@@ -20,6 +20,7 @@ import ropold.backend.model.AppUser;
 import ropold.backend.repository.AppUserRepository;
 
 import java.util.Collections;
+import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
@@ -71,7 +72,9 @@ public class SecurityConfig {
                                 githubUser.getAttribute("name"),
                                 githubUser.getAttribute("avatar_url"),
                                 githubUser.getAttribute("html_url"),
-                                Collections.emptyList());
+                                Collections.emptyList(),
+                                Map.of()
+                        );
                         return appUserRepository.save(newUser);
                     });
 

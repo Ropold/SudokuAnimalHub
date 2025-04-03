@@ -30,14 +30,19 @@ public class AnimalController {
         return animalService.getAllAnimals();
     }
 
-    @GetMapping("/active/animal-enum/{animalEnum}")
-    public List<AnimalModel> getActiveAnimalsByAnimalEnum(@PathVariable String animalEnum) {
-        return animalService.getActiveAnimalsByAnimalEnum(animalEnum);
+    @GetMapping("/active")
+    public List<AnimalModel> getActiveAnimals() {
+        return animalService.getActiveAnimals();
     }
 
     @GetMapping("/active/animal-enum")
     public List<String> getActiveAnimalEnums() {
         return animalService.getActiveAnimalEnums();
+    }
+
+    @GetMapping("/active/animal-enum/{animalEnum}")
+    public List<AnimalModel> getActiveAnimalsByAnimalEnum(@PathVariable String animalEnum) {
+        return animalService.getActiveAnimalsByAnimalEnum(animalEnum);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -55,10 +60,6 @@ public class AnimalController {
                 ));
     }
 
-    @GetMapping("/active")
-    public List<AnimalModel> getActiveAnimals() {
-        return animalService.getActiveAnimals();
-    }
 
     @GetMapping("/{id}")
     public AnimalModel getAnimalById(@PathVariable String id) {

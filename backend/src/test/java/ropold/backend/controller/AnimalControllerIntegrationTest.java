@@ -2,11 +2,13 @@ package ropold.backend.controller;
 
 import com.cloudinary.Cloudinary;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ropold.backend.model.AnimalEnum;
 import ropold.backend.model.AnimalModel;
 import ropold.backend.model.AppUser;
@@ -15,6 +17,9 @@ import ropold.backend.repository.AppUserRepository;
 
 import java.util.List;
 import java.util.Map;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -42,7 +47,7 @@ class AnimalControllerIntegrationTest {
                 "Lion",
                 AnimalEnum.LION,
                 "Lions are large carnivorous mammals.",
-                true,
+                false,
                 "user",
                 "https://example.com/lion.jpg"
         );
@@ -81,5 +86,71 @@ class AnimalControllerIntegrationTest {
         appUserRepository.save(user);
     }
 
+
+    @Test
+    void getAllAnimals_shouldReturnAllAnimals() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/sudoku-animal-hub"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        [
+                            {
+                                "id": "1",
+                                "name": "Lion",
+                                "animalEnum": "LION",
+                                "description": "Lions are large carnivorous mammals.",
+                                "isActive": false,
+                                "githubId": "user",
+                                "imageUrl": "https://example.com/lion.jpg"
+                            },
+                            {
+                                "id": "2",
+                                "name": "Tiger",
+                                "animalEnum": "TIGER",
+                                "description": "Tigers are the largest cat species.",
+                                "isActive": true,
+                                "githubId": "user",
+                                "imageUrl": "https://example.com/tiger.jpg"
+                            }
+                        ]
+                        """));
+    }
+
+    @Test
+    void getActiveAnimals_shouldReturnActiveAnimals() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/sudoku-animal-hub/active"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        [
+                            {
+                                "id": "2",
+                                "name": "Tiger",
+                                "animalEnum": "TIGER",
+                                "description": "Tigers are the largest cat species.",
+                                "isActive": true,
+                                "githubId": "user",
+                                "imageUrl": "https://example.com/tiger.jpg"
+                            }
+                        ]
+                        """));
+    }
+
+    @Test
+    void getActiveAnimalsByAnimalEnum_shouldReturnActiveAnimalsByAnimalEnum() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/sudoku-animal-hub/active/animal-enum/TIGER"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        [
+                             {
+                                "id": "2",
+                                "name": "Tiger",
+                                "animalEnum": "TIGER",
+                                "description": "Tigers are the largest cat species.",
+                                "isActive": true,
+                                "githubId": "user",
+                                "imageUrl": "https://example.com/tiger.jpg"
+                            }
+                        ]
+                        """));
+    }
 
 }
