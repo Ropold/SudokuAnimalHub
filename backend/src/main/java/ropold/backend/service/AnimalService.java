@@ -108,4 +108,10 @@ public class AnimalService {
     }
 
 
+    public List<AnimalModel> getRevealsForGithubUser(String githubId) {
+        return animalRepository.findAll().stream()
+                .filter(animalModel -> animalModel.githubId().equals(githubId))
+                .toList();
+    }
+
 }
