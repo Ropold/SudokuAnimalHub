@@ -153,4 +153,15 @@ class AnimalControllerIntegrationTest {
                         """));
     }
 
+    @Test
+    void getActiveEnums_shouldReturnActiveAnimalEnums() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/sudoku-animal-hub/active/animal-enum"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        [
+                            "TIGER"
+                        ]
+                        """));
+    }
+
 }
