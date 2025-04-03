@@ -24,7 +24,6 @@ public class AnimalController {
 
     private final AnimalService animalService;
     private final CloudinaryService cloudinaryService;
-    private final AppUserService appUserService;
 
     @GetMapping
     public List<AnimalModel> getAllAnimals() {
@@ -39,37 +38,6 @@ public class AnimalController {
     @GetMapping("/active/animal-enum")
     public List<String> getActiveAnimalEnums() {
         return animalService.getActiveAnimalEnums();
-    }
-
-    @GetMapping("/favorites")
-    public List<AnimalModel> getUserFavorites(@AuthenticationPrincipal OAuth2User authentication) {
-        List<String> favoriteAnimalIds = appUserService.getUserFavoriteAnimals(authentication.getName());
-        return animalService.getAnimalsByIds(favoriteAnimalIds);
-    }
-
-    @PostMapping("/favorites/{animalId}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void addAnimalToFavorites(@PathVariable String animalId, @AuthenticationPrincipal OAuth2User authentication) {
-        String authenticatedUserId = authentication.getName();
-        appUserService.addAnimalToFavoriteAnimals(authenticatedUserId, animalId);
-    }
-
-    @DeleteMapping("/favorites/{animalId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeAnimalFromFavorites(@PathVariable String animalId, @AuthenticationPrincipal OAuth2User authentication) {
-        String authenticatedUserId = authentication.getName();
-        appUserService.removeAnimalFromFavoriteAnimals(authenticatedUserId, animalId);
-    }
-
-    @PutMapping("/{id}/toggle-active")
-    public AnimalModel toggleAnimalActive(@PathVariable String id, @AuthenticationPrincipal OAuth2User authentication) {
-        String authenticatedUserId = authentication.getName();
-
-        AnimalModel animalModel = animalService.getAnimalById(id);
-        if (!animalModel.githubId().equals(authenticatedUserId)) {
-            throw new AccessDeniedException("You do not have permission to toggle this animal.");
-        }
-        return animalService.toggleAnimalActive(id);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
