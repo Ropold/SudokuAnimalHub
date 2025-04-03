@@ -18,25 +18,25 @@ public class AppUserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    public List<String> getUserFavorites(String userId) {
+    public List<String> getUserFavoriteAnimals(String userId) {
         AppUser user = getUserById(userId);
-        return user.favorites();
+        return user.favoriteAnimals();
     }
 
-    public void addAnimalToFavorites(String authenticatedUserId, String revealId) {
+    public void addAnimalToFavoriteAnimals(String authenticatedUserId, String revealId) {
         AppUser user = getUserById(authenticatedUserId);
 
-        if (!user.favorites().contains(revealId)) {
-            user.favorites().add(revealId);
+        if (!user.favoriteAnimals().contains(revealId)) {
+            user.favoriteAnimals().add(revealId);
             appUserRepository.save(user);
         }
     }
 
-    public void removeAnimalFromFavorites(String authenticatedUserId, String revealId) {
+    public void removeAnimalFromFavoriteAnimals(String authenticatedUserId, String revealId) {
         AppUser user = getUserById(authenticatedUserId);
 
-        if (user.favorites().contains(revealId)) {
-            user.favorites().remove(revealId);
+        if (user.favoriteAnimals().contains(revealId)) {
+            user.favoriteAnimals().remove(revealId);
             appUserRepository.save(user);
         }
     }

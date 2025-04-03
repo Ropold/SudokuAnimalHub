@@ -43,7 +43,7 @@ public class AnimalController {
 
     @GetMapping("/favorites")
     public List<AnimalModel> getUserFavorites(@AuthenticationPrincipal OAuth2User authentication) {
-        List<String> favoriteAnimalIds = appUserService.getUserFavorites(authentication.getName());
+        List<String> favoriteAnimalIds = appUserService.getUserFavoriteAnimals(authentication.getName());
         return animalService.getAnimalsByIds(favoriteAnimalIds);
     }
 
@@ -51,14 +51,14 @@ public class AnimalController {
     @ResponseStatus(HttpStatus.CREATED)
     public void addAnimalToFavorites(@PathVariable String animalId, @AuthenticationPrincipal OAuth2User authentication) {
         String authenticatedUserId = authentication.getName();
-        appUserService.addAnimalToFavorites(authenticatedUserId, animalId);
+        appUserService.addAnimalToFavoriteAnimals(authenticatedUserId, animalId);
     }
 
     @DeleteMapping("/favorites/{animalId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeAnimalFromFavorites(@PathVariable String animalId, @AuthenticationPrincipal OAuth2User authentication) {
         String authenticatedUserId = authentication.getName();
-        appUserService.removeAnimalFromFavorites(authenticatedUserId, animalId);
+        appUserService.removeAnimalFromFavoriteAnimals(authenticatedUserId, animalId);
     }
 
     @PutMapping("/{id}/toggle-active")

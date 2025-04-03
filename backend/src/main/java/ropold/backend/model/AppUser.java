@@ -1,6 +1,7 @@
 package ropold.backend.model;
 
 import java.util.List;
+import java.util.Map;
 
 public record AppUser(
         String id,
@@ -8,6 +9,7 @@ public record AppUser(
         String name,
         String avatarUrl,
         String githubUrl,
-        List<String> favorites
+        List<String> favoriteAnimals,
+        Map<Integer, String> sudokuNumberToAnimal
 ) {
 }

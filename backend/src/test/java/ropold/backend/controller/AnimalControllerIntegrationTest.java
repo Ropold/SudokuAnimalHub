@@ -14,6 +14,7 @@ import ropold.backend.repository.AnimalRepository;
 import ropold.backend.repository.AppUserRepository;
 
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -64,7 +65,18 @@ class AnimalControllerIntegrationTest {
                 "Max Mustermann",
                 "https://github.com/avatar",
                 "https://github.com/mustermann",
-                List.of("2")
+                List.of("2"),
+                Map.of(
+                        1, "https://example.com/tier1.jpg",
+                        2, "https://example.com/tier2.jpg",
+                        3, "https://example.com/tier3.jpg",
+                        4, "https://example.com/tier4.jpg",
+                        5, "https://example.com/tier5.jpg",
+                        6, "https://example.com/tier6.jpg",
+                        7, "https://example.com/tier7.jpg",
+                        8, "https://example.com/tier8.jpg",
+                        9, "https://example.com/tier9.jpg"
+                )
         );
         appUserRepository.save(user);
     }
