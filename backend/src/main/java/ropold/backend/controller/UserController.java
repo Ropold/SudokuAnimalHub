@@ -72,7 +72,7 @@ public class UserController {
         return animalService.toggleAnimalActive(id);
     }
 
-    @GetMapping("numbers-to-animal")
+    @GetMapping("/numbers-to-animal")
     public Map<Integer, String> getAllNumberToAnimalMapping(@AuthenticationPrincipal OAuth2User authentication) {
         return appUserService.getAllNumberToAnimalMapping(authentication.getName());
     }
