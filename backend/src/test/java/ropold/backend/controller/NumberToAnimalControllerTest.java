@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ropold.backend.model.AnimalEnum;
 import ropold.backend.model.AnimalModel;
 import ropold.backend.model.AppUser;
@@ -15,6 +16,9 @@ import ropold.backend.repository.AppUserRepository;
 
 import java.util.List;
 import java.util.Map;
+
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -80,9 +84,23 @@ class NumberToAnimalControllerTest {
 
     @Test
     void getAllNumberToAnimalsMapping_shouldReturnAllMappings() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/number-to-animal"))
-
-
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/numbers-to-animal"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json("""
+                {
+                    "1": "https://example.com/tier1.jpg",
+                    "2": "https://example.com/tier2.jpg",
+                    "3": "https://example.com/tier3.jpg",
+                    "4": "https://example.com/tier4.jpg",
+                    "5": "https://example.com/tier5.jpg",
+                    "6": "https://example.com/tier6.jpg",
+                    "7": "https://example.com/tier7.jpg",
+                    "8": "https://example.com/tier8.jpg",
+                    "9": "https://example.com/tier9.jpg"
+                }
+            """));
     }
+
+
 
 }

@@ -35,16 +35,17 @@ public class UserController {
         return user.getAttributes();
     }
 
-    @GetMapping("/me/my-animals/{githubId}")
-    public List<AnimalModel> getAnimalsForGithubUser(@PathVariable String githubId) {
-        return animalService.getRevealsForGithubUser(githubId);
-    }
-
     @GetMapping("/favorites")
     public List<AnimalModel> getUserFavorites(@AuthenticationPrincipal OAuth2User authentication) {
         List<String> favoriteAnimalIds = appUserService.getUserFavoriteAnimals(authentication.getName());
         return animalService.getAnimalsByIds(favoriteAnimalIds);
     }
+
+    @GetMapping("/me/my-animals/{githubId}")
+    public List<AnimalModel> getAnimalsForGithubUser(@PathVariable String githubId) {
+        return animalService.getRevealsForGithubUser(githubId);
+    }
+
 
     @PostMapping("/favorites/{animalId}")
     @ResponseStatus(HttpStatus.CREATED)
@@ -70,5 +71,18 @@ public class UserController {
         }
         return animalService.toggleAnimalActive(id);
     }
+
+    @GetMapping("numbers-to-animal")
+    public Map<Integer, String> getAllNumberToAnimalMapping(@AuthenticationPrincipal OAuth2User authentication) {
+        return appUserService.getAllNumberToAnimalMapping(authentication.getName());
+    }
+
+    @PostMapping("/numbers-to-animal")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void saveNumberToAnimalsMap(@RequestBody Map<Integer, String> sudokuAnimals, @AuthenticationPrincipal OAuth2User authentication) {
+        String authenticatedUserId = authentication.getName();
+        appUserService.saveMapNumberToAnimals(sudokuAnimals, authenticatedUserId);
+    }
+
 
 }

@@ -6,6 +6,7 @@ import ropold.backend.model.AppUser;
 import ropold.backend.repository.AppUserRepository;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -40,4 +41,5 @@ public class AppUserService {
             appUserRepository.save(user);
         }
     }
+
 }
