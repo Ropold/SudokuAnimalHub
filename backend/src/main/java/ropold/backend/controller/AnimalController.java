@@ -11,7 +11,6 @@ import ropold.backend.exception.AccessDeniedException;
 import ropold.backend.model.AnimalModel;
 import ropold.backend.model.AnimalModelDto;
 import ropold.backend.service.AnimalService;
-import ropold.backend.service.AppUserService;
 import ropold.backend.service.CloudinaryService;
 
 import java.io.IOException;
@@ -45,20 +44,20 @@ public class AnimalController {
         return animalService.getActiveAnimalsByAnimalEnum(animalEnum);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/test-add")
-    public AnimalModel addTestAnimal(@RequestBody AnimalModelDto animalModelDto) {
-        return animalService.addAnimal(
-                new AnimalModel(
-                        null,
-                        animalModelDto.name(),
-                        animalModelDto.animalEnum(),
-                        animalModelDto.description(),
-                        animalModelDto.isActive(),
-                        animalModelDto.githubId(),
-                        animalModelDto.imageUrl()
-                ));
-    }
+//    @ResponseStatus(HttpStatus.CREATED)
+//    @PostMapping("/test-add")
+//    public AnimalModel addTestAnimal(@RequestBody AnimalModelDto animalModelDto) {
+//        return animalService.addAnimal(
+//                new AnimalModel(
+//                        null,
+//                        animalModelDto.name(),
+//                        animalModelDto.animalEnum(),
+//                        animalModelDto.description(),
+//                        animalModelDto.isActive(),
+//                        animalModelDto.githubId(),
+//                        animalModelDto.imageUrl()
+//                ));
+//    }
 
 
     @GetMapping("/{id}")
