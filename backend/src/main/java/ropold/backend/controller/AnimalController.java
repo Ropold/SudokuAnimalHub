@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ropold.backend.exception.AccessDeniedException;
+import ropold.backend.exception.AnimalNotFoundException;
 import ropold.backend.model.AnimalModel;
 import ropold.backend.model.AnimalModelDto;
 import ropold.backend.service.AnimalService;
@@ -64,7 +65,7 @@ public class AnimalController {
     public AnimalModel getAnimalById(@PathVariable String id) {
         AnimalModel animal = animalService.getAnimalById(id);
         if (animal == null) {
-            throw new AccessDeniedException("No Animal found with id: " + id);
+            throw new AnimalNotFoundException("No Animal found with id: " + id);
         }
         return animal;
     }
