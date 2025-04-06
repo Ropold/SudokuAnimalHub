@@ -134,7 +134,6 @@ class AppUserControllerTest {
         OAuth2User mockUser = mock(OAuth2User.class);
         when(mockUser.getName()).thenReturn("user");
 
-        // Simuliere den OAuth2User in der SecurityContext
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         Authentication authentication = new UsernamePasswordAuthenticationToken(mockUser, null, mockUser.getAuthorities());
         context.setAuthentication(authentication);
@@ -157,7 +156,36 @@ class AppUserControllerTest {
             """));
     }
 
+    @Test
+    void saveMapNumberToAnimals_shouldReturnSavedMap() throws Exception {
+        // Erstellen eines Mock OAuth2User
+        OAuth2User mockUser = mock(OAuth2User.class);
+        when(mockUser.getName()).thenReturn("user");
 
+        // Simuliere den OAuth2User in der SecurityContext
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        Authentication authentication = new UsernamePasswordAuthenticationToken(mockUser, null, mockUser.getAuthorities());
+        context.setAuthentication(authentication);
+        SecurityContextHolder.setContext(context);
 
+        String json = """
+                {
+                    "1": "https://example.com/tier1.jpg",
+                    "2": "https://example.com/tier2.jpg",
+                    "3": "https://example.com/tier3.jpg",
+                    "4": "https://example.com/tier4.jpg",
+                    "5": "https://example.com/tier5.jpg",
+                    "6": "https://example.com/tier6.jpg",
+                    "7": "https://example.com/tier7.jpg",
+                    "8": "https://example.com/tier8.jpg",
+                    "9": "https://example.com/tier9.jpg"
+                }
+            """;
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/users/numbers-to-animal")
+                        .contentType("application/json")
+                        .content(json))
+                .andExpect(status().isCreated())
+                .andExpect(MockMvcResultMatchers.content().string(""));
+    }
 
 }
