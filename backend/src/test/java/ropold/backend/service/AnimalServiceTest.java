@@ -120,4 +120,48 @@ class AnimalServiceTest {
 
     }
 
+    @Test
+    void toggleAnimalActive_shouldReturnUpdatedAnimal(){
+        AnimalModel animalModel = animalModels.getFirst();
+        when(animalRepository.findById("1")).thenReturn(java.util.Optional.of(animalModel));
+
+        AnimalModel updatedAnimalModel = new AnimalModel(
+                "1",
+                "Lion",
+                AnimalEnum.LION,
+                "description",
+                false,
+                "user",
+                "https://example.com/lion1.jpg"
+        );
+
+        when(animalRepository.findById("1")).thenReturn(java.util.Optional.of(animalModel));
+        when(animalRepository.save(any(AnimalModel.class))).thenReturn(updatedAnimalModel);
+
+        AnimalModel expected = animalService.toggleAnimalActive("1");
+
+        //then
+        assertEquals(updatedAnimalModel, expected);
+        verify(animalRepository, times(1)).findById("1");
+        verify(animalRepository, times(1)).save(updatedAnimalModel);
+
+    }
+
+    @Test
+    void testGetActiveAnimalEnums(){
+        List<String> expected = List.of("LION", "TIGER");
+        List<String> result = animalService.getActiveAnimalEnums();
+        assertEquals(expected,result);
+    }
+
+    @Test
+    void TestGetActiveAnimalsByAnimalEnum(){
+        List<AnimalModel> result = animalService.getActiveAnimalsByAnimalEnum("LION");
+        List<AnimalModel> expected = animalModels.stream()
+                .filter(a-> a.animalEnum() == AnimalEnum.LION && a.isActive())
+                .toList();
+        assertEquals(expected, result);
+
+    }
+
 }
