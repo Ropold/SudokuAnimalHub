@@ -76,4 +76,48 @@ class AnimalServiceTest {
         verify(animalRepository, times(1)).save(animalModel3);
     }
 
+    @Test
+    void testGetActiveAnimals(){
+        List<AnimalModel> result = animalService.getActiveAnimals();
+        assertEquals(animalModels, result);
+    }
+
+    @Test
+    void testGetAnimalById(){
+        AnimalModel expected = animalModels.getFirst();
+        when(animalRepository.findById("1")).thenReturn(java.util.Optional.of(expected));
+        AnimalModel result = animalService.getAnimalById("1");
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void testDeleteAnimal(){
+        AnimalModel animalModel = animalModels.getFirst();
+        when(animalRepository.findById("1")).thenReturn(java.util.Optional.of(animalModel));
+        animalService.deleteAnimal("1");
+        verify(animalRepository, times(1)).deleteById("1");
+        verify(cloudinaryService, times(1)).deleteImage(animalModel.imageUrl());
+    }
+
+    @Test
+    void testUpdateAnimal(){
+        AnimalModel updatedAnimalModel = new AnimalModel(
+                "1",
+                "Lion",
+                AnimalEnum.LION,
+                "updated description",
+                true,
+                "user",
+                "https://example.com/lion1.jpg"
+        );
+
+        when(animalRepository.existsById("1")).thenReturn(true);
+        when(animalRepository.save(updatedAnimalModel)).thenReturn(updatedAnimalModel);
+
+        AnimalModel result = animalService.updateAnimal("1", updatedAnimalModel);
+        assertEquals(updatedAnimalModel, result);
+        verify(animalRepository, times(1)).existsById("1");
+
+    }
+
 }
