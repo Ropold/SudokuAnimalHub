@@ -19,6 +19,13 @@ public class GlobalExceptionHandler {
         return new AnimalError(e.getMessage());
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public AnimalError handleRuntimeException(RuntimeException e) {
+        e.printStackTrace();
+        return new AnimalError(e.getMessage());
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public AccessDeniedError handleAccessDeniedException(AccessDeniedException e) {

@@ -109,4 +109,14 @@ class ExceptionHandlerTest {
                 .andReturn();
     }
 
+    @Test
+    void whenRuntimeException_thenReturnsInternalServerError() throws Exception {
+        when(animalService.getAnimalById(any())).thenThrow(new RuntimeException("Unexpected error"));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/sudoku-animal-hub/{id}", "any-id"))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.message").value("Unexpected error"));
+
+    }
+
 }
