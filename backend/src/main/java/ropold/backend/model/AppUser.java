@@ -13,3 +13,4 @@ public record AppUser(
         Map<Integer, String> sudokuNumberToAnimal
 ) {
 }
+

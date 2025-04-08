@@ -45,22 +45,6 @@ public class AnimalController {
         return animalService.getActiveAnimalsByAnimalEnum(animalEnum);
     }
 
-//    @ResponseStatus(HttpStatus.CREATED)
-//    @PostMapping("/test-add")
-//    public AnimalModel addTestAnimal(@RequestBody AnimalModelDto animalModelDto) {
-//        return animalService.addAnimal(
-//                new AnimalModel(
-//                        null,
-//                        animalModelDto.name(),
-//                        animalModelDto.animalEnum(),
-//                        animalModelDto.description(),
-//                        animalModelDto.isActive(),
-//                        animalModelDto.githubId(),
-//                        animalModelDto.imageUrl()
-//                ));
-//    }
-
-
     @GetMapping("/{id}")
     public AnimalModel getAnimalById(@PathVariable String id) {
         AnimalModel animal = animalService.getAnimalById(id);

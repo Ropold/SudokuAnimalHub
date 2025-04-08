@@ -278,4 +278,18 @@ class AppUserControllerTest {
         Assertions.assertFalse(updatedUser.favoriteAnimals().contains("2"));
     }
 
+    @Test
+    void ToggleActiveStatus_shouldToggleActiveStatus() throws Exception {
+        AnimalModel memoryBefore = animalRepository.findById("1").orElseThrow();
+        Assertions.assertTrue(memoryBefore.isActive());
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/users/1/toggle-active")
+                        .with(oidcLogin().idToken(i -> i.claim("sub", "user")))
+                )
+                .andExpect(status().isOk());
+
+        AnimalModel updatedMemory = animalRepository.findById("1").orElseThrow();
+        Assertions.assertFalse(updatedMemory.isActive());
+    }
+
 }
