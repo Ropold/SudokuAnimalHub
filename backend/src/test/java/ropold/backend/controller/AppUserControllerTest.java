@@ -24,6 +24,7 @@ import java.util.Map;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,9 +39,13 @@ class AppUserControllerTest {
     @Autowired
     private AppUserRepository appUserRepository;
 
+    @Autowired
+    private AnimalRepository animalRepository;
+
     @BeforeEach
     void setUp() {
         appUserRepository.deleteAll();
+        animalRepository.deleteAll();
 
         AppUser user = new AppUser(
                 "user",
@@ -62,6 +67,11 @@ class AppUserControllerTest {
                 )
         );
         appUserRepository.save(user);
+
+        animalRepository.saveAll(List.of(
+                new AnimalModel("1", "Lion", AnimalEnum.LION, "description", true, "user", "https://example.com/Lion1.jpg"),
+                new AnimalModel("2", "Tiger", AnimalEnum.TIGER, "description", true, "user", "https://example.com/tiger1.jpg")
+        ));
     }
 
     @Test
@@ -186,6 +196,36 @@ class AppUserControllerTest {
                         .content(json))
                 .andExpect(status().isCreated())
                 .andExpect(MockMvcResultMatchers.content().string(""));
+    }
+
+    @Test
+    void TestGetAnimalsForGithubUser_ShouldReturnAnimalsForGithubUser() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/me/my-animals/user")
+                        .with(oidcLogin().idToken(i -> i.claim("sub", "user")))
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                [
+                    {
+                        "id": "1",
+                        "name": "Lion",
+                        "animalEnum": "LION",
+                        "description": "description",
+                        "isActive": true,
+                        "githubId": "user",
+                        "imageUrl": "https://example.com/Lion1.jpg"
+                    },
+                    {
+                        "id": "2",
+                        "name": "Tiger",
+                        "animalEnum": "TIGER",
+                        "description": "description",
+                        "isActive": true,
+                        "githubId": "user",
+                        "imageUrl": "https://example.com/tiger1.jpg"
+                    }
+                ]
+            """));
     }
 
 }
