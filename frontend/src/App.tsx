@@ -1,12 +1,12 @@
 import './App.css'
+import Welcome from "./components/Welcome.tsx";
 
 export default function App() {
 
 
   return (
     <>
-      <h1>SudokuAnimalHub ver.2</h1>
-      <p>huhu</p>
+        <Welcome/>
     </>
   )
 }
