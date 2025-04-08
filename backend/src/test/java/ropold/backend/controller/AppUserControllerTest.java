@@ -1,5 +1,6 @@
 package ropold.backend.controller;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -226,6 +228,54 @@ class AppUserControllerTest {
                     }
                 ]
             """));
+    }
+
+    @Test
+    @WithMockUser(username = "user")
+    void getUserFavorites_shouldReturnUserFavorites() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/favorites")
+                        .with(oidcLogin().idToken(i -> i.claim("sub", "user"))))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                [
+                    {
+                        "id": "2",
+                        "name": "Tiger",
+                        "animalEnum": "TIGER",
+                        "description": "description",
+                        "isActive": true,
+                        "githubId": "user",
+                        "imageUrl": "https://example.com/tiger1.jpg"
+                    }
+                ]
+            """));
+    }
+
+    @Test
+    void addAnimalToFavorites_shouldAddAnimalAndReturnFavorites() throws Exception {
+        AppUser userBefore = appUserRepository.findById("user").orElseThrow();
+        Assertions.assertFalse(userBefore.favoriteAnimals().contains("1"));
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/users/favorites/1")
+                        .with(oidcLogin().idToken(i -> i.claim("sub", "user"))))
+                .andExpect(status().isCreated());
+
+        AppUser updatedUser = appUserRepository.findById("user").orElseThrow();
+        Assertions.assertTrue(updatedUser.favoriteAnimals().contains("1"));
+    }
+
+    @Test
+    void removeRevealFromFavorites_shouldRemoveRevealAndReturnFavorites() throws Exception {
+        AppUser userBefore = appUserRepository.findById("user").orElseThrow();
+        Assertions.assertTrue(userBefore.favoriteAnimals().contains("2"));
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/users/favorites/2")
+                        .with(oidcLogin().idToken(i -> i.claim("sub", "user")))
+                )
+                .andExpect(status().isNoContent()); // .isOk = 200, .isNoContent = 204
+
+        AppUser updatedUser = appUserRepository.findById("user").orElseThrow();
+        Assertions.assertFalse(updatedUser.favoriteAnimals().contains("2"));
     }
 
 }
