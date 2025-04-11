@@ -25,8 +25,8 @@ export default function Welcome(){
 
                 {showCredits && (
                     <div className="image-credit">
-                        Bild: <a href="https://www.vecteezy.com/vector-art/9377494-sudoku-word-logo-with-toucan-bird" target="_blank" rel="noopener noreferrer">
-                        Sudoku word logo</a> von <a href="https://www.vecteezy.com" target="_blank" rel="noopener noreferrer">Vecteezy</a>
+                        Picture: <a href="https://www.vecteezy.com/vector-art/9377494-sudoku-word-logo-with-toucan-bird" target="_blank" rel="noopener noreferrer">
+                        Sudoku Word Logo</a> von <a href="https://www.vecteezy.com" target="_blank" rel="noopener noreferrer">Vecteezy</a>
                     </div>
                 )}
             </div>
