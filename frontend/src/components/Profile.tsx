@@ -1,39 +1,60 @@
-import {UserDetails} from "./model/UserDetailsModel.ts";
-import "./styles/Profile.css"
+import { useState } from "react";
+import { UserDetails } from "./model/UserDetailsModel.ts";
+import AddAnimalCard from "./AddAnimalCard.tsx";
+import Favorites from "./Favorites.tsx";
+import MyAnimals from "./MyAnimals.tsx";
+import "./styles/Profile.css";
 
 type ProfileProps = {
     userDetails: UserDetails | null;
-}
+};
 
-export default function Profile(props: Readonly<ProfileProps>) {
+export default function Profile({ userDetails }: Readonly<ProfileProps>) {
+    const [activeTab, setActiveTab] = useState<"profile" | "add" | "my-animals" | "favorites">("profile");
+
     return (
-            <div className="profile-container">
-
-                {/* GitHub-Profil */}
-                <h2>GitHub Profile</h2>
-                {props.userDetails ? (
-                    <div>
-                        <p>Username: {props.userDetails.login}</p>
-                        <p>Name: {props.userDetails.name || "No name provided"}</p>
-                        <p>Location: {props.userDetails.location ?? "No location provided"}</p>
-                        {props.userDetails.bio && <p>Bio: {props.userDetails.bio}</p>}
-                        <p>Followers: {props.userDetails.followers}</p>
-                        <p>Following: {props.userDetails.following}</p>
-                        <p>Public Repositories: {props.userDetails.public_repos}</p>
-                        <p>
-                            GitHub Profile:{" "}
-                            <a href={props.userDetails.html_url} target="_blank" rel="noopener noreferrer">
-                                Visit Profile
-                            </a>
-                        </p>
-                        <img src={props.userDetails.avatar_url} alt={`${props.userDetails.login}'s avatar`} />
-                        <p>Account Created: {new Date(props.userDetails.created_at).toLocaleDateString()}</p>
-                        <p>Last Updated: {new Date(props.userDetails.updated_at).toLocaleDateString()}</p>
-                    </div>
-                ) : (
-                    <p>Loading...</p>
-                )}
+        <div className="profile-container">
+            {/* Button-Navigation */}
+            <div className="space-between">
+                <button className="button-group-button" onClick={() => setActiveTab("profile")}>Profil</button>
+                <button className="button-group-button" onClick={() => setActiveTab("add")}>Add</button>
+                <button className="button-group-button" onClick={() => setActiveTab("my-animals")}>My Animals</button>
+                <button className="button-group-button" onClick={() => setActiveTab("favorites")}>Favorites</button>
             </div>
 
-    )
+            {/* Anzeige je nach aktivem Tab */}
+            <div>
+                {activeTab === "profile" && (
+                    <>
+                        <h2>GitHub Profile</h2>
+                        {userDetails ? (
+                            <div>
+                                <p>Username: {userDetails.login}</p>
+                                <p>Name: {userDetails.name || "No name provided"}</p>
+                                <p>Location: {userDetails.location ?? "No location provided"}</p>
+                                {userDetails.bio && <p>Bio: {userDetails.bio}</p>}
+                                <p>Followers: {userDetails.followers}</p>
+                                <p>Following: {userDetails.following}</p>
+                                <p>Public Repositories: {userDetails.public_repos}</p>
+                                <p>
+                                    GitHub Profile:{" "}
+                                    <a href={userDetails.html_url} target="_blank" rel="noopener noreferrer">
+                                        Visit Profile
+                                    </a>
+                                </p>
+                                <img src={userDetails.avatar_url} alt={`${userDetails.login}'s avatar`} />
+                                <p>Account Created: {new Date(userDetails.created_at).toLocaleDateString()}</p>
+                                <p>Last Updated: {new Date(userDetails.updated_at).toLocaleDateString()}</p>
+                            </div>
+                        ) : (
+                            <p>Loading...</p>
+                        )}
+                    </>
+                )}
+                {activeTab === "add" && <AddAnimalCard />}
+                {activeTab === "my-animals" && <MyAnimals />}
+                {activeTab === "favorites" && <Favorites />}
+            </div>
+        </div>
+    );
 }

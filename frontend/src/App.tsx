@@ -14,9 +14,6 @@ import ListOfAllAnimals from "./components/ListOfAllAnimals.tsx";
 import Details from "./components/Details.tsx";
 import HighScore from "./components/HighScore.tsx";
 import Deck from "./components/Deck.tsx";
-import Favorites from "./components/Favorites.tsx";
-import MyAnimals from "./components/MyAnimals.tsx";
-import AddAnimalCard from "./components/AddAnimalCard.tsx";
 
 
 export default function App() {
@@ -70,11 +67,9 @@ export default function App() {
                 <Route path="/deck" element={<Deck/>}/>
 
                 <Route element={<ProtectedRoute user={user} />}>
-                    <Route path="/favorites" element={<Favorites/>}/>
-                    <Route path="/my-animals" element={<MyAnimals/>}/>
-                    <Route path="/add" element={<AddAnimalCard/>}/>
-                    <Route path="/profile" element={<Profile userDetails={userDetails}/>} />
+                    <Route path="/profile/*" element={<Profile userDetails={userDetails} />} />
                 </Route>
+
             </Routes>
         <Footer/>
     </>

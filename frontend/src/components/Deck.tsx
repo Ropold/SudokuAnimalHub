@@ -2,7 +2,7 @@
 export default function Deck(){
     return(
         <div>
-            <h2>Deck</h2>
+            <h3>Deck</h3>
         </div>
     )
 }
