@@ -33,3 +33,23 @@
     object-fit: cover; /* Bild wird vollständig angezeigt */
     border-bottom: 1px solid #ccc;
 }
+
+.animal-category-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.animal-card-image-add {
+    width: 120px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.animal-category-label {
+    display: flex;
+    flex-direction: column;
+}

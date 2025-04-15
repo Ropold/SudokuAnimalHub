@@ -2,10 +2,11 @@ import {AnimalModel} from "./model/AnimalModel.ts";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
-import {AnimalEnum, All_ANIMALS_ENUM} from "./model/AnimalEnum.ts";
+import {All_ANIMALS_ENUM, AnimalEnum} from "./model/AnimalEnum.ts";
 import {getAnimalEnumDisplayName} from "./utils/getAnimalEnumDisplayName.ts";
 import "./styles/AddAnimalCard.css"
 import "./styles/Popup.css"
+import { animalsEnumImages } from "./utils/AnimalEnumImages.ts"
 
 type AddAnimalCardProps = {
     user: string
@@ -87,7 +88,7 @@ export default function AddAnimalCard(props: Readonly<AddAnimalCardProps>) {
     return(
 
             <div className="edit-form">
-                <h2>Add Animal Card</h2>
+                <h2>Add new Animal Card</h2>
                 <form onSubmit={handleSubmit}>
                     <label>
                         Name:
@@ -99,21 +100,33 @@ export default function AddAnimalCard(props: Readonly<AddAnimalCardProps>) {
                         />
                     </label>
 
-                    <label>
-                        Animal Category:
-                        <select
-                            className="input-small"
-                            value={animalEnum || ""}
-                            onChange={(e) => setAnimalEnum(e.target.value)}
-                        >
-                            <option value="">Select Animal Category</option>
-                            {All_ANIMALS_ENUM.map((animal) => (
-                                <option key={animal} value={animal}>
-                                    {getAnimalEnumDisplayName(animal)}
-                                </option>
-                            ))}
-                        </select>
-                    </label>
+                    <div className="animal-category-row">
+                        <label className="animal-category-label">
+                            Animal Category:
+                            <select
+                                className="input-small"
+                                value={animalEnum || ""}
+                                onChange={(e) => setAnimalEnum(e.target.value)}
+                            >
+                                <option value="">Select Animal Category</option>
+                                {All_ANIMALS_ENUM.map((animal) => (
+                                    <option key={animal} value={animal}>
+                                        {getAnimalEnumDisplayName(animal)}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+
+                        {animalEnum && animalsEnumImages[animalEnum as AnimalEnum] && (
+                            <img
+                                src={animalsEnumImages[animalEnum as AnimalEnum]}
+                                alt={animalEnum}
+                                className="animal-card-image-add"
+                            />
+                        )}
+                    </div>
+
+
 
                     <label>
                         Description:
