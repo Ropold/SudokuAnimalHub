@@ -22,6 +22,7 @@ export default function App() {
     const [user, setUser] = useState<string>("anonymousUser");
     const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
     const [activeAnimals, setActiveAnimals] = useState<AnimalModel[]>([]);
+    const [activeTab, setActiveTab] = useState<"profile" | "add" | "my-animals" | "favorites">("profile");
 
     // User functions
     function getUser() {
@@ -74,7 +75,7 @@ export default function App() {
 
   return (
     <>
-        <Navbar getUser={getUser} getUserDetails={getUserDetails} user={user}/>
+        <Navbar getUser={getUser} getUserDetails={getUserDetails} user={user} setActiveTab={setActiveTab}/>
             <Routes>
                 <Route path="*" element={<NotFound />} />
                 <Route path="/" element={<Welcome/>}/>
@@ -85,7 +86,7 @@ export default function App() {
                 <Route path="/deck" element={<Deck/>}/>
 
                 <Route element={<ProtectedRoute user={user} />}>
-                    <Route path="/profile/*" element={<Profile user={user} userDetails={userDetails} handleNewAnimalSubmit={handleNewAnimalSubmit}/>} />
+                    <Route path="/profile/*" element={<Profile user={user} userDetails={userDetails} handleNewAnimalSubmit={handleNewAnimalSubmit} activeTab={activeTab} setActiveTab={setActiveTab}/>} />
                 </Route>
 
             </Routes>

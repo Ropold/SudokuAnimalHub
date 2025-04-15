@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { UserDetails } from "./model/UserDetailsModel.ts";
 import AddAnimalCard from "./AddAnimalCard.tsx";
 import Favorites from "./Favorites.tsx";
@@ -10,24 +9,25 @@ type ProfileProps = {
     user: string;
     userDetails: UserDetails | null;
     handleNewAnimalSubmit:(newAnimal:AnimalModel)=> void;
+    activeTab: "profile" | "add" | "my-animals" | "favorites";
+    setActiveTab: (tab: "profile" | "add" | "my-animals" | "favorites") => void;
 };
 
 export default function Profile(props: Readonly<ProfileProps>) {
-    const [activeTab, setActiveTab] = useState<"profile" | "add" | "my-animals" | "favorites">("profile");
 
     return (
         <div className="profile-container">
             {/* Button-Navigation */}
             <div className="space-between">
-                <button className={activeTab === "profile" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("profile")}>Profil</button>
-                <button className={activeTab === "add" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("add")}>Add</button>
-                <button className={activeTab === "my-animals" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("my-animals")}>My Animals</button>
-                <button className={activeTab === "favorites" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("favorites")}>Favorites</button>
+                <button className={props.activeTab === "profile" ? "active-profile-button" : "button-group-button"} onClick={() => props.setActiveTab("profile")}>Profil</button>
+                <button className={props.activeTab === "add" ? "active-profile-button" : "button-group-button"} onClick={() => props.setActiveTab("add")}>Add</button>
+                <button className={props.activeTab === "my-animals" ? "active-profile-button" : "button-group-button"} onClick={() => props.setActiveTab("my-animals")}>My Animals</button>
+                <button className={props.activeTab === "favorites" ? "active-profile-button" : "button-group-button"} onClick={() => props.setActiveTab("favorites")}>Favorites</button>
             </div>
 
             {/* Anzeige je nach aktivem Tab */}
             <div>
-                {activeTab === "profile" && (
+                {props.activeTab === "profile" && (
                     <>
                         <h2>GitHub Profile</h2>
                         {props.userDetails ? (
@@ -54,9 +54,9 @@ export default function Profile(props: Readonly<ProfileProps>) {
                         )}
                     </>
                 )}
-                {activeTab === "add" && <AddAnimalCard user={props.user} handleNewAnimalSubmit={props.handleNewAnimalSubmit}/>}
-                {activeTab === "my-animals" && <MyAnimals />}
-                {activeTab === "favorites" && <Favorites />}
+                {props.activeTab === "add" && <AddAnimalCard user={props.user} handleNewAnimalSubmit={props.handleNewAnimalSubmit}/>}
+                {props.activeTab === "my-animals" && <MyAnimals />}
+                {props.activeTab === "favorites" && <Favorites />}
             </div>
         </div>
     );
