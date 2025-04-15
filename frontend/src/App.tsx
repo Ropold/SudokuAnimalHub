@@ -14,12 +14,14 @@ import ListOfAllAnimals from "./components/ListOfAllAnimals.tsx";
 import Details from "./components/Details.tsx";
 import HighScore from "./components/HighScore.tsx";
 import Deck from "./components/Deck.tsx";
+import {AnimalModel} from "./components/model/AnimalModel.ts";
 
 
 export default function App() {
 
     const [user, setUser] = useState<string>("anonymousUser");
     const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
+    const [activeAnimals, setActiveAnimals] = useState<AnimalModel[]>([]);
 
     // User functions
     function getUser() {
@@ -46,6 +48,7 @@ export default function App() {
 
     useEffect(() => {
         getUser();
+        getActiveAnimals();
     }, []);
 
     useEffect(() => {
@@ -54,6 +57,21 @@ export default function App() {
         }
     }, [user]);
 
+    function handleNewAnimalSubmit(newAnimal: AnimalModel) {
+        setActiveAnimals((prevAnimals) => [...prevAnimals, newAnimal]);
+    }
+
+    function getActiveAnimals() {
+        axios
+            .get("/api/sudoku-animal-hub/active")
+            .then((response) => {
+                setActiveAnimals(response.data);
+            })
+            .catch((error) => {
+                console.error("Error fetching active animals: ", error);
+            });
+    }
+
   return (
     <>
         <Navbar getUser={getUser} getUserDetails={getUserDetails} user={user}/>
@@ -61,13 +79,13 @@ export default function App() {
                 <Route path="*" element={<NotFound />} />
                 <Route path="/" element={<Welcome/>}/>
                 <Route path="/play" element={<Play/>}/>
-                <Route path="/list-of-all-animals" element={<ListOfAllAnimals/>}/>
+                <Route path="/list-of-all-animals" element={<ListOfAllAnimals activeAnimals={activeAnimals}/>}/>
                 <Route path="/animal/:id" element={<Details/>}/>
                 <Route path="/high-score" element={<HighScore/>}/>
                 <Route path="/deck" element={<Deck/>}/>
 
                 <Route element={<ProtectedRoute user={user} />}>
-                    <Route path="/profile/*" element={<Profile userDetails={userDetails} />} />
+                    <Route path="/profile/*" element={<Profile user={user} userDetails={userDetails} handleNewAnimalSubmit={handleNewAnimalSubmit}/>} />
                 </Route>
 
             </Routes>

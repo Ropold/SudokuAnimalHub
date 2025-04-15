@@ -1,6 +1,15 @@
+import {AnimalModel} from "./model/AnimalModel.ts";
 
-export default function AddAnimalCard(){
+type AddAnimalCardProps = {
+    user: string
+    handleNewAnimalSubmit: (newAnimal: AnimalModel) => void
+}
+
+export default function AddAnimalCard(props: Readonly<AddAnimalCardProps>) {
     return(
+        <>
         <h3>Add Animal Card</h3>
+        <p>{props.user}</p>
+        </>
     )
 }
