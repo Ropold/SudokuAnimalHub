@@ -11,6 +11,9 @@ type ProfileProps = {
     handleNewAnimalSubmit:(newAnimal:AnimalModel)=> void;
     activeTab: "profile" | "add" | "my-animals" | "favorites";
     setActiveTab: (tab: "profile" | "add" | "my-animals" | "favorites") => void;
+    allAnimals: AnimalModel[];
+    isEditing: boolean;
+    setIsEditing: (isEditing: boolean) => void;
 };
 
 export default function Profile(props: Readonly<ProfileProps>) {
@@ -55,7 +58,7 @@ export default function Profile(props: Readonly<ProfileProps>) {
                     </>
                 )}
                 {props.activeTab === "add" && <AddAnimalCard user={props.user} handleNewAnimalSubmit={props.handleNewAnimalSubmit}/>}
-                {props.activeTab === "my-animals" && <MyAnimals />}
+                {props.activeTab === "my-animals" && <MyAnimals allAnimals={props.allAnimals} />}
                 {props.activeTab === "favorites" && <Favorites />}
             </div>
         </div>

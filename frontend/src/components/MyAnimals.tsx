@@ -1,5 +1,10 @@
+import {AnimalModel} from "./model/AnimalModel.ts";
 
-export default function MyAnimals(){
+type MyAnimalsProps = {
+    allAnimals: AnimalModel[];
+}
+
+export default function MyAnimals(props: Readonly<MyAnimalsProps>) {
     return (
         <h3>My Animals</h3>
     )
