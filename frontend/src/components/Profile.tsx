@@ -45,7 +45,7 @@ export default function Profile(props: Readonly<ProfileProps>) {
                                         Visit Profile
                                     </a>
                                 </p>
-                                <img src={props.userDetails.avatar_url} alt={`${props.userDetails.login}'s avatar`} />
+                                <img className="profile-container-img" src={props.userDetails.avatar_url} alt={`${props.userDetails.login}'s avatar`} />
                                 <p>Account Created: {new Date(props.userDetails.created_at).toLocaleDateString()}</p>
                                 <p>Last Updated: {new Date(props.userDetails.updated_at).toLocaleDateString()}</p>
                             </div>
