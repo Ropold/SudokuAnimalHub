@@ -22,3 +22,18 @@
     padding: 10px 20px;
     font-size: 1rem;
 }
+
+#button-profile {
+    background-color: #9c27b0; /* Violett */
+}
+
+#button-profile:hover {
+    background-color: #7b1fa2; /* Dunkleres Violett beim Hover */
+}
+
+.active-profile-button{
+    background-color: #999;
+}
+.active-profile-button:hover{
+    cursor: default;
+}

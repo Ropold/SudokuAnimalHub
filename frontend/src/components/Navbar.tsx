@@ -83,7 +83,7 @@ export default function Navbar(props: Readonly<NavbarProps>) {
 
             {props.user !== "anonymousUser" ? (
                 <>
-                    <button className="button-group-button" onClick={() => navigate("/profile")}>Profile</button>
+                    <button id="button-profile" onClick={() => navigate("/profile")}>Profile</button>
                     <button className="button-group-button" onClick={logoutFromGithub}>Logout</button>
                 </>
             ) : (

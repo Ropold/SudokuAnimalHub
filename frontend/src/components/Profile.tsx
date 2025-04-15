@@ -16,10 +16,10 @@ export default function Profile({ userDetails }: Readonly<ProfileProps>) {
         <div className="profile-container">
             {/* Button-Navigation */}
             <div className="space-between">
-                <button className="button-group-button" onClick={() => setActiveTab("profile")}>Profil</button>
-                <button className="button-group-button" onClick={() => setActiveTab("add")}>Add</button>
-                <button className="button-group-button" onClick={() => setActiveTab("my-animals")}>My Animals</button>
-                <button className="button-group-button" onClick={() => setActiveTab("favorites")}>Favorites</button>
+                <button className={activeTab === "profile" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("profile")}>Profil</button>
+                <button className={activeTab === "add" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("add")}>Add</button>
+                <button className={activeTab === "my-animals" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("my-animals")}>My Animals</button>
+                <button className={activeTab === "favorites" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("favorites")}>Favorites</button>
             </div>
 
             {/* Anzeige je nach aktivem Tab */}
