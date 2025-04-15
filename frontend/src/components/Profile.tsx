@@ -20,7 +20,7 @@ export default function Profile(props: Readonly<ProfileProps>) {
             {/* Button-Navigation */}
             <div className="space-between">
                 <button className={props.activeTab === "profile" ? "active-profile-button" : "button-group-button"} onClick={() => props.setActiveTab("profile")}>Profil</button>
-                <button className={props.activeTab === "add" ? "active-profile-button" : "button-group-button"} onClick={() => props.setActiveTab("add")}>Add</button>
+                <button className={props.activeTab === "add" ? "active-profile-button" : "button-group-button"} onClick={() => props.setActiveTab("add")}>Add new Animal</button>
                 <button className={props.activeTab === "my-animals" ? "active-profile-button" : "button-group-button"} onClick={() => props.setActiveTab("my-animals")}>My Animals</button>
                 <button className={props.activeTab === "favorites" ? "active-profile-button" : "button-group-button"} onClick={() => props.setActiveTab("favorites")}>Favorites</button>
             </div>
