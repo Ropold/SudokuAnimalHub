@@ -39,7 +39,7 @@ export default function SearchBar(props: Readonly<SearchBarProps>) {
                     value={selectedAnimalEnum}
                     onChange={(e) => setSelectedAnimalEnum(e.target.value as AnimalEnum | "")}
                 >
-                    <option value="">Filter by Animal Type</option>
+                    <option value="">Filter by Animal</option>
                     {animalTypes.map((type) => (
                         <option key={type} value={type}>
                             {type}
