@@ -15,6 +15,7 @@ import Details from "./components/Details.tsx";
 import HighScore from "./components/HighScore.tsx";
 import Deck from "./components/Deck.tsx";
 import {AnimalModel} from "./components/model/AnimalModel.ts";
+import {DefaultNumberToAnimalMap, NumberToAnimalMap} from "./components/model/NumberToAnimalMap.ts";
 
 
 export default function App() {
@@ -25,6 +26,7 @@ export default function App() {
     const [allAnimals, setAllAnimals] = useState<AnimalModel[]>([]);
     const [favorites, setFavorites] = useState<string[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [deck, setDeck] = useState<NumberToAnimalMap>(DefaultNumberToAnimalMap);
 
 
     // User functions
@@ -117,6 +119,17 @@ export default function App() {
             })
             .catch((error) => {
                 console.error("Error fetching all animals: ", error);
+            });
+    }
+
+    function getUsersDeck() {
+        axios
+            .get("/api/users/numbers-to-animal")
+            .then((response) => {
+                setDeck(response.data);
+            })
+            .catch((error) => {
+                console.error("Error fetching numbers to animals: ", error);
             });
     }
 
