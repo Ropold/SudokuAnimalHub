@@ -5,14 +5,14 @@ type AnimalCardProps = {
     animal: AnimalModel;
     user: string;
     favorites: string[];
-    toggleFavorite: (revealId: string) => void;
+    toggleFavorite: (animalId: string) => void;
 }
 
 export default function AnimalCard(props: Readonly<AnimalCardProps>) {
     const navigate = useNavigate();
 
     const handleCardClick = () => {
-        navigate(`/reveal/${props.animal.id}`);
+        navigate(`/animal/${props.animal.id}`);
     }
 
     const isFavorite = props.favorites.includes(props.animal.id);

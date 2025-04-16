@@ -222,10 +222,10 @@ class AnimalControllerIntegrationTest {
                         """.getBytes())))
                 .andExpect(status().isCreated());
 
-        List<AnimalModel> allReveals = animalRepository.findAll();
-        Assertions.assertEquals(1, allReveals.size());
+        List<AnimalModel> allAnimals = animalRepository.findAll();
+        Assertions.assertEquals(1, allAnimals.size());
 
-        AnimalModel savedAnimal = allReveals.getFirst();
+        AnimalModel savedAnimal = allAnimals.getFirst();
         org.assertj.core.api.Assertions.assertThat(savedAnimal)
                 .usingRecursiveComparison()
                 .ignoringFields("id", "imageUrl")

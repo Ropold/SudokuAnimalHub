@@ -4,6 +4,7 @@ import {useLocation} from "react-router-dom";
 import SearchBar from "./SearchBar.tsx";
 import AnimalCard from "./AnimalCard.tsx";
 import "./styles/AnimalCard.css"
+import "./styles/SearchBar.css"
 
 type ListOfAllAnimalsProps = {
     activeAnimals: AnimalModel[];
@@ -22,7 +23,6 @@ export default function ListOfAllAnimals(props: Readonly<ListOfAllAnimalsProps>)
     const [animalsPerPage, setAnimalsPerPage] = useState<number>(9);
 
     const location = useLocation();
-
 
     useEffect(() => {
         props.getActiveAnimals();
@@ -76,7 +76,6 @@ export default function ListOfAllAnimals(props: Readonly<ListOfAllAnimalsProps>)
 
     return (
             <>
-            <h2>List of all Animals</h2>
                 <SearchBar
                     searchQuery={searchQuery}
                     setSearchQuery={setSearchQuery}

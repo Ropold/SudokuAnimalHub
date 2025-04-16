@@ -104,7 +104,7 @@ export default function AddAnimalCard(props: Readonly<AddAnimalCardProps>) {
                         <label className="animal-category-label">
                             Animal Category:
                             <select
-                                className="input-small"
+                                className="input-small select-space"
                                 value={animalEnum || ""}
                                 onChange={(e) => setAnimalEnum(e.target.value)}
                             >

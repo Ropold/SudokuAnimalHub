@@ -3,16 +3,19 @@
     margin: 0 auto; /* Horizontal zentrieren */
 }
 
+.input-small {
+    padding: 8px;
+    margin-bottom: 15px;
+}
+
 .input-small, select{
     width: 100%;
     height: 40px;
-    padding: 8px;
     font-size: 14px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
     transition: border 0.3s ease;
-    margin-bottom: 15px;
 }
 
 .textarea-large {
@@ -52,4 +55,12 @@
 .animal-category-label {
     display: flex;
     flex-direction: column;
+}
+
+.button-grey{
+    background-color: #999;
+}
+.button-grey:hover{
+    background-color: #555;
+    cursor: default;
 }

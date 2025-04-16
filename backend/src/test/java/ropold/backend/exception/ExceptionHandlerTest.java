@@ -45,7 +45,7 @@ class ExceptionHandlerTest {
     private AnimalService animalService;
 
     @Test
-    void whenRevealNotFoundException_thenReturnsNotFound() throws Exception {
+    void whenAnimalNotFoundException_thenReturnsNotFound() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/sudoku-animal-hub/{id}", "non-existing-id"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("No Animal found with id: non-existing-id"));
