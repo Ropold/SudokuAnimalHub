@@ -7,6 +7,7 @@ import {getAnimalEnumDisplayName} from "./utils/getAnimalEnumDisplayName.ts";
 import "./styles/AddAnimalCard.css"
 import "./styles/Popup.css"
 import { animalsEnumImages } from "./utils/AnimalEnumImages.ts"
+import headerLogo from "../assets/Small-Sudoko-Logo.jpg"
 
 type AddAnimalCardProps = {
     user: string
@@ -88,7 +89,6 @@ export default function AddAnimalCard(props: Readonly<AddAnimalCardProps>) {
     return(
 
             <div className="edit-form">
-                <h2>Add new Animal Card</h2>
                 <form onSubmit={handleSubmit}>
                     <label>
                         Name:
@@ -116,14 +116,14 @@ export default function AddAnimalCard(props: Readonly<AddAnimalCardProps>) {
                                 ))}
                             </select>
                         </label>
-
-                        {animalEnum && animalsEnumImages[animalEnum as AnimalEnum] && (
-                            <img
-                                src={animalsEnumImages[animalEnum as AnimalEnum]}
-                                alt={animalEnum}
-                                className="animal-card-image-add"
-                            />
-                        )}
+                        <img
+                            src={
+                                animalEnum
+                                ? animalsEnumImages[animalEnum as AnimalEnum]
+                                : headerLogo}
+                            alt={animalEnum || "logo sudoku animal hub"}
+                            className="animal-card-image-add"
+                        />
                     </div>
 
                     <label>

@@ -32,7 +32,6 @@
 
 .animal-card-image {
     width: 280px; /* Bild passt sich der Breite an */
-    height: 200px; /* Feste Höhe */
     object-fit: cover; /* Bild wird vollständig angezeigt */
     border-bottom: 1px solid #ccc;
 }

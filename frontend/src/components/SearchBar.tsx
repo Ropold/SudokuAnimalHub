@@ -1,6 +1,8 @@
 import { AnimalModel } from "./model/AnimalModel.ts";
 import { AnimalEnum } from "./model/AnimalEnum.ts";
 import {getAnimalEnumDisplayName} from "./utils/getAnimalEnumDisplayName.ts";
+import {animalsEnumImages} from "./utils/AnimalEnumImages.ts";
+import headerLogo from "../assets/Small-Sudoko-Logo.jpg"
 
 type SearchBarProps = {
     searchQuery: string;
@@ -48,6 +50,15 @@ export default function SearchBar(props: Readonly<SearchBarProps>) {
                     ))}
                 </select>
             </label>
+            <img
+                src={
+                    selectedAnimalEnum
+                        ? animalsEnumImages[selectedAnimalEnum as AnimalEnum]
+                        : headerLogo
+                }
+                alt={selectedAnimalEnum || "logo sudoku animal hub"}
+                className="animal-image-searchbar"
+            />
             <button
                 onClick={handleReset}
                 className={`${searchQuery || selectedAnimalEnum ? "button-group-button" : "button-grey"}`}
