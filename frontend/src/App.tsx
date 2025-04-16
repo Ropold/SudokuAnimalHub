@@ -26,7 +26,8 @@ export default function App() {
     const [allAnimals, setAllAnimals] = useState<AnimalModel[]>([]);
     const [favorites, setFavorites] = useState<string[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [deck, setDeck] = useState<NumberToAnimalMap>(DefaultNumberToAnimalMap);
+    const [savedDeck, setSavedDeck] = useState<NumberToAnimalMap>(DefaultNumberToAnimalMap);
+    const [tempDeck, setTempDeck] = useState<NumberToAnimalMap>(DefaultNumberToAnimalMap);
 
 
     // User functions
@@ -62,6 +63,7 @@ export default function App() {
         if(user !== "anonymousUser"){
             getUserDetails();
             getAppUserFavorites();
+            getUsersDeck();
         }
     }, [user]);
 
@@ -126,7 +128,8 @@ export default function App() {
         axios
             .get("/api/users/numbers-to-animal")
             .then((response) => {
-                setDeck(response.data);
+                setSavedDeck(response.data);
+                setTempDeck(response.data);
             })
             .catch((error) => {
                 console.error("Error fetching numbers to animals: ", error);
@@ -147,7 +150,7 @@ export default function App() {
                 <Route path="/list-of-all-animals" element={<ListOfAllAnimals activeAnimals={activeAnimals} getActiveAnimals={getActiveAnimals} favorites={favorites} toggleFavorite={toggleFavorite} currentPage={currentPage} setCurrentPage={setCurrentPage} user={user}/>}/>
                 <Route path="/animal/:id" element={<Details user={user} favorites={favorites} toggleFavorite={toggleFavorite}/>}/>
                 <Route path="/high-score" element={<HighScore/>}/>
-                <Route path="/deck" element={<Deck/>}/>
+                <Route path="/deck" element={<Deck activeAnimals={activeAnimals} tempDeck={tempDeck} savedDeck={savedDeck} setSavedDeck={setSavedDeck} />}/>
 
                 <Route element={<ProtectedRoute user={user} />}>
                     <Route path="/profile/*" element={<Profile user={user} userDetails={userDetails} handleNewAnimalSubmit={handleNewAnimalSubmit} allAnimals={allAnimals} getAllAnimals={getAllAnimals} setAllAnimals={setAllAnimals} favorites={favorites} toggleFavorite={toggleFavorite}/>} />
