@@ -1,5 +1,6 @@
 import { AnimalModel } from "./model/AnimalModel.ts";
 import { AnimalEnum } from "./model/AnimalEnum.ts";
+import {getAnimalEnumDisplayName} from "./utils/getAnimalEnumDisplayName.ts";
 
 type SearchBarProps = {
     searchQuery: string;
@@ -42,7 +43,7 @@ export default function SearchBar(props: Readonly<SearchBarProps>) {
                     <option value="">Filter by Animal</option>
                     {animalTypes.map((type) => (
                         <option key={type} value={type}>
-                            {type}
+                            {getAnimalEnumDisplayName(type)}
                         </option>
                     ))}
                 </select>

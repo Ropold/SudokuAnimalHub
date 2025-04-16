@@ -2,6 +2,7 @@ import {AnimalModel} from "./model/AnimalModel.ts";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import * as React from "react";
+import AnimalCard from "./AnimalCard.tsx";
 
 type MyAnimalsProps = {
     allAnimals: AnimalModel[];
@@ -191,25 +192,31 @@ export default function MyAnimals(props: Readonly<MyAnimalsProps>) {
                 <div className="animal-card-container">
                     {props.allAnimals.length > 0 ? (
                         props.allAnimals.map((a) => (
-                            <div key={a.id} className="animal-card">
-                                <h4>{a.name}</h4>
-                                <p>{a.description}</p>
-                                <img src={a.imageUrl} alt={a.name} style={{ width: "150px" }} />
-
+                            <div key={a.id}>
+                                <AnimalCard
+                                    animal={a}
+                                    user={props.user}
+                                    favorites={props.favorites}
+                                    toggleFavorite={props.toggleFavorite}
+                                />
                                 <div className="space-between">
                                     <button
-                                        id={a.isActive ? "active-button" : "inactive-button"}
+                                        id={a.isActive ? "active-button-my-animals" : "button-is-inactive"}
                                         onClick={() => handleToggleActiveStatu(a.id)}
                                     >
                                         {a.isActive ? "Active" : "Inactive"}
                                     </button>
-                                    <button className="button-group-button" onClick={() => handleEditToggle(a.id)}>Edit</button>
-                                    <button id="button-delete" onClick={() => handleDeleteClick(a.id)}>Delete</button>
+                                    <button className="button-group-button" onClick={() => handleEditToggle(a.id)}>
+                                        Edit
+                                    </button>
+                                    <button id="button-delete" onClick={() => handleDeleteClick(a.id)}>
+                                        Delete
+                                    </button>
                                 </div>
                             </div>
                         ))
                     ) : (
-                        <p>No animals found.</p>
+                        <p>No animals found for this user.</p>
                     )}
                 </div>
             )}

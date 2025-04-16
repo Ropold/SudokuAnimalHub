@@ -25,7 +25,6 @@ export default function Favorites(props: Readonly<FavoritesProps>) {
 
     return (
         <>
-            <h2>Favorites</h2>
             <div className="animal-card-container">
                 {favoritesAnimals.length > 0 ? (
                     favoritesAnimals.map((a) => (  // ← Korrekte Syntax mit `r`
