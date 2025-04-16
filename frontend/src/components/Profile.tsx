@@ -1,25 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UserDetails } from "./model/UserDetailsModel.ts";
 import AddAnimalCard from "./AddAnimalCard.tsx";
 import Favorites from "./Favorites.tsx";
 import MyAnimals from "./MyAnimals.tsx";
 import "./styles/Profile.css";
+import { AnimalModel } from "./model/AnimalModel.ts";
 
 type ProfileProps = {
+    user: string;
     userDetails: UserDetails | null;
+    handleNewAnimalSubmit: (newAnimal: AnimalModel) => void;
+    allAnimals: AnimalModel[];
+    setAllAnimals: React.Dispatch<React.SetStateAction<AnimalModel[]>>;
+    getAllAnimals: () => void;
+    favorites: string[];
+    toggleFavorite: (animalId: string) => void;
 };
 
-export default function Profile({ userDetails }: Readonly<ProfileProps>) {
-    const [activeTab, setActiveTab] = useState<"profile" | "add" | "my-animals" | "favorites">("profile");
+export default function Profile(props: Readonly<ProfileProps>) {
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+
+    const [activeTab, setActiveTab] = useState<"profile" | "add" | "my-animals" | "favorites">(() => {
+        const savedTab = localStorage.getItem("activeTab");
+        return (savedTab as "profile" | "add" | "my-animals" | "favorites") || "profile";
+    });
+
+    useEffect(() => {
+        localStorage.setItem("activeTab", activeTab);
+    }, [activeTab]);
 
     return (
         <div className="profile-container">
             {/* Button-Navigation */}
             <div className="space-between">
-                <button className="button-group-button" onClick={() => setActiveTab("profile")}>Profil</button>
-                <button className="button-group-button" onClick={() => setActiveTab("add")}>Add</button>
-                <button className="button-group-button" onClick={() => setActiveTab("my-animals")}>My Animals</button>
-                <button className="button-group-button" onClick={() => setActiveTab("favorites")}>Favorites</button>
+                <button className={activeTab === "profile" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("profile")}>Profil</button>
+                <button className={activeTab === "add" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("add")}>Add new Animal</button>
+                <button className={activeTab === "my-animals" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("my-animals")}>My Animals</button>
+                <button className={activeTab === "favorites" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("favorites")}>Favorites</button>
             </div>
 
             {/* Anzeige je nach aktivem Tab */}
@@ -27,33 +44,33 @@ export default function Profile({ userDetails }: Readonly<ProfileProps>) {
                 {activeTab === "profile" && (
                     <>
                         <h2>GitHub Profile</h2>
-                        {userDetails ? (
+                        {props.userDetails ? (
                             <div>
-                                <p>Username: {userDetails.login}</p>
-                                <p>Name: {userDetails.name || "No name provided"}</p>
-                                <p>Location: {userDetails.location ?? "No location provided"}</p>
-                                {userDetails.bio && <p>Bio: {userDetails.bio}</p>}
-                                <p>Followers: {userDetails.followers}</p>
-                                <p>Following: {userDetails.following}</p>
-                                <p>Public Repositories: {userDetails.public_repos}</p>
+                                <p>Username: {props.userDetails.login}</p>
+                                <p>Name: {props.userDetails.name || "No name provided"}</p>
+                                <p>Location: {props.userDetails.location ?? "No location provided"}</p>
+                                {props.userDetails.bio && <p>Bio: {props.userDetails.bio}</p>}
+                                <p>Followers: {props.userDetails.followers}</p>
+                                <p>Following: {props.userDetails.following}</p>
+                                <p>Public Repositories: {props.userDetails.public_repos}</p>
                                 <p>
                                     GitHub Profile:{" "}
-                                    <a href={userDetails.html_url} target="_blank" rel="noopener noreferrer">
+                                    <a href={props.userDetails.html_url} target="_blank" rel="noopener noreferrer">
                                         Visit Profile
                                     </a>
                                 </p>
-                                <img src={userDetails.avatar_url} alt={`${userDetails.login}'s avatar`} />
-                                <p>Account Created: {new Date(userDetails.created_at).toLocaleDateString()}</p>
-                                <p>Last Updated: {new Date(userDetails.updated_at).toLocaleDateString()}</p>
+                                <img className="profile-container-img" src={props.userDetails.avatar_url} alt={`${props.userDetails.login}'s avatar`} />
+                                <p>Account Created: {new Date(props.userDetails.created_at).toLocaleDateString()}</p>
+                                <p>Last Updated: {new Date(props.userDetails.updated_at).toLocaleDateString()}</p>
                             </div>
                         ) : (
                             <p>Loading...</p>
                         )}
                     </>
                 )}
-                {activeTab === "add" && <AddAnimalCard />}
-                {activeTab === "my-animals" && <MyAnimals />}
-                {activeTab === "favorites" && <Favorites />}
+                {activeTab === "add" && <AddAnimalCard user={props.user} handleNewAnimalSubmit={props.handleNewAnimalSubmit} />}
+                {activeTab === "my-animals" && <MyAnimals allAnimals={props.allAnimals} getAllAnimals={props.getAllAnimals} setAllAnimals={props.setAllAnimals} user={props.user} favorites={props.favorites} toggleFavorite={props.toggleFavorite} isEditing={isEditing} setIsEditing={setIsEditing}/>}
+                {activeTab === "favorites" && <Favorites user={props.user} favorites={props.favorites} toggleFavorite={props.toggleFavorite} />}
             </div>
         </div>
     );

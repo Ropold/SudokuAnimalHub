@@ -21,4 +21,58 @@
     gap: 10px;
     padding: 10px 20px;
     font-size: 1rem;
+    margin-top: 10px;
+}
+
+#button-profile {
+    background-color: #9c27b0; /* Violett */
+}
+
+#button-profile:hover {
+    background-color: #7b1fa2; /* Dunkleres Violett beim Hover */
+}
+
+.active-profile-button{
+    background-color: #999;
+}
+.active-profile-button:hover{
+    cursor: default;
+}
+
+#button-favorite-animal-card {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    outline: none;
+}
+.favorite-on {
+    color: red;
+}
+
+.favorite-off {
+    color: #999;
+}
+
+#active-button-my-animals{
+    background-color: #66bb6a;
+}
+#active-button-my-animals:hover{
+    background-color: #388e3c;
+}
+
+#button-is-inactive {
+    background-color: #999;
+}
+#button-is-inactive:hover {
+    background-color: #555;
+}
+#button-delete {
+    background-color: #ff9999;
+}
+
+#button-delete:hover {
+    background-color: #d32f2f;
 }

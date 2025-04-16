@@ -43,7 +43,7 @@ public class UserController {
 
     @GetMapping("/me/my-animals/{githubId}")
     public List<AnimalModel> getAnimalsForGithubUser(@PathVariable String githubId) {
-        return animalService.getRevealsForGithubUser(githubId);
+        return animalService.getAnimalsForGithubUser(githubId);
     }
 
 

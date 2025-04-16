@@ -265,7 +265,7 @@ class AppUserControllerTest {
     }
 
     @Test
-    void removeRevealFromFavorites_shouldRemoveRevealAndReturnFavorites() throws Exception {
+    void removeAnimalFromFavorites_shouldRemoveAnimalAndReturnFavorites() throws Exception {
         AppUser userBefore = appUserRepository.findById("user").orElseThrow();
         Assertions.assertTrue(userBefore.favoriteAnimals().contains("2"));
 

@@ -18,7 +18,7 @@ export default function Welcome(){
             <div className="image-wrapper">
                 <img
                     src={welcomePic}
-                    alt="Welcome to RevealHub"
+                    alt="Welcome to Sudoku Animal Hub"
                     className="logo-welcome"
                 />
                 <div className="info-icon" onClick={toggleCredits} title="Bildnachweis">i</div>

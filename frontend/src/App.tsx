@@ -14,12 +14,18 @@ import ListOfAllAnimals from "./components/ListOfAllAnimals.tsx";
 import Details from "./components/Details.tsx";
 import HighScore from "./components/HighScore.tsx";
 import Deck from "./components/Deck.tsx";
+import {AnimalModel} from "./components/model/AnimalModel.ts";
 
 
 export default function App() {
 
     const [user, setUser] = useState<string>("anonymousUser");
     const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
+    const [activeAnimals, setActiveAnimals] = useState<AnimalModel[]>([]);
+    const [allAnimals, setAllAnimals] = useState<AnimalModel[]>([]);
+    const [favorites, setFavorites] = useState<string[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+
 
     // User functions
     function getUser() {
@@ -46,28 +52,92 @@ export default function App() {
 
     useEffect(() => {
         getUser();
+        getActiveAnimals();
+        getAllAnimals();
     }, []);
 
     useEffect(() => {
         if(user !== "anonymousUser"){
             getUserDetails();
+            getAppUserFavorites();
         }
     }, [user]);
 
-  return (
+    function handleNewAnimalSubmit(newAnimal: AnimalModel) {
+        setActiveAnimals((prevAnimals) => [...prevAnimals, newAnimal]);
+    }
+
+    function getActiveAnimals() {
+        axios
+            .get("/api/sudoku-animal-hub/active")
+            .then((response) => {
+                setActiveAnimals(response.data);
+            })
+            .catch((error) => {
+                console.error("Error fetching active animals: ", error);
+            });
+    }
+
+    function getAppUserFavorites(){
+        axios.get<AnimalModel[]>(`/api/users/favorites`)
+            .then((response) => {
+                const favoriteIds = response.data.map((animal) => animal.id);
+                setFavorites(favoriteIds);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
+    function toggleFavorite(animalId: string) {
+        const isFavorite = favorites.includes(animalId);
+
+        if (isFavorite) {
+            axios.delete(`/api/users/favorites/${animalId}`)
+                .then(() => {
+                    setFavorites((prevFavorites) =>
+                        prevFavorites.filter((id) => id !== animalId)
+                    );
+                })
+                .catch((error) => console.error(error));
+        } else {
+            axios.post(`/api/users/favorites/${animalId}`)
+                .then(() => {
+                    setFavorites((prevFavorites) => [...prevFavorites, animalId]);
+                })
+                .catch((error) => console.error(error));
+        }
+    }
+
+    function getAllAnimals() {
+        axios
+            .get("/api/sudoku-animal-hub")
+            .then((response) => {
+                setAllAnimals(response.data);
+            })
+            .catch((error) => {
+                console.error("Error fetching all animals: ", error);
+            });
+    }
+
+    useEffect(() => {
+        window.scroll(0, 0);
+    }, [location]);
+
+    return (
     <>
         <Navbar getUser={getUser} getUserDetails={getUserDetails} user={user}/>
             <Routes>
                 <Route path="*" element={<NotFound />} />
                 <Route path="/" element={<Welcome/>}/>
                 <Route path="/play" element={<Play/>}/>
-                <Route path="/list-of-all-animals" element={<ListOfAllAnimals/>}/>
-                <Route path="/animal/:id" element={<Details/>}/>
+                <Route path="/list-of-all-animals" element={<ListOfAllAnimals activeAnimals={activeAnimals} getActiveAnimals={getActiveAnimals} favorites={favorites} toggleFavorite={toggleFavorite} currentPage={currentPage} setCurrentPage={setCurrentPage} user={user}/>}/>
+                <Route path="/animal/:id" element={<Details user={user} favorites={favorites} toggleFavorite={toggleFavorite}/>}/>
                 <Route path="/high-score" element={<HighScore/>}/>
                 <Route path="/deck" element={<Deck/>}/>
 
                 <Route element={<ProtectedRoute user={user} />}>
-                    <Route path="/profile/*" element={<Profile userDetails={userDetails} />} />
+                    <Route path="/profile/*" element={<Profile user={user} userDetails={userDetails} handleNewAnimalSubmit={handleNewAnimalSubmit} allAnimals={allAnimals} getAllAnimals={getAllAnimals} setAllAnimals={setAllAnimals} favorites={favorites} toggleFavorite={toggleFavorite}/>} />
                 </Route>
 
             </Routes>
