@@ -1,6 +1,9 @@
 import {AnimalModel} from "./model/AnimalModel.ts";
 import {useEffect, useState} from "react";
 import {useLocation} from "react-router-dom";
+import SearchBar from "./SearchBar.tsx";
+import AnimalCard from "./AnimalCard.tsx";
+import "./styles/AnimalCard.css"
 
 type ListOfAllAnimalsProps = {
     activeAnimals: AnimalModel[];
@@ -9,6 +12,7 @@ type ListOfAllAnimalsProps = {
     toggleFavorite: (animalId: string) => void;
     currentPage: number;
     setCurrentPage: (pageNumber: number) => void;
+    user: string;
 }
 
 export default function ListOfAllAnimals(props: Readonly<ListOfAllAnimalsProps>) {
@@ -62,16 +66,49 @@ export default function ListOfAllAnimals(props: Readonly<ListOfAllAnimalsProps>)
 
     function getPaginationData() {
         const indexOfLastAnimal = props.currentPage * animalsPerPage;
-        const indexOfFirstReveal = indexOfLastAnimal - animalsPerPage;
-        const currentAnimals = filteredAnimals.slice(indexOfFirstReveal, indexOfLastAnimal);
+        const indexOfFirstAnimal = indexOfLastAnimal - animalsPerPage;
+        const currentAnimals = filteredAnimals.slice(indexOfFirstAnimal, indexOfLastAnimal);
         const totalPages = Math.ceil(filteredAnimals.length / animalsPerPage);
-        return { currentReveals: currentAnimals, totalPages };
+        return { currentAnimals: currentAnimals, totalPages };
     }
 
-    const { currentReveals, totalPages } = getPaginationData();
+    const { currentAnimals, totalPages } = getPaginationData();
 
     return (
-
-            <h3>List of all Animals</h3>
+            <>
+            <h2>List of all Animals</h2>
+                <SearchBar
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
+                    selectedAnimalEnum={selectedAnimalEnum}
+                    setSelectedAnimalEnum={setSelectedAnimalEnum}
+                    activeAnimals={props.activeAnimals}
+                />
+                <div className="animal-card-container">
+                    {currentAnimals.map((a) => (
+                        <AnimalCard
+                            key={a.id}
+                            animal={a}
+                            user={props.user}
+                            favorites={props.favorites}
+                            toggleFavorite={props.toggleFavorite}
+                        />
+                    ))}
+                </div>
+                <div className="space-between">
+                    {Array.from({ length: totalPages }, (_, index) => (
+                        <button
+                            key={index}
+                            className={"button-group-button"}
+                            id={index +1 === props.currentPage ? "active-paginate" : undefined}
+                            onClick={() => {
+                                props.setCurrentPage(index + 1);
+                            }}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                </div>
+            </>
     )
 }

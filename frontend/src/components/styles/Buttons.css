@@ -37,3 +37,20 @@
 .active-profile-button:hover{
     cursor: default;
 }
+
+#button-favorite-animal-card {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    outline: none;
+}
+.favorite-on {
+    color: red;
+}
+
+.favorite-off {
+    color: #999;
+}

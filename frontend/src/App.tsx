@@ -132,7 +132,7 @@ export default function App() {
                 <Route path="*" element={<NotFound />} />
                 <Route path="/" element={<Welcome/>}/>
                 <Route path="/play" element={<Play/>}/>
-                <Route path="/list-of-all-animals" element={<ListOfAllAnimals activeAnimals={activeAnimals} getActiveAnimals={getActiveAnimals} favorites={favorites} toggleFavorite={toggleFavorite} currentPage={currentPage} setCurrentPage={setCurrentPage}/>}/>
+                <Route path="/list-of-all-animals" element={<ListOfAllAnimals activeAnimals={activeAnimals} getActiveAnimals={getActiveAnimals} favorites={favorites} toggleFavorite={toggleFavorite} currentPage={currentPage} setCurrentPage={setCurrentPage} user={user}/>}/>
                 <Route path="/animal/:id" element={<Details/>}/>
                 <Route path="/high-score" element={<HighScore/>}/>
                 <Route path="/deck" element={<Deck/>}/>
