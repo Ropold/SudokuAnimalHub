@@ -11,7 +11,7 @@ type ProfileProps = {
     userDetails: UserDetails | null;
     handleNewAnimalSubmit: (newAnimal: AnimalModel) => void;
     allAnimals: AnimalModel[];
-    setAllAnimals: (animals: AnimalModel[]) => void;
+    setAllAnimals: React.Dispatch<React.SetStateAction<AnimalModel[]>>;
     getAllAnimals: () => void;
     favorites: string[];
     toggleFavorite: (animalId: string) => void;
