@@ -1,36 +1,45 @@
+import { useState, useEffect } from "react";
 import { UserDetails } from "./model/UserDetailsModel.ts";
 import AddAnimalCard from "./AddAnimalCard.tsx";
 import Favorites from "./Favorites.tsx";
 import MyAnimals from "./MyAnimals.tsx";
 import "./styles/Profile.css";
-import {AnimalModel} from "./model/AnimalModel.ts";
+import { AnimalModel } from "./model/AnimalModel.ts";
 
 type ProfileProps = {
     user: string;
     userDetails: UserDetails | null;
-    handleNewAnimalSubmit:(newAnimal:AnimalModel)=> void;
-    activeTab: "profile" | "add" | "my-animals" | "favorites";
-    setActiveTab: (tab: "profile" | "add" | "my-animals" | "favorites") => void;
+    handleNewAnimalSubmit: (newAnimal: AnimalModel) => void;
     allAnimals: AnimalModel[];
     isEditing: boolean;
     setIsEditing: (isEditing: boolean) => void;
+    favorites: string[];
+    toggleFavorite: (animalId: string) => void;
 };
 
 export default function Profile(props: Readonly<ProfileProps>) {
+    const [activeTab, setActiveTab] = useState<"profile" | "add" | "my-animals" | "favorites">(() => {
+        const savedTab = localStorage.getItem("activeTab");
+        return (savedTab as "profile" | "add" | "my-animals" | "favorites") || "profile";
+    });
+
+    useEffect(() => {
+        localStorage.setItem("activeTab", activeTab);
+    }, [activeTab]);
 
     return (
         <div className="profile-container">
             {/* Button-Navigation */}
             <div className="space-between">
-                <button className={props.activeTab === "profile" ? "active-profile-button" : "button-group-button"} onClick={() => props.setActiveTab("profile")}>Profil</button>
-                <button className={props.activeTab === "add" ? "active-profile-button" : "button-group-button"} onClick={() => props.setActiveTab("add")}>Add new Animal</button>
-                <button className={props.activeTab === "my-animals" ? "active-profile-button" : "button-group-button"} onClick={() => props.setActiveTab("my-animals")}>My Animals</button>
-                <button className={props.activeTab === "favorites" ? "active-profile-button" : "button-group-button"} onClick={() => props.setActiveTab("favorites")}>Favorites</button>
+                <button className={activeTab === "profile" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("profile")}>Profil</button>
+                <button className={activeTab === "add" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("add")}>Add new Animal</button>
+                <button className={activeTab === "my-animals" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("my-animals")}>My Animals</button>
+                <button className={activeTab === "favorites" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("favorites")}>Favorites</button>
             </div>
 
             {/* Anzeige je nach aktivem Tab */}
             <div>
-                {props.activeTab === "profile" && (
+                {activeTab === "profile" && (
                     <>
                         <h2>GitHub Profile</h2>
                         {props.userDetails ? (
@@ -57,9 +66,9 @@ export default function Profile(props: Readonly<ProfileProps>) {
                         )}
                     </>
                 )}
-                {props.activeTab === "add" && <AddAnimalCard user={props.user} handleNewAnimalSubmit={props.handleNewAnimalSubmit}/>}
-                {props.activeTab === "my-animals" && <MyAnimals allAnimals={props.allAnimals} />}
-                {props.activeTab === "favorites" && <Favorites />}
+                {activeTab === "add" && <AddAnimalCard user={props.user} handleNewAnimalSubmit={props.handleNewAnimalSubmit} />}
+                {activeTab === "my-animals" && <MyAnimals allAnimals={props.allAnimals} />}
+                {activeTab === "favorites" && <Favorites user={props.user} favorites={props.favorites} toggleFavorite={props.toggleFavorite} />}
             </div>
         </div>
     );

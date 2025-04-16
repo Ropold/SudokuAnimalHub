@@ -126,8 +126,6 @@ export default function AddAnimalCard(props: Readonly<AddAnimalCardProps>) {
                         )}
                     </div>
 
-
-
                     <label>
                         Description:
                         <textarea

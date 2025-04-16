@@ -23,10 +23,10 @@ export default function App() {
     const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
     const [activeAnimals, setActiveAnimals] = useState<AnimalModel[]>([]);
     const [allAnimals, setAllAnimals] = useState<AnimalModel[]>([]);
-    const [activeTab, setActiveTab] = useState<"profile" | "add" | "my-animals" | "favorites">("profile");
     const [favorites, setFavorites] = useState<string[]>([]);
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
+
 
     // User functions
     function getUser() {
@@ -127,7 +127,7 @@ export default function App() {
 
     return (
     <>
-        <Navbar getUser={getUser} getUserDetails={getUserDetails} user={user} setActiveTab={setActiveTab}/>
+        <Navbar getUser={getUser} getUserDetails={getUserDetails} user={user}/>
             <Routes>
                 <Route path="*" element={<NotFound />} />
                 <Route path="/" element={<Welcome/>}/>
@@ -138,7 +138,7 @@ export default function App() {
                 <Route path="/deck" element={<Deck/>}/>
 
                 <Route element={<ProtectedRoute user={user} />}>
-                    <Route path="/profile/*" element={<Profile user={user} userDetails={userDetails} handleNewAnimalSubmit={handleNewAnimalSubmit} activeTab={activeTab} setActiveTab={setActiveTab} allAnimals={allAnimals} isEditing={isEditing} setIsEditing={setIsEditing}/>} />
+                    <Route path="/profile/*" element={<Profile user={user} userDetails={userDetails} handleNewAnimalSubmit={handleNewAnimalSubmit} allAnimals={allAnimals} isEditing={isEditing} setIsEditing={setIsEditing} favorites={favorites} toggleFavorite={toggleFavorite}/>} />
                 </Route>
 
             </Routes>

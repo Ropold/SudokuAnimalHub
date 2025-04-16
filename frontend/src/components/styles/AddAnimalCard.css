@@ -46,8 +46,8 @@
 }
 
 .animal-card-image-add {
-    width: 120px;
-    height: auto;
+    width: auto;
+    height: 120px;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -60,6 +60,7 @@
 .button-grey{
     background-color: #999;
 }
+
 .button-grey:hover{
     background-color: #555;
     cursor: default;

@@ -11,7 +11,6 @@ type NavbarProps = {
     getUser: () => void;
     getUserDetails: () => void;
     user: string;
-    setActiveTab: (activeTab: "profile") => void;
 }
 
 export default function Navbar(props: Readonly<NavbarProps>) {
@@ -84,7 +83,7 @@ export default function Navbar(props: Readonly<NavbarProps>) {
 
             {props.user !== "anonymousUser" ? (
                 <>
-                    <button id="button-profile" onClick={() => {props.setActiveTab("profile"); navigate("/profile")}}>Profile</button>
+                    <button id="button-profile" onClick={() => navigate("/profile")}>Profile</button>
                     <button className="button-group-button" onClick={logoutFromGithub}>Logout</button>
                 </>
             ) : (
