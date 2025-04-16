@@ -38,9 +38,9 @@ export default function MyAnimals(props: Readonly<MyAnimalsProps>) {
                 })
                 .catch((error) => console.error("Error loading current image:", error));
         }
-    };
+    }
 
-    function handleToggleActiveStatu(animalId: string) {
+    function handleToggleActiveStatus(animalId: string) {
         axios
             .put(`/api/users/${animalId}/toggle-active`)
             .then(() => {
@@ -54,7 +54,7 @@ export default function MyAnimals(props: Readonly<MyAnimalsProps>) {
                 console.error("Error during Toggle Offline/Active", error);
                 alert("An Error while changing the status of Active/Offline.");
             });
-    };
+    }
 
     function handleSaveEdit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -92,14 +92,14 @@ export default function MyAnimals(props: Readonly<MyAnimalsProps>) {
                 console.error("Error saving animal edits:", error);
                 alert("An unexpected error occurred. Please try again.");
             });
-    };
+    }
 
     function onFileChange (e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.files) {
             setImage(e.target.files[0]);
             setImageChanged(true);
         }
-    };
+    }
 
     function handleDeleteClick(id: string) {
         setAnimalToDelete(id);
@@ -198,21 +198,11 @@ export default function MyAnimals(props: Readonly<MyAnimalsProps>) {
                                     user={props.user}
                                     favorites={props.favorites}
                                     toggleFavorite={props.toggleFavorite}
+                                    showButtons={true}
+                                    handleEditToggle={handleEditToggle}
+                                    handleDeleteClick={handleDeleteClick}
+                                    handleToggleActiveStatus={handleToggleActiveStatus}
                                 />
-                                <div className="space-between">
-                                    <button
-                                        id={a.isActive ? "active-button-my-animals" : "button-is-inactive"}
-                                        onClick={() => handleToggleActiveStatu(a.id)}
-                                    >
-                                        {a.isActive ? "Active" : "Inactive"}
-                                    </button>
-                                    <button className="button-group-button" onClick={() => handleEditToggle(a.id)}>
-                                        Edit
-                                    </button>
-                                    <button id="button-delete" onClick={() => handleDeleteClick(a.id)}>
-                                        Delete
-                                    </button>
-                                </div>
                             </div>
                         ))
                     ) : (

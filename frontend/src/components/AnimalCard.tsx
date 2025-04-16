@@ -6,6 +6,10 @@ type AnimalCardProps = {
     user: string;
     favorites: string[];
     toggleFavorite: (animalId: string) => void;
+    showButtons?: boolean;
+    handleEditToggle?: (id: string) => void;
+    handleDeleteClick?: (id: string) => void;
+    handleToggleActiveStatus?: (id: string) => void;
 }
 
 export default function AnimalCard(props: Readonly<AnimalCardProps>) {
@@ -33,6 +37,38 @@ export default function AnimalCard(props: Readonly<AnimalCardProps>) {
                     >
                         ♥
                     </button>
+                )}
+
+                {props.showButtons && (
+                    <div className="space-between">
+                        <button
+                            id={props.animal.isActive ? "active-button-my-animals" : "button-is-inactive"}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                props.handleToggleActiveStatus?.(props.animal.id);
+                            }}
+                        >
+                            {props.animal.isActive ? "Active" : "Inactive"}
+                        </button>
+                        <button
+                            className="button-group-button"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                props.handleEditToggle?.(props.animal.id);
+                            }}
+                        >
+                            Edit
+                        </button>
+                        <button
+                            id="button-delete"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                props.handleDeleteClick?.(props.animal.id);
+                            }}
+                        >
+                            Delete
+                        </button>
+                    </div>
                 )}
             </div>
     )
