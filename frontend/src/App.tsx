@@ -24,7 +24,6 @@ export default function App() {
     const [activeAnimals, setActiveAnimals] = useState<AnimalModel[]>([]);
     const [allAnimals, setAllAnimals] = useState<AnimalModel[]>([]);
     const [favorites, setFavorites] = useState<string[]>([]);
-    const [isEditing, setIsEditing] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
 
 
@@ -138,7 +137,7 @@ export default function App() {
                 <Route path="/deck" element={<Deck/>}/>
 
                 <Route element={<ProtectedRoute user={user} />}>
-                    <Route path="/profile/*" element={<Profile user={user} userDetails={userDetails} handleNewAnimalSubmit={handleNewAnimalSubmit} allAnimals={allAnimals} isEditing={isEditing} setIsEditing={setIsEditing} favorites={favorites} toggleFavorite={toggleFavorite}/>} />
+                    <Route path="/profile/*" element={<Profile user={user} userDetails={userDetails} handleNewAnimalSubmit={handleNewAnimalSubmit} allAnimals={allAnimals} getAllAnimals={getAllAnimals} setAllAnimals={setAllAnimals} favorites={favorites} toggleFavorite={toggleFavorite}/>} />
                 </Route>
 
             </Routes>

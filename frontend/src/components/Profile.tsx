@@ -11,13 +11,15 @@ type ProfileProps = {
     userDetails: UserDetails | null;
     handleNewAnimalSubmit: (newAnimal: AnimalModel) => void;
     allAnimals: AnimalModel[];
-    isEditing: boolean;
-    setIsEditing: (isEditing: boolean) => void;
+    setAllAnimals: (animals: AnimalModel[]) => void;
+    getAllAnimals: () => void;
     favorites: string[];
     toggleFavorite: (animalId: string) => void;
 };
 
 export default function Profile(props: Readonly<ProfileProps>) {
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+
     const [activeTab, setActiveTab] = useState<"profile" | "add" | "my-animals" | "favorites">(() => {
         const savedTab = localStorage.getItem("activeTab");
         return (savedTab as "profile" | "add" | "my-animals" | "favorites") || "profile";
@@ -67,7 +69,7 @@ export default function Profile(props: Readonly<ProfileProps>) {
                     </>
                 )}
                 {activeTab === "add" && <AddAnimalCard user={props.user} handleNewAnimalSubmit={props.handleNewAnimalSubmit} />}
-                {activeTab === "my-animals" && <MyAnimals allAnimals={props.allAnimals} />}
+                {activeTab === "my-animals" && <MyAnimals allAnimals={props.allAnimals} getAllAnimals={props.getAllAnimals} setAllAnimals={props.setAllAnimals} user={props.user} favorites={props.favorites} toggleFavorite={props.toggleFavorite} isEditing={isEditing} setIsEditing={setIsEditing}/>}
                 {activeTab === "favorites" && <Favorites user={props.user} favorites={props.favorites} toggleFavorite={props.toggleFavorite} />}
             </div>
         </div>
