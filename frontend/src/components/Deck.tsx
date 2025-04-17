@@ -5,7 +5,7 @@ import {animalsEnumImages} from "./utils/AnimalEnumImages.ts";
 import "./styles/Deck.css";
 import * as React from "react";
 import {getAnimalEnumDisplayName} from "./utils/getAnimalEnumDisplayName.ts";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import AnimalSelectPopup from "./AnimalSelectPopup.tsx";
 import {AnimalEnum} from "./model/AnimalEnum.ts";
 import {isAnimalOfUser} from "./utils/isAnimalOfUser.ts";
@@ -22,18 +22,37 @@ type DeckProps = {
 export default function Deck(props: Readonly<DeckProps>) {
     const [popupTempDeckNumber, setPopupTempDeckNumber] = useState<number | null>(null);
     const [popupSavedDeckNumber, setPopupSavedDeckNumber] = useState<number | null>(null);
+    const [savedPopup, setSavedPopup] = useState<boolean>(false);
 
 
-    function saveUsersDeck() {
+    function saveUsersDeck(deck: NumberToAnimalMap) {
+        const cleanedDeck: { [key: number]: string } = {};
+
+        Object.entries(deck).forEach(([key, value]) => {
+            cleanedDeck[Number(key)] = isAnimalOfUser(value)
+                ? value.imageUrl
+                : value;
+        });
+
         axios
-            .post("/api/users/numbers-to-animal", props.tempDeck)
+            .post("/api/users/numbers-to-animal", cleanedDeck)
             .then(() => {
-                props.setSavedDeck(props.tempDeck);
+                props.setSavedDeck(deck);
+                setSavedPopup(true);
             })
             .catch((error) => {
                 console.error("Error saving deck:", error);
             });
     }
+
+
+    useEffect(() => {
+        if(savedPopup) {
+            setTimeout(() => {
+                setSavedPopup(false);
+            }, 2000);
+        }
+    }, [savedPopup]);
 
     return (
         <div>
@@ -73,10 +92,16 @@ export default function Deck(props: Readonly<DeckProps>) {
                     </div>
 
                     <div className="space-between">
-                        <button className="button-group-button">
+                        <button
+                            className="button-group-button"
+                            onClick={() => saveUsersDeck(props.tempDeck)}
+                        >
                             Save Temp Deck as User Deck
                         </button>
-                        <button id="button-profile">
+                        <button
+                            id="button-profile"
+                            onClick={() => saveUsersDeck(props.savedDeck)}
+                        >
                             Save User Deck
                         </button>
                     </div>
@@ -121,6 +146,12 @@ export default function Deck(props: Readonly<DeckProps>) {
                     }}
                     activeAnimals={props.activeAnimals}
                 />
+            )}
+
+            {savedPopup && (
+                <div className="saved-animation">
+                    <p>Deck saved</p>
+                </div>
             )}
         </div>
     );

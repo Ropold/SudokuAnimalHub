@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { animalsEnumImages } from "./utils/AnimalEnumImages";
 import { getAnimalEnumDisplayName } from "./utils/getAnimalEnumDisplayName";
-import {All_ANIMALS_ENUM, AnimalEnum} from "./model/AnimalEnum.ts";
-import {AnimalModel} from "./model/AnimalModel.ts";
-import "./styles/AnimalSelectPopup.css"
-import {AnimalOfUser} from "./model/NumberToAnimalMap.ts";
-import {isAnimalOfUser} from "./utils/isAnimalOfUser.ts";
+import { All_ANIMALS_ENUM, AnimalEnum } from "./model/AnimalEnum.ts";
+import { AnimalModel } from "./model/AnimalModel.ts";
+import "./styles/AnimalSelectPopup.css";
+import { AnimalOfUser } from "./model/NumberToAnimalMap.ts";
+import { isAnimalOfUser } from "./utils/isAnimalOfUser.ts";
 
 type AnimalSelectPopupProps = {
     deckNumber: number;
@@ -18,14 +18,14 @@ type AnimalSelectPopupProps = {
 export default function AnimalSelectPopup(props: Readonly<AnimalSelectPopupProps>) {
     const [selectedAnimalEnum, setSelectedAnimalEnum] = useState<string | null>(null);
 
+    // Handle the selection of an animal
     const handleAnimalSelect = (animal: AnimalEnum | AnimalOfUser) => {
-        props.setAnimalInDeck(animal);
-        setSelectedAnimalEnum(isAnimalOfUser(animal) ? animal.name : animal); // optional, nur für UI
-        props.closePopup();
+        props.setAnimalInDeck(animal); // Set the selected animal to the deck
+        setSelectedAnimalEnum(isAnimalOfUser(animal) ? animal.name : animal); // Update selected name for UI
+        props.closePopup(); // Close the popup
     };
 
-
-
+    // Combine active user animals with the default animals from enum
     const allAnimals: (AnimalEnum | AnimalOfUser)[] = [
         ...props.activeAnimals.map((animal) => ({
             name: animal.name,
@@ -34,25 +34,28 @@ export default function AnimalSelectPopup(props: Readonly<AnimalSelectPopupProps
         ...All_ANIMALS_ENUM,
     ];
 
-
     return (
         <div className="modal-overlay">
             <div className="modal-content">
-                <button className="button-group-button" onClick={props.closePopup}>Close</button>
+                <button className="button-group-button" onClick={props.closePopup}>
+                    Close
+                </button>
                 <h3>Select an Animal for #{props.deckNumber}</h3>
                 <div className="popup-animal-grid">
                     {allAnimals.map((animal, index) => {
                         const imageUrl = isAnimalOfUser(animal)
-                            ? animal.imageUrl
-                            : animalsEnumImages[animal];
+                            ? animal.imageUrl // If it's a user animal, use the imageUrl
+                            : animalsEnumImages[animal]; // Else, use the default image from the enum
                         const name = isAnimalOfUser(animal)
-                            ? animal.name
-                            : getAnimalEnumDisplayName(animal);
+                            ? animal.name // If it's a user animal, use the name of the user animal
+                            : getAnimalEnumDisplayName(animal); // Else, use the enum name
 
                         return (
                             <div
                                 key={`animal-${index}`}
-                                className={`deck-animal-card ${selectedAnimalEnum === name ? "selected" : ""}`}
+                                className={`deck-animal-card ${
+                                    selectedAnimalEnum === name ? "selected" : ""
+                                }`}
                                 onClick={() => handleAnimalSelect(animal)}
                             >
                                 <img
@@ -64,10 +67,8 @@ export default function AnimalSelectPopup(props: Readonly<AnimalSelectPopupProps
                             </div>
                         );
                     })}
-
                 </div>
             </div>
         </div>
     );
-
 }
