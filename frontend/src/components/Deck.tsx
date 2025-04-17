@@ -4,6 +4,7 @@ import {AnimalModel} from "./model/AnimalModel.ts";
 import {animalsEnumImages} from "./utils/AnimalEnumImages.ts";
 import "./styles/Deck.css";
 import * as React from "react";
+import {getAnimalEnumDisplayName} from "./utils/getAnimalEnumDisplayName.ts";
 
 type DeckProps = {
     user: string;
@@ -38,34 +39,37 @@ export default function Deck(props: Readonly<DeckProps>) {
                             alt={animal}
                             className="deck-image"
                         />
-                        <p className="deck-number">#{number}</p>
-                        <p className="deck-animal">{animal}</p>
+                        <p>#{number}</p>
+                        <p>{getAnimalEnumDisplayName(animal)}</p>
                     </div>
                 ))}
             </div>
 
             {props.user !== "anonymousUser" ? (
-                <div className="deck-grid">
-                    {Object.entries(props.savedDeck).map(([number, animal]) => (
-                        <div key={number} className="deck-card">
-                            <img
-                                src={animalsEnumImages[animal]}
-                                alt={animal}
-                                className="deck-image"
-                            />
-                            <p className="deck-number">#{number}</p>
-                            <p className="deck-animal">{animal}</p>
-                        </div>
-                    ))}
-                    <div>
-                    <button className="button-group-button" onClick={saveUsersDeck}>
-                        Save Deck
-                    </button>
+                <>
+                    <h3 className="margin-top-50">User Deck</h3>
+                    <div className="deck-grid">
+                        {Object.entries(props.savedDeck).map(([number, animal]) => (
+                            <div key={number} className="deck-card">
+                                <img
+                                    src={animalsEnumImages[animal]}
+                                    alt={animal}
+                                    className="deck-image"
+                                />
+                                <p>#{number}</p>
+                                <p>{getAnimalEnumDisplayName(animal)}</p>
+                            </div>
+                        ))}
                     </div>
-                </div>
 
+                    <div className="space-between">
+                        <button className="button-group-button" onClick={saveUsersDeck}>
+                            Save User Deck
+                        </button>
+                    </div>
+                </>
             ) : (
-                <p>You can save your deck if you login with your GitHub account.</p>
+                <h3 className="margin-top-50">You can save your deck if you login with your GitHub account.</h3>
             )}
 
 
