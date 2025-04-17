@@ -77,19 +77,34 @@ export default function Deck(props: Readonly<DeckProps>) {
                 <>
                     <h3 className="margin-top-50">User Deck</h3>
                     <div className="deck-grid">
-                        {Object.entries(props.savedDeck).map(([number, animal]) => (
-                            <div key={number} className="deck-card">
-                                <img
-                                    src={isAnimalOfUser(animal) ? animal.imageUrl : animalsEnumImages[animal]}
-                                    alt={isAnimalOfUser(animal) ? animal.name : getAnimalEnumDisplayName(animal)}
-                                    className="deck-image"
-                                    onClick={() => setPopupSavedDeckNumber(Number(number))}
-                                />
-                                <p>#{number}</p>
-                                <p>{isAnimalOfUser(animal) ? animal.name : getAnimalEnumDisplayName(animal)}</p>
-                            </div>
-                        ))}
+                        {Object.entries(props.savedDeck).map(([number, animal]) => {
+                            const isUserAnimal = typeof animal === "string" && animal.startsWith("https://");
+                            const imageUrl = isUserAnimal ? animal : animalsEnumImages[animal as AnimalEnum];
+
+                            // optional: aktiven Namen holen, wenn du willst
+                            const matchedAnimal = isUserAnimal
+                                ? props.activeAnimals.find((a) => a.imageUrl === animal)
+                                : null;
+
+                            const name = isUserAnimal
+                                ? matchedAnimal?.name || "Custom Animal"
+                                : getAnimalEnumDisplayName(animal as AnimalEnum);
+
+                            return (
+                                <div key={number} className="deck-card">
+                                    <img
+                                        src={imageUrl}
+                                        alt={name}
+                                        className="deck-image"
+                                        onClick={() => setPopupSavedDeckNumber(Number(number))}
+                                    />
+                                    <p>#{number}</p>
+                                    <p>{name}</p>
+                                </div>
+                            );
+                        })}
                     </div>
+
 
                     <div className="space-between">
                         <button
@@ -111,6 +126,7 @@ export default function Deck(props: Readonly<DeckProps>) {
                     You can save your deck if you login with your GitHub account.
                 </h3>
             )}
+
 
 
             {/* Popup für das Temp Deck */}
