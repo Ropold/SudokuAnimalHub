@@ -58,7 +58,7 @@ export default function Deck(props: Readonly<DeckProps>) {
                         : null;
 
                     const name = isUserAnimal
-                        ? matchedAnimal?.name || "Custom Animal"
+                        ? matchedAnimal?.name ?? "Custom Animal"
                         : getAnimalEnumDisplayName(animal as AnimalEnum);
 
                     return (
@@ -92,7 +92,7 @@ export default function Deck(props: Readonly<DeckProps>) {
                                 : null;
 
                             const name = isUserAnimal
-                                ? matchedAnimal?.name || "Custom Animal"
+                                ? matchedAnimal?.name ?? "Custom Animal"
                                 : getAnimalEnumDisplayName(animal as AnimalEnum);
 
                             return (
@@ -141,7 +141,7 @@ export default function Deck(props: Readonly<DeckProps>) {
                     setAnimalInDeck={(animal) => {
                         props.setTempDeck(prev => ({
                             ...prev,
-                            [popupTempDeckNumber]: typeof animal === "string" || typeof animal === "object" ? animal : animal
+                            [popupTempDeckNumber]: animal
                         }));
                         setPopupTempDeckNumber(null);
                     }}
@@ -159,7 +159,7 @@ export default function Deck(props: Readonly<DeckProps>) {
                     setAnimalInDeck={(animal) => {
                         props.setSavedDeck(prev => ({
                             ...prev,
-                            [popupSavedDeckNumber]: typeof animal === "string" || typeof animal === "object" ? animal : animal
+                            [popupSavedDeckNumber]: animal
                         }));
                         setPopupSavedDeckNumber(null);
                     }}
