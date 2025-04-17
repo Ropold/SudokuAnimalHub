@@ -1,0 +1,32 @@
+
+
+.deck-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.deck-card {
+    text-align: center;
+    width: 100px;
+}
+
+.deck-image {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.deck-number {
+    font-weight: bold;
+    margin: 0.25rem 0 0;
+}
+
+.deck-animal {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #333;
+}
