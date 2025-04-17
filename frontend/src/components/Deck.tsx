@@ -50,7 +50,7 @@ export default function Deck(props: Readonly<DeckProps>) {
             <h3>Temp Deck</h3>
             <div className="deck-grid">
                 {Object.entries(props.tempDeck).map(([number, animal]) => {
-                    const isUserAnimal = typeof animal === "string" && animal.startsWith("https://");
+                    const isUserAnimal = animal.startsWith("https://");
                     const imageUrl = isUserAnimal ? animal : animalsEnumImages[animal as AnimalEnum];
 
                     const matchedAnimal = isUserAnimal
@@ -83,7 +83,7 @@ export default function Deck(props: Readonly<DeckProps>) {
                     <h3 className="margin-top-50">User Deck</h3>
                     <div className="deck-grid">
                         {Object.entries(props.savedDeck).map(([number, animal]) => {
-                            const isUserAnimal = typeof animal === "string" && animal.startsWith("https://");
+                            const isUserAnimal = animal.startsWith("https://");
                             const imageUrl = isUserAnimal ? animal : animalsEnumImages[animal as AnimalEnum];
 
                             // optional: aktiven Namen holen, wenn du willst
