@@ -8,6 +8,7 @@ import {getAnimalEnumDisplayName} from "./utils/getAnimalEnumDisplayName.ts";
 import {useState} from "react";
 import AnimalSelectPopup from "./AnimalSelectPopup.tsx";
 import {AnimalEnum} from "./model/AnimalEnum.ts";
+import {isAnimalOfUser} from "./utils/isAnimalOfUser.ts";
 
 type DeckProps = {
     user: string;
@@ -41,16 +42,17 @@ export default function Deck(props: Readonly<DeckProps>) {
                 {Object.entries(props.tempDeck).map(([number, animal]) => (
                     <div key={number} className="deck-card">
                         <img
-                            src={animalsEnumImages[animal]}
-                            alt={animal}
+                            src={isAnimalOfUser(animal) ? animal.imageUrl : animalsEnumImages[animal]}
+                            alt={isAnimalOfUser(animal) ? animal.name : getAnimalEnumDisplayName(animal)}
                             className="deck-image"
                             onClick={() => setPopupTempDeckNumber(Number(number))}
                         />
                         <p>#{number}</p>
-                        <p>{getAnimalEnumDisplayName(animal)}</p>
+                        <p>{isAnimalOfUser(animal) ? animal.name : getAnimalEnumDisplayName(animal)}</p>
                     </div>
                 ))}
             </div>
+
 
             {props.user !== "anonymousUser" ? (
                 <>
@@ -59,13 +61,13 @@ export default function Deck(props: Readonly<DeckProps>) {
                         {Object.entries(props.savedDeck).map(([number, animal]) => (
                             <div key={number} className="deck-card">
                                 <img
-                                    src={animalsEnumImages[animal]}
-                                    alt={animal}
+                                    src={isAnimalOfUser(animal) ? animal.imageUrl : animalsEnumImages[animal]}
+                                    alt={isAnimalOfUser(animal) ? animal.name : getAnimalEnumDisplayName(animal)}
                                     className="deck-image"
                                     onClick={() => setPopupSavedDeckNumber(Number(number))}
                                 />
                                 <p>#{number}</p>
-                                <p>{getAnimalEnumDisplayName(animal)}</p>
+                                <p>{isAnimalOfUser(animal) ? animal.name : getAnimalEnumDisplayName(animal)}</p>
                             </div>
                         ))}
                     </div>
@@ -74,14 +76,17 @@ export default function Deck(props: Readonly<DeckProps>) {
                         <button className="button-group-button">
                             Save Temp Deck as User Deck
                         </button>
-                        <button id="button-profile" onClick={saveUsersDeck}>
+                        <button id="button-profile">
                             Save User Deck
                         </button>
                     </div>
                 </>
             ) : (
-                <h3 className="margin-top-50">You can save your deck if you login with your GitHub account.</h3>
+                <h3 className="margin-top-50">
+                    You can save your deck if you login with your GitHub account.
+                </h3>
             )}
+
 
             {/* Popup für das Temp Deck */}
             {popupTempDeckNumber !== null && (
