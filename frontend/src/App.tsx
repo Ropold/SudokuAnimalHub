@@ -15,6 +15,7 @@ import Details from "./components/Details.tsx";
 import HighScore from "./components/HighScore.tsx";
 import Deck from "./components/Deck.tsx";
 import {AnimalModel} from "./components/model/AnimalModel.ts";
+import {DefaultNumberToAnimalMap, NumberToAnimalMap} from "./components/model/NumberToAnimalMap.ts";
 
 
 export default function App() {
@@ -25,6 +26,8 @@ export default function App() {
     const [allAnimals, setAllAnimals] = useState<AnimalModel[]>([]);
     const [favorites, setFavorites] = useState<string[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [tempDeck, setTempDeck] = useState<NumberToAnimalMap>(DefaultNumberToAnimalMap);
+    const [savedDeck, setSavedDeck] = useState<NumberToAnimalMap>(DefaultNumberToAnimalMap);
 
 
     // User functions
@@ -60,6 +63,7 @@ export default function App() {
         if(user !== "anonymousUser"){
             getUserDetails();
             getAppUserFavorites();
+            getUsersDeck();
         }
     }, [user]);
 
@@ -120,6 +124,17 @@ export default function App() {
             });
     }
 
+    function getUsersDeck() {
+        axios
+            .get("/api/users/numbers-to-animal")
+            .then((response) => {
+                setSavedDeck(response.data);
+            })
+            .catch((error) => {
+                console.error("Error fetching numbers to animals: ", error);
+            });
+    }
+
     useEffect(() => {
         window.scroll(0, 0);
     }, [location]);
@@ -134,7 +149,7 @@ export default function App() {
                 <Route path="/list-of-all-animals" element={<ListOfAllAnimals activeAnimals={activeAnimals} getActiveAnimals={getActiveAnimals} favorites={favorites} toggleFavorite={toggleFavorite} currentPage={currentPage} setCurrentPage={setCurrentPage} user={user}/>}/>
                 <Route path="/animal/:id" element={<Details user={user} favorites={favorites} toggleFavorite={toggleFavorite}/>}/>
                 <Route path="/high-score" element={<HighScore/>}/>
-                <Route path="/deck" element={<Deck/>}/>
+                <Route path="/deck" element={<Deck user={user} activeAnimals={activeAnimals} tempDeck={tempDeck} setTempDeck={setTempDeck} savedDeck={savedDeck} setSavedDeck={setSavedDeck} />}/>
 
                 <Route element={<ProtectedRoute user={user} />}>
                     <Route path="/profile/*" element={<Profile user={user} userDetails={userDetails} handleNewAnimalSubmit={handleNewAnimalSubmit} allAnimals={allAnimals} getAllAnimals={getAllAnimals} setAllAnimals={setAllAnimals} favorites={favorites} toggleFavorite={toggleFavorite}/>} />
