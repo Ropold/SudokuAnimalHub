@@ -22,6 +22,12 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
+@media (prefers-color-scheme: dark) {
+    .modal-content {
+        background: #333;  /* Dunkler Hintergrund im Darkmode */
+        color: white;  /* Helle Textfarbe im Darkmode */
+    }
+}
 
 .deck-animal-card {
     display: flex;

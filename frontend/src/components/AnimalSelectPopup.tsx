@@ -26,8 +26,6 @@ export default function AnimalSelectPopup(props: Readonly<AnimalSelectPopupProps
         props.closePopup();
     };
 
-
-    // Combine active user animals with the default animals from enum
     const allAnimals: (AnimalEnum | AnimalOfUser)[] = [
         ...props.activeAnimals.map((animal) => ({
             name: animal.name,
@@ -46,11 +44,11 @@ export default function AnimalSelectPopup(props: Readonly<AnimalSelectPopupProps
                 <div className="popup-animal-grid">
                     {allAnimals.map((animal, index) => {
                         const imageUrl = isAnimalOfUser(animal)
-                            ? animal.imageUrl // If it's a user animal, use the imageUrl
-                            : animalsEnumImages[animal]; // Else, use the default image from the enum
+                            ? animal.imageUrl
+                            : animalsEnumImages[animal];
                         const name = isAnimalOfUser(animal)
-                            ? animal.name // If it's a user animal, use the name of the user animal
-                            : getAnimalEnumDisplayName(animal); // Else, use the enum name
+                            ? animal.name
+                            : getAnimalEnumDisplayName(animal);
 
                         return (
                             <div
