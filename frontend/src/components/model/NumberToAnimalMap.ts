@@ -1,7 +1,7 @@
 import {AnimalEnum} from "./AnimalEnum.ts";
 
 export type NumberToAnimalMap = {
-    [key: number]: AnimalEnum | AnimalOfUser;
+    [key: number]: AnimalEnum | string;
 };
 
 export type AnimalOfUser = {

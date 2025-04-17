@@ -11,19 +11,21 @@ type AnimalSelectPopupProps = {
     deckNumber: number;
     deckType: "temp" | "saved";
     closePopup: () => void;
-    setAnimalInDeck: (animal: AnimalEnum | AnimalOfUser) => void;
+    setAnimalInDeck: (animal: AnimalEnum | string) => void;
     activeAnimals: AnimalModel[];
 };
 
 export default function AnimalSelectPopup(props: Readonly<AnimalSelectPopupProps>) {
     const [selectedAnimalEnum, setSelectedAnimalEnum] = useState<string | null>(null);
 
-    // Handle the selection of an animal
     const handleAnimalSelect = (animal: AnimalEnum | AnimalOfUser) => {
-        props.setAnimalInDeck(animal); // Set the selected animal to the deck
-        setSelectedAnimalEnum(isAnimalOfUser(animal) ? animal.name : animal); // Update selected name for UI
-        props.closePopup(); // Close the popup
+        const valueToStore = isAnimalOfUser(animal) ? animal.imageUrl : animal;
+
+        props.setAnimalInDeck(valueToStore);
+        setSelectedAnimalEnum(isAnimalOfUser(animal) ? animal.name : animal); // nur UI
+        props.closePopup();
     };
+
 
     // Combine active user animals with the default animals from enum
     const allAnimals: (AnimalEnum | AnimalOfUser)[] = [

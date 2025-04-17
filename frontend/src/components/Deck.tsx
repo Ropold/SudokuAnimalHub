@@ -8,7 +8,6 @@ import {getAnimalEnumDisplayName} from "./utils/getAnimalEnumDisplayName.ts";
 import {useEffect, useState} from "react";
 import AnimalSelectPopup from "./AnimalSelectPopup.tsx";
 import {AnimalEnum} from "./model/AnimalEnum.ts";
-import {isAnimalOfUser} from "./utils/isAnimalOfUser.ts";
 
 type DeckProps = {
     user: string;
@@ -26,16 +25,8 @@ export default function Deck(props: Readonly<DeckProps>) {
 
 
     function saveUsersDeck(deck: NumberToAnimalMap) {
-        const cleanedDeck: { [key: number]: string } = {};
-
-        Object.entries(deck).forEach(([key, value]) => {
-            cleanedDeck[Number(key)] = isAnimalOfUser(value)
-                ? value.imageUrl
-                : value;
-        });
-
         axios
-            .post("/api/users/numbers-to-animal", cleanedDeck)
+            .post("/api/users/numbers-to-animal", deck)
             .then(() => {
                 props.setSavedDeck(deck);
                 setSavedPopup(true);
@@ -58,19 +49,33 @@ export default function Deck(props: Readonly<DeckProps>) {
         <div>
             <h3>Temp Deck</h3>
             <div className="deck-grid">
-                {Object.entries(props.tempDeck).map(([number, animal]) => (
-                    <div key={number} className="deck-card">
-                        <img
-                            src={isAnimalOfUser(animal) ? animal.imageUrl : animalsEnumImages[animal]}
-                            alt={isAnimalOfUser(animal) ? animal.name : getAnimalEnumDisplayName(animal)}
-                            className="deck-image"
-                            onClick={() => setPopupTempDeckNumber(Number(number))}
-                        />
-                        <p>#{number}</p>
-                        <p>{isAnimalOfUser(animal) ? animal.name : getAnimalEnumDisplayName(animal)}</p>
-                    </div>
-                ))}
+                {Object.entries(props.tempDeck).map(([number, animal]) => {
+                    const isUserAnimal = typeof animal === "string" && animal.startsWith("https://");
+                    const imageUrl = isUserAnimal ? animal : animalsEnumImages[animal as AnimalEnum];
+
+                    const matchedAnimal = isUserAnimal
+                        ? props.activeAnimals.find((a) => a.imageUrl === animal)
+                        : null;
+
+                    const name = isUserAnimal
+                        ? matchedAnimal?.name || "Custom Animal"
+                        : getAnimalEnumDisplayName(animal as AnimalEnum);
+
+                    return (
+                        <div key={number} className="deck-card">
+                            <img
+                                src={imageUrl}
+                                alt={name}
+                                className="deck-image"
+                                onClick={() => setPopupTempDeckNumber(Number(number))}
+                            />
+                            <p>#{number}</p>
+                            <p>{name}</p>
+                        </div>
+                    );
+                })}
             </div>
+
 
 
             {props.user !== "anonymousUser" ? (
@@ -127,18 +132,16 @@ export default function Deck(props: Readonly<DeckProps>) {
                 </h3>
             )}
 
-
-
             {/* Popup für das Temp Deck */}
             {popupTempDeckNumber !== null && (
                 <AnimalSelectPopup
                     deckNumber={popupTempDeckNumber}
                     deckType="temp"
                     closePopup={() => setPopupTempDeckNumber(null)}
-                    setAnimalInDeck={(animalEnum) => {
+                    setAnimalInDeck={(animal) => {
                         props.setTempDeck(prev => ({
                             ...prev,
-                            [popupTempDeckNumber]: animalEnum as AnimalEnum
+                            [popupTempDeckNumber]: typeof animal === "string" || typeof animal === "object" ? animal : animal
                         }));
                         setPopupTempDeckNumber(null);
                     }}
@@ -153,10 +156,10 @@ export default function Deck(props: Readonly<DeckProps>) {
                     deckNumber={popupSavedDeckNumber}
                     deckType="saved"
                     closePopup={() => setPopupSavedDeckNumber(null)}
-                    setAnimalInDeck={(animalEnum) => {
+                    setAnimalInDeck={(animal) => {
                         props.setSavedDeck(prev => ({
                             ...prev,
-                            [popupSavedDeckNumber]: animalEnum as AnimalEnum
+                            [popupSavedDeckNumber]: typeof animal === "string" || typeof animal === "object" ? animal : animal
                         }));
                         setPopupSavedDeckNumber(null);
                     }}
