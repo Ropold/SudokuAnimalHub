@@ -105,7 +105,7 @@ export default function AddAnimalCard(props: Readonly<AddAnimalCardProps>) {
                             Animal Category:
                             <select
                                 className="input-small select-space"
-                                value={animalEnum || ""}
+                                value={animalEnum ?? ""}
                                 onChange={(e) => setAnimalEnum(e.target.value)}
                             >
                                 <option value="">Select Animal Category</option>
@@ -121,7 +121,7 @@ export default function AddAnimalCard(props: Readonly<AddAnimalCardProps>) {
                                 animalEnum
                                 ? animalsEnumImages[animalEnum as AnimalEnum]
                                 : headerLogo}
-                            alt={animalEnum || "logo sudoku animal hub"}
+                            alt={animalEnum ?? "logo sudoku animal hub"}
                             className="animal-card-image-add"
                         />
                     </div>

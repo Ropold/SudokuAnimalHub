@@ -35,7 +35,7 @@ export default function Profile(props: Readonly<ProfileProps>) {
             <div className="space-between">
                 <button className={activeTab === "profile" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("profile")}>Profil</button>
                 <button className={activeTab === "add" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("add")}>Add new Animal</button>
-                <button className={activeTab === "my-animals" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("my-animals")}>My Animals</button>
+                <button className={activeTab === "my-animals" ? "active-profile-button" : "button-group-button"} onClick={() => { setActiveTab("my-animals"); setIsEditing(false); }}>My Animals</button>
                 <button className={activeTab === "favorites" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("favorites")}>Favorites</button>
             </div>
 
