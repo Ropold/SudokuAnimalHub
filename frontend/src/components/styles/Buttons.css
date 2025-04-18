@@ -76,3 +76,10 @@
 #button-delete:hover {
     background-color: #d32f2f;
 }
+
+#active-paginate{
+    background-color: #999;
+}
+#active-paginate:hover{
+    cursor: default;
+}

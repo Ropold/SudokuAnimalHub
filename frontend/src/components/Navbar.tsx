@@ -65,7 +65,7 @@ export default function Navbar(props: Readonly<NavbarProps>) {
                     navigate("/list-of-all-animals");
                 }}
             >
-                <h2 className="header-title">Animal Collection</h2>
+                <h2 className="header-title">User Animals</h2>
                 <img src={allAnimalsLogo} alt="All Animals Logo" className="logo-image" />
             </div>
 

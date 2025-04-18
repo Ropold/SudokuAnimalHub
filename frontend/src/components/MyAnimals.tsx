@@ -3,6 +3,10 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import * as React from "react";
 import AnimalCard from "./AnimalCard.tsx";
+import {All_ANIMALS_ENUM, AnimalEnum} from "./model/AnimalEnum.ts";
+import {getAnimalEnumDisplayName} from "./utils/getAnimalEnumDisplayName.ts";
+import {animalsEnumImages} from "./utils/AnimalEnumImages.ts";
+import headerLogo from "../assets/Small-Sudoko-Logo.jpg"
 
 type MyAnimalsProps = {
     allAnimals: AnimalModel[];
@@ -144,16 +148,44 @@ export default function MyAnimals(props: Readonly<MyAnimalsProps>) {
                             <input
                                 className="input-small"
                                 type="text"
-                                value={editData?.name || ""}
+                                value={editData?.name ?? ""}
                                 onChange={(e) => setEditData({ ...editData!, name: e.target.value })}
                             />
                         </label>
+
+                        <div className="animal-category-row">
+                            <label className="animal-category-label">
+                                Animal Category:
+                                <select
+                                    className="input-small select-space"
+                                    value={editData?.animalEnum ?? ""}
+                                    onChange={(e) => setEditData({ ...editData!, animalEnum: e.target.value as AnimalEnum })}
+                                >
+                                    <option value="">Select Animal Category</option>
+                                    {All_ANIMALS_ENUM.map((a) => (
+                                        <option key={a} value={a}>
+                                            {getAnimalEnumDisplayName(a)}
+                                        </option>
+                                    ))}
+                                </select>
+                            </label>
+                            <img
+                                src={
+                                    editData?.animalEnum
+                                        ? animalsEnumImages[editData.animalEnum as AnimalEnum]
+                                        : headerLogo
+                                }
+                                alt={editData?.animalEnum ?? "logo sudoku animal hub"}
+                                className="animal-card-image-add"
+                            />
+                        </div>
+
 
                         <label>
                             Description:
                             <textarea
                                 className="textarea-large"
-                                value={editData?.description || ""}
+                                value={editData?.description ?? ""}
                                 onChange={(e) => setEditData({ ...editData!, description: e.target.value })}
                             />
                         </label>
@@ -176,7 +208,7 @@ export default function MyAnimals(props: Readonly<MyAnimalsProps>) {
                             {image && (
                                 <img
                                     src={URL.createObjectURL(image)}
-                                    alt={editData?.name || "Preview"}
+                                    alt={editData?.name ?? "Preview"}
                                     style={{ width: "150px", marginTop: "10px" }}
                                 />
                             )}
