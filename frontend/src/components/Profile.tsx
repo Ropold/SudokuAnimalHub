@@ -5,6 +5,8 @@ import Favorites from "./Favorites.tsx";
 import MyAnimals from "./MyAnimals.tsx";
 import "./styles/Profile.css";
 import { AnimalModel } from "./model/AnimalModel.ts";
+import AddSudokuGrid from "./AddSudokuGrid.tsx";
+import MySudokuGrids from "./MySudokuGrids.tsx";
 
 type ProfileProps = {
     user: string;
@@ -20,9 +22,9 @@ type ProfileProps = {
 export default function Profile(props: Readonly<ProfileProps>) {
     const [isEditing, setIsEditing] = useState<boolean>(false);
 
-    const [activeTab, setActiveTab] = useState<"profile" | "add" | "my-animals" | "favorites">(() => {
+    const [activeTab, setActiveTab] = useState<"profile" | "add-animal" | "my-animals" | "favorites" | "add-sudoku-grid" | "my-sudoku-grids">(() => {
         const savedTab = localStorage.getItem("activeTab");
-        return (savedTab as "profile" | "add" | "my-animals" | "favorites") || "profile";
+        return (savedTab as "profile" | "add-animal" | "my-animals" | "favorites" | "add-sudoku-grid" | "my-sudoku-grids") || "profile";
     });
 
     useEffect(() => {
@@ -32,11 +34,13 @@ export default function Profile(props: Readonly<ProfileProps>) {
     return (
         <div className="profile-container">
             {/* Button-Navigation */}
-            <div className="space-between">
-                <button className={activeTab === "profile" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("profile")}>Profil</button>
-                <button className={activeTab === "add" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("add")}>Add new Animal</button>
+            <div className="space-between" id="buttons-profile-container">
+                <button className={activeTab === "profile" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("profile")}>Profil of Github</button>
+                <button className={activeTab === "add-animal" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("add-animal")}>Add new Animal</button>
                 <button className={activeTab === "my-animals" ? "active-profile-button" : "button-group-button"} onClick={() => { setActiveTab("my-animals"); setIsEditing(false); }}>My Animals</button>
-                <button className={activeTab === "favorites" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("favorites")}>Favorites</button>
+                <button className={activeTab === "favorites" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("favorites")}>Favorites of Animals</button>
+                <button className={activeTab === "add-sudoku-grid" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("add-sudoku-grid")}>Add new Sudoku Grid</button>
+                <button className={activeTab === "my-sudoku-grids" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("my-sudoku-grids")}>My Sudoku Grids</button>
             </div>
 
             {/* Anzeige je nach aktivem Tab */}
@@ -68,9 +72,12 @@ export default function Profile(props: Readonly<ProfileProps>) {
                         )}
                     </>
                 )}
-                {activeTab === "add" && <AddAnimalCard user={props.user} handleNewAnimalSubmit={props.handleNewAnimalSubmit} />}
+                {activeTab === "add-animal" && <AddAnimalCard user={props.user} handleNewAnimalSubmit={props.handleNewAnimalSubmit} />}
                 {activeTab === "my-animals" && <MyAnimals allAnimals={props.allAnimals} getAllAnimals={props.getAllAnimals} setAllAnimals={props.setAllAnimals} user={props.user} favorites={props.favorites} toggleFavorite={props.toggleFavorite} isEditing={isEditing} setIsEditing={setIsEditing}/>}
                 {activeTab === "favorites" && <Favorites user={props.user} favorites={props.favorites} toggleFavorite={props.toggleFavorite} />}
+                {activeTab === "add-sudoku-grid" && <AddSudokuGrid user={props.user}/>}
+                {activeTab === "my-sudoku-grids" && <MySudokuGrids/>}
+
             </div>
         </div>
     );

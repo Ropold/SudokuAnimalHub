@@ -24,6 +24,12 @@
     margin-top: 10px;
 }
 
+#buttons-profile-container {
+    padding:0;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
 #button-profile {
     background-color: #9c27b0; /* Violett */
 }
