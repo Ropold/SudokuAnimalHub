@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ropold.backend.model.DeckEnum;
 import ropold.backend.model.DifficultyEnum;
 import ropold.backend.model.HighScoreModel;
 import ropold.backend.repository.HighScoreRepository;
@@ -35,10 +36,10 @@ class HighScoreControllerIntegrationTest {
         LocalDateTime fixedDate = LocalDateTime.of(2025, 3, 5, 12, 0, 0);
 
         HighScoreModel highScoreModel1 = new HighScoreModel(
-                "1", "player1", "123456", DifficultyEnum.EASY, 10.2, fixedDate);
+                "1", "player1", "123456", DifficultyEnum.EASY, DeckEnum.TEMP_DECK,10.2, fixedDate);
 
         HighScoreModel highScoreModel2 = new HighScoreModel(
-                "2", "player1", "123456", DifficultyEnum.MEDIUM, 14.5, fixedDate.minusMinutes(5));
+                "2", "player1", "123456", DifficultyEnum.MEDIUM, DeckEnum.TEMP_DECK,14.5, fixedDate.minusMinutes(5));
 
         highScoreRepository.saveAll(List.of(highScoreModel1, highScoreModel2));
     }
@@ -54,6 +55,7 @@ class HighScoreControllerIntegrationTest {
                             "playerName": "player1",
                             "githubId": "123456",
                             "difficultyEnum": "EASY",
+                            "deckEnum": "TEMP_DECK",
                             "scoreTime": 10.2,
                             "date": "2025-03-05T12:00:00"
                         }
@@ -70,6 +72,7 @@ class HighScoreControllerIntegrationTest {
                     "playerName": "player2",
                     "githubId": "654321",
                     "difficultyEnum": "HARD",
+                    "deckEnum": "TEMP_DECK",
                     "scoreTime": 20.5,
                     "date": "2025-03-05T12:00:00"
                 }
@@ -93,6 +96,7 @@ class HighScoreControllerIntegrationTest {
                         "player2",
                         "654321",
                         DifficultyEnum.HARD,
+                        DeckEnum.TEMP_DECK,
                         20.5,
                         null
                 ));
@@ -112,7 +116,8 @@ class HighScoreControllerIntegrationTest {
                     "player" + i,
                     "githubId" + i,
                     DifficultyEnum.EASY,
-                    10.0 + i, // scoreTime von 10.0 bis 19.0
+                    DeckEnum.TEMP_DECK,
+                    10.0 + i,
                     fixedDate
             ));
         }
@@ -123,6 +128,7 @@ class HighScoreControllerIntegrationTest {
             "playerName": "playerNew",
             "githubId": "githubNew",
             "difficultyEnum": "EASY",
+            "deckEnum": "TEMP_DECK",
             "scoreTime": 20.0,
             "date": "2025-03-05T12:00:00"
         }

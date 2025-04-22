@@ -2,6 +2,7 @@ package ropold.backend.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ropold.backend.model.DeckEnum;
 import ropold.backend.model.DifficultyEnum;
 import ropold.backend.model.HighScoreModel;
 import ropold.backend.repository.HighScoreRepository;
@@ -24,6 +25,7 @@ class HighScoreServiceTest {
             "player1",
             "123456",
             DifficultyEnum.EASY,
+            DeckEnum.TEMP_DECK,
             10.2,
             LocalDateTime.of(2025, 3, 5, 12, 0, 0)
     );
@@ -33,6 +35,7 @@ class HighScoreServiceTest {
             "player1",
             "123456",
             DifficultyEnum.MEDIUM,
+            DeckEnum.TEMP_DECK,
             14.5,
             LocalDateTime.of(2025, 3, 5, 11, 55, 0)
     );
@@ -63,13 +66,13 @@ class HighScoreServiceTest {
 
     @Test
     void addHighScore_whenOnlyTwoHighScoreAreInRepo() {
-        HighScoreModel highScore1 = new HighScoreModel("1", "Player1", "12345", DifficultyEnum.EASY, 10.0, LocalDateTime.now());
-        HighScoreModel highScore2 = new HighScoreModel("2", "Player2", "54321", DifficultyEnum.EASY, 15.0, LocalDateTime.now());
+        HighScoreModel highScore1 = new HighScoreModel("1", "Player1", "12345", DifficultyEnum.EASY, DeckEnum.TEMP_DECK,10.0, LocalDateTime.now());
+        HighScoreModel highScore2 = new HighScoreModel("2", "Player2", "54321", DifficultyEnum.EASY, DeckEnum.TEMP_DECK,15.0, LocalDateTime.now());
 
         when(highScoreRepository.findByDifficultyEnumOrderByScoreTimeAsc(DifficultyEnum.EASY))
                 .thenReturn(List.of(highScore1, highScore2));
 
-        HighScoreModel newHighScore = new HighScoreModel("3", "Player3", "67890", DifficultyEnum.EASY, 12.0, LocalDateTime.now());
+        HighScoreModel newHighScore = new HighScoreModel("3", "Player3", "67890", DifficultyEnum.EASY, DeckEnum.TEMP_DECK, 12.0, LocalDateTime.now());
 
         when(highScoreRepository.save(any(HighScoreModel.class))).thenReturn(newHighScore);
 
@@ -88,16 +91,16 @@ class HighScoreServiceTest {
         LocalDateTime fixedDate = LocalDateTime.of(2025, 3, 5, 12, 0, 0);
 
         List<HighScoreModel> existingScores = List.of(
-                new HighScoreModel("1", "player1", "123456", DifficultyEnum.EASY, 10.2, fixedDate),
-                new HighScoreModel("2", "player1", "123456", DifficultyEnum.EASY, 10.5, fixedDate),
-                new HighScoreModel("3", "player1", "123456", DifficultyEnum.EASY, 10.7, fixedDate),
-                new HighScoreModel("4", "player1", "123456", DifficultyEnum.EASY, 11.0, fixedDate),
-                new HighScoreModel("5", "player1", "123456", DifficultyEnum.EASY, 11.2, fixedDate),
-                new HighScoreModel("6", "player1", "123456", DifficultyEnum.EASY, 11.5, fixedDate),
-                new HighScoreModel("7", "player1", "123456", DifficultyEnum.EASY, 11.7, fixedDate),
-                new HighScoreModel("8", "player1", "123456", DifficultyEnum.EASY, 12.0, fixedDate),
-                new HighScoreModel("9", "player1", "123456", DifficultyEnum.EASY, 12.2, fixedDate),
-                new HighScoreModel("10", "player1", "123456", DifficultyEnum.EASY, 12.5, fixedDate)
+                new HighScoreModel("1", "player1", "123456", DifficultyEnum.EASY, DeckEnum.TEMP_DECK,10.2, fixedDate),
+                new HighScoreModel("2", "player1", "123456", DifficultyEnum.EASY, DeckEnum.TEMP_DECK,10.5, fixedDate),
+                new HighScoreModel("3", "player1", "123456", DifficultyEnum.EASY, DeckEnum.TEMP_DECK,10.7, fixedDate),
+                new HighScoreModel("4", "player1", "123456", DifficultyEnum.EASY, DeckEnum.TEMP_DECK,11.0, fixedDate),
+                new HighScoreModel("5", "player1", "123456", DifficultyEnum.EASY, DeckEnum.TEMP_DECK,11.2, fixedDate),
+                new HighScoreModel("6", "player1", "123456", DifficultyEnum.EASY, DeckEnum.TEMP_DECK,11.5, fixedDate),
+                new HighScoreModel("7", "player1", "123456", DifficultyEnum.EASY, DeckEnum.TEMP_DECK,11.7, fixedDate),
+                new HighScoreModel("8", "player1", "123456", DifficultyEnum.EASY, DeckEnum.TEMP_DECK,12.0, fixedDate),
+                new HighScoreModel("9", "player1", "123456", DifficultyEnum.EASY, DeckEnum.TEMP_DECK,12.2, fixedDate),
+                new HighScoreModel("10", "player1", "123456", DifficultyEnum.EASY, DeckEnum.TEMP_DECK,12.5, fixedDate)
         );
 
         when(highScoreRepository.findByDifficultyEnumOrderByScoreTimeAsc(DifficultyEnum.EASY))
@@ -108,6 +111,7 @@ class HighScoreServiceTest {
                 "player1",
                 "123456",
                 DifficultyEnum.EASY,
+                DeckEnum.TEMP_DECK,
                 11.2,
                 fixedDate
         );

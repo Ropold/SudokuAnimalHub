@@ -13,6 +13,7 @@ public record HighScoreModel(
         String playerName,
         String githubId,
         DifficultyEnum difficultyEnum,
+        DeckEnum deckEnum,
         double scoreTime,
         @NotNull LocalDateTime date
 ) {
