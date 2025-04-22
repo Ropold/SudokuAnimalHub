@@ -15,7 +15,6 @@ public class SudokuGridService {
     private final IdService idService;
     private final SudokuGridRepository sudokuGridRepository;
 
-
     public List<SudokuGridModel> getAllSudokuGrids() {
         return sudokuGridRepository.findAll();
     }
