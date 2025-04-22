@@ -9,7 +9,6 @@ import ropold.backend.exception.AccessDeniedException;
 import ropold.backend.model.SudokuGridModel;
 import ropold.backend.service.SudokuGridService;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
