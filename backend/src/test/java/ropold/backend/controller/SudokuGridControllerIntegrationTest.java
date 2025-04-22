@@ -60,12 +60,14 @@ class SudokuGridControllerIntegrationTest {
         SudokuGridModel sudokuGridModel1 = new SudokuGridModel(
                 "1",
                 exampleGrid,
+                exampleGrid,
                 DifficultyEnum.EASY,
                 "user"
         );
 
         SudokuGridModel sudokuGridModel2 = new SudokuGridModel(
                 "2",
+                exampleGrid,
                 exampleGrid,
                 DifficultyEnum.MEDIUM,
                 "user"
@@ -105,15 +107,17 @@ class SudokuGridControllerIntegrationTest {
 
     @Test
     void getSudokuGridById_shouldReturnGrid_whenIdExists() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/sudoku-grid/1"))
+        mockMvc.perform(get("/api/sudoku-grid/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(jsonPath("$.difficultyEnum").value("EASY"))
                 .andExpect(jsonPath("$.githubId").value("user"))
-                .andExpect(jsonPath("$.grid").isArray())
-                .andExpect(jsonPath("$.grid[0]").isArray())
-                .andExpect(jsonPath("$.grid[0][0]").value(0));
+                .andExpect(jsonPath("$.initialGrid").isArray())
+                .andExpect(jsonPath("$.initialGrid[0]").isArray())
+                .andExpect(jsonPath("$.initialGrid[0][0]").value(0))
+                .andExpect(jsonPath("$.solutionGrid").isArray())
+                .andExpect(jsonPath("$.solutionGrid[0][0]").value(0));
     }
 
     @Test
@@ -131,7 +135,18 @@ class SudokuGridControllerIntegrationTest {
 
         String sudokuGridJson = """
         {
-            "grid": [
+            "initialGrid": [
+                [5, 3, 0, 0, 7, 0, 0, 0, 0],
+                [6, 0, 0, 1, 9, 5, 0, 0, 0],
+                [0, 9, 8, 0, 0, 0, 0, 6, 0],
+                [8, 0, 0, 0, 6, 0, 0, 0, 3],
+                [4, 0, 0, 8, 0, 3, 0, 0, 1],
+                [7, 0, 0, 0, 2, 0, 0, 0, 6],
+                [0, 6, 0, 0, 0, 0, 2, 8, 0],
+                [0, 0, 0, 4, 1, 9, 0, 0, 5],
+                [0, 0, 0, 0, 8, 0, 0, 7, 9]
+            ],
+            "solutionGrid": [
                 [5, 3, 0, 0, 7, 0, 0, 0, 0],
                 [6, 0, 0, 1, 9, 5, 0, 0, 0],
                 [0, 9, 8, 0, 0, 0, 0, 6, 0],
@@ -181,7 +196,18 @@ class SudokuGridControllerIntegrationTest {
 
         String updatedSudokuGridJson = """
     {
-        "grid": [
+        "initialGrid": [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1]
+        ],
+         "solutionGrid": [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -203,9 +229,10 @@ class SudokuGridControllerIntegrationTest {
                 .andExpect(status().isOk());
 
         // Verify the changes were persisted
-        SudokuGridModel updatedSudokuGrid = sudokuGridRepository.findById("1").orElseThrow();
-        Assertions.assertEquals(DifficultyEnum.EASY, updatedSudokuGrid.difficultyEnum());
-        Assertions.assertEquals(updatedGrid, updatedSudokuGrid.grid());
+        SudokuGridModel updated = sudokuGridRepository.findById("1").orElseThrow();
+        Assertions.assertEquals(DifficultyEnum.EASY, updated.difficultyEnum());
+        Assertions.assertEquals(updatedGrid, updated.initialGrid());
+        Assertions.assertEquals(updatedGrid, updated.solutionGrid());
     }
 
     @Test

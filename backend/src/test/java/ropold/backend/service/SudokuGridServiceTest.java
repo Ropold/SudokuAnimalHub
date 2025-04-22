@@ -36,12 +36,14 @@ class SudokuGridServiceTest {
         SudokuGridModel sudokuGridModel1 = new SudokuGridModel(
                 "1",
                 dummyGrid,
+                dummyGrid,
                 DifficultyEnum.EASY,
                 "123456"
         );
 
         SudokuGridModel sudokuGridModel2 = new SudokuGridModel(
                 "2",
+                dummyGrid,
                 dummyGrid,
                 DifficultyEnum.HARD,
                 "654321"
@@ -80,6 +82,17 @@ class SudokuGridServiceTest {
                         List.of(1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9),
                         List.of(1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9)
                 ),
+                List.of(
+                        List.of(1, 2, 3, 4, 5, 6, 7, 8, 9),
+                        List.of(1, 2, 3, 4, 5, 6, 7, 8, 9),
+                        List.of(1, 2, 3, 4, 5, 6, 7, 8, 9),
+                        List.of(1, 2, 3, 4, 5, 6, 7, 8, 9),
+                        List.of(1, 2, 3, 4, 5, 6, 7, 8, 9),
+                        List.of(1, 2, 3, 4, 5, 6, 7, 8, 9),
+                        List.of(1, 2, 3, 4, 5, 6, 7, 8 ,9),
+                        List.of(1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9),
+                        List.of(1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9)
+                ),
                 DifficultyEnum.EASY,
                 "123456"
         );
@@ -106,6 +119,17 @@ class SudokuGridServiceTest {
                         List.of(1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9),
                         List.of(1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9),
                         List.of(1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9),
+                        List.of(1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9),
+                        List.of(1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9)
+                ),
+                List.of(
+                        List.of(1, 2, 3, 4, 5, 6, 7, 8, 9),
+                        List.of(1, 2, 3, 4, 5, 6, 7, 8, 9),
+                        List.of(1, 2, 3, 4, 5, 6, 7, 8, 9),
+                        List.of(1, 2, 3, 4, 5, 6, 7, 8, 9),
+                        List.of(1, 2, 3, 4, 5, 6, 7, 8, 9),
+                        List.of(1, 2, 3, 4, 5, 6, 7, 8, 9),
+                        List.of(1, 2, 3, 4, 5, 6, 7, 8 ,9),
                         List.of(1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9),
                         List.of(1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9)
                 ),
