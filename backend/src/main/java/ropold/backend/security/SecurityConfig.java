@@ -75,6 +75,7 @@ public class SecurityConfig {
                                 Collections.emptyList(),
                                 Map.of()
                         );
+                        // hier kannst du die Rolle des Users setzen, z.B. "ROLE_USER"
                         return appUserRepository.save(newUser);
                     });
 

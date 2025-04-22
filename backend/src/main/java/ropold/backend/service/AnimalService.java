@@ -60,7 +60,6 @@ public class AnimalService {
         animalRepository.deleteById(id);
     }
 
-
     public AnimalModel getAnimalById(String id) {
         return animalRepository.findById(id).orElseThrow(() -> new AnimalNotFoundException("No Animal found with id: " + id));
     }
