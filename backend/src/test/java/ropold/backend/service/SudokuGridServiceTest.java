@@ -1,12 +1,14 @@
 package ropold.backend.service;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import ropold.backend.model.DifficultyEnum;
 import ropold.backend.model.SudokuGridModel;
 import ropold.backend.repository.SudokuGridRepository;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -48,6 +50,20 @@ class SudokuGridServiceTest {
 
         sudokuGridModels = List.of(sudokuGridModel1, sudokuGridModel2);
         when(sudokuGridRepository.findAll()).thenReturn(sudokuGridModels);
+    }
+
+    @Test
+    void testGetAllSudokuGrids() {
+        List<SudokuGridModel> result = sudokuGridService.getAllSudokuGrids();
+        assertEquals(sudokuGridModels, result);
+    }
+
+    @Test
+    void testGetSudokuGridById() {
+        SudokuGridModel expected = sudokuGridModels.getFirst();
+        when(sudokuGridRepository.findById("1")).thenReturn(java.util.Optional.of(expected));
+        SudokuGridModel result = sudokuGridService.getSudokuGridById("1");
+        assertEquals(expected, result);
     }
 
 
