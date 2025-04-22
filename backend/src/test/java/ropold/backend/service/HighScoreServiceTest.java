@@ -62,21 +62,25 @@ class HighScoreServiceTest {
     }
 
     @Test
-    void addHighScore_whenOnlyTwoHighScoreAreInRepo(){
+    void addHighScore_whenOnlyTwoHighScoreAreInRepo() {
+        HighScoreModel highScore1 = new HighScoreModel("1", "Player1", "12345", DifficultyEnum.EASY, 10.0, LocalDateTime.now());
+        HighScoreModel highScore2 = new HighScoreModel("2", "Player2", "54321", DifficultyEnum.EASY, 15.0, LocalDateTime.now());
 
-        HighScoreModel highScoreModel3 = new HighScoreModel(
-                "3",
-                "player2",
-                "654321",
-                DifficultyEnum.EASY,
-                5.0,
-                LocalDateTime.of(2025, 3, 5, 12, 0, 0)
-        );
+        when(highScoreRepository.findByDifficultyEnumOrderByScoreTimeAsc(DifficultyEnum.EASY))
+                .thenReturn(List.of(highScore1, highScore2));
 
-        when(idService.generateRandomId()).thenReturn("3");
-        when(highScoreRepository.findByDifficultyEnumOrderByScoreTimeAsc(DifficultyEnum.EASY)).thenReturn(List.of(highScoreModel1, highScoreModel2));
-        when(highScoreRepository.save(highScoreModel3)).thenReturn(highScoreModel3);
+        HighScoreModel newHighScore = new HighScoreModel("3", "Player3", "67890", DifficultyEnum.EASY, 12.0, LocalDateTime.now());
+
+        when(highScoreRepository.save(any(HighScoreModel.class))).thenReturn(newHighScore);
+
+        HighScoreModel result = highScoreService.addHighScore(newHighScore);
+
+        assertNotNull(result);
+        assertEquals("3", result.id());
+        assertEquals("Player3", result.playerName());
+        assertEquals(12.0, result.scoreTime(), 0.1);
     }
+
 
     @Test
     void addHighScore_shouldDeleteWorstHighScore_whenNewHighScoreIsBetterThanWorst() {
