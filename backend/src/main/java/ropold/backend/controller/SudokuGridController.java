@@ -40,7 +40,7 @@ public class SudokuGridController {
     }
 
     @PutMapping("/{id}")
-    public SudokuGridModel updateSudokuGrid(@PathVariable String id, @RequestBody SudokuGridModel sudokuGridModel, @AuthenticationPrincipal OAuth2User user) throws IOException {
+    public SudokuGridModel updateSudokuGrid(@PathVariable String id, @RequestBody SudokuGridModel sudokuGridModel, @AuthenticationPrincipal OAuth2User user){
        if(user == null) {
             throw new AccessDeniedException("You do not have permission to update a grid.");
         }
