@@ -156,4 +156,73 @@ public class SudokuGridControllerIntegrationTest {
         Assertions.assertEquals(DifficultyEnum.MEDIUM, allGrids.getFirst().difficultyEnum());
     }
 
+    @Test
+    void updateSudokuGridWithPut_shouldUpdateSudokuGrid() throws Exception {
+        OAuth2User mockOAuth2User = mock(OAuth2User.class);
+        when(mockOAuth2User.getName()).thenReturn("user");
+
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken(mockOAuth2User, null,
+                        Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")))
+        );
+
+        // Neue Sudoku-Daten, um das bestehende Feld zu aktualisieren
+        List<List<Integer>> updatedGrid = List.of(
+                List.of(1, 1, 1, 1, 1, 1, 1, 1, 1),
+                List.of(1, 1, 1, 1, 1, 1, 1, 1, 1),
+                List.of(1, 1, 1, 1, 1, 1, 1, 1, 1),
+                List.of(1, 1, 1, 1, 1, 1, 1, 1, 1),
+                List.of(1, 1, 1, 1, 1, 1, 1, 1, 1),
+                List.of(1, 1, 1, 1, 1, 1, 1, 1, 1),
+                List.of(1, 1, 1, 1, 1, 1, 1, 1, 1),
+                List.of(1, 1, 1, 1, 1, 1, 1, 1, 1),
+                List.of(1, 1, 1, 1, 1, 1, 1, 1, 1)
+        );
+
+        String updatedSudokuGridJson = """
+    {
+        "grid": [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1]
+        ],
+        "difficultyEnum": "EASY"
+    }
+    """;
+
+        // Perform PUT request to update Sudoku grid
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/sudoku-grid/1")
+                        .contentType("application/json")
+                        .content(updatedSudokuGridJson))
+                .andExpect(status().isOk());
+
+        // Verify the changes were persisted
+        SudokuGridModel updatedSudokuGrid = sudokuGridRepository.findById("1").orElseThrow();
+        Assertions.assertEquals(DifficultyEnum.EASY, updatedSudokuGrid.difficultyEnum());
+        Assertions.assertEquals(updatedGrid, updatedSudokuGrid.grid());
+    }
+
+    @Test
+    void deleteSudokuGrid_shouldDeleteGrid() throws Exception {
+        OAuth2User mockOAuth2User = mock(OAuth2User.class);
+        when(mockOAuth2User.getName()).thenReturn("user");
+
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken(mockOAuth2User, null,
+                        Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")))
+        );
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/sudoku-grid/1"))
+                .andExpect(status().isNoContent());
+
+        Assertions.assertFalse(sudokuGridRepository.existsById("1"));
+    }
+
+
 }
