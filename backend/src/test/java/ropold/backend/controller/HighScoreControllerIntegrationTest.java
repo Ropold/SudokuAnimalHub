@@ -1,5 +1,6 @@
 package ropold.backend.controller;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,4 +61,94 @@ public class HighScoreControllerIntegrationTest {
                 """));
     }
 
+    @Test
+    void postHighScore_shouldReturnSavedHighScore() throws Exception{
+        highScoreRepository.deleteAll();
+
+        String highScoreJson = """
+                {
+                    "playerName": "player2",
+                    "githubId": "654321",
+                    "difficultyEnum": "HARD",
+                    "scoreTime": 20.5,
+                    "date": "2025-03-05T12:00:00"
+                }
+                """;
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/high-score")
+                        .contentType("application/json")
+                        .content(highScoreJson))
+                .andExpect(status().isCreated());
+
+        List<HighScoreModel> allHighScores = highScoreRepository.findAll();
+        Assertions.assertEquals(1, allHighScores.size());
+
+        HighScoreModel savedHighScore = allHighScores.getFirst();
+
+        org.assertj.core.api.Assertions.assertThat(savedHighScore)
+                .usingRecursiveComparison()
+                .ignoringFields("id", "date")
+                .isEqualTo(new HighScoreModel(
+                        null,
+                        "player2",
+                        "654321",
+                        DifficultyEnum.HARD,
+                        20.5,
+                        null
+                ));
+    }
+
+    @Test
+    void postHighScore_withHighTime_shouldNotBeSaved_ifNotInTop10() throws Exception {
+
+        highScoreRepository.deleteAll();
+
+        LocalDateTime fixedDate = LocalDateTime.of(2025, 3, 5, 12, 0, 0);
+
+        // 10 bestehende Highscores mit besserer Zeit
+        for (int i = 0; i < 10; i++) {
+            highScoreRepository.save(new HighScoreModel(
+                    String.valueOf(i + 1),
+                    "player" + i,
+                    "githubId" + i,
+                    DifficultyEnum.EASY,
+                    10.0 + i, // scoreTime von 10.0 bis 19.0
+                    fixedDate
+            ));
+        }
+
+        // Score, der schlechter ist (scoreTime = 20.0)
+        String newScoreJson = """
+        {
+            "playerName": "playerNew",
+            "githubId": "githubNew",
+            "difficultyEnum": "EASY",
+            "scoreTime": 20.0,
+            "date": "2025-03-05T12:00:00"
+        }
+        """;
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/high-score")
+                        .contentType("application/json")
+                        .content(newScoreJson))
+                .andExpect(status().isCreated())
+                .andExpect(MockMvcResultMatchers.content().string(""));
+
+        // Verifizieren: Es bleiben nur die 10 alten drin
+        List<HighScoreModel> all = highScoreRepository.findAll();
+        Assertions.assertEquals(10, all.size());
+
+        boolean containsNewPlayer = all.stream()
+                .anyMatch(score -> "playerNew".equals(score.playerName()));
+        Assertions.assertFalse(containsNewPlayer);
+    }
+
+    @Test
+    void deleteHighScore_shouldDeleteHighScore() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/high-score/1"))
+                .andExpect(status().isNoContent());
+        Assertions.assertEquals(1, highScoreRepository.count());
+        Assertions.assertTrue(highScoreRepository.existsById("2"));
+    }
 }
