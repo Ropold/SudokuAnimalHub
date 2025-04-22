@@ -24,10 +24,15 @@ public class SudokuGridController {
         return sudokuGridService.getAllSudokuGrids();
     }
 
+    @GetMapping("/{id}")
+    public SudokuGridModel getSudokuGridById(@PathVariable String id) {
+        return sudokuGridService.getSudokuGridById(id);
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public SudokuGridModel addSudokuGrid(@RequestBody SudokuGridModel sudokuGridModel, @AuthenticationPrincipal
-    OAuth2User user) throws IOException {
+    OAuth2User user){
         if (user == null) {
             throw new AccessDeniedException("You do not have permission to add a grid.");
         }
