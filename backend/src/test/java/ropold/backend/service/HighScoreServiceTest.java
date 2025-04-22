@@ -10,8 +10,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 class HighScoreServiceTest {
     IdService idService = mock(IdService.class);
@@ -54,6 +55,77 @@ class HighScoreServiceTest {
         assertEquals(expected, List.of(highScoreModel1));
     }
 
+    @Test
+    void deleteHighScore_shouldDeleteHighScore() {
+        highScoreService.deleteHighScore("1");
+        verify(highScoreRepository, times(1)).deleteById("1");
+    }
 
+    @Test
+    void addHighScore_whenOnlyTwoHighScoreAreInRepo(){
+
+        HighScoreModel highScoreModel3 = new HighScoreModel(
+                "3",
+                "player2",
+                "654321",
+                DifficultyEnum.EASY,
+                5.0,
+                LocalDateTime.of(2025, 3, 5, 12, 0, 0)
+        );
+
+        when(idService.generateRandomId()).thenReturn("3");
+        when(highScoreRepository.findByDifficultyEnumOrderByScoreTimeAsc(DifficultyEnum.EASY)).thenReturn(List.of(highScoreModel1, highScoreModel2));
+        when(highScoreRepository.save(highScoreModel3)).thenReturn(highScoreModel3);
+    }
+
+    @Test
+    void addHighScore_shouldDeleteWorstHighScore_whenNewHighScoreIsBetterThanWorst() {
+        // Arrange
+        LocalDateTime fixedDate = LocalDateTime.of(2025, 3, 5, 12, 0, 0);
+
+        List<HighScoreModel> existingScores = List.of(
+                new HighScoreModel("1", "player1", "123456", DifficultyEnum.EASY, 10.2, fixedDate),
+                new HighScoreModel("2", "player1", "123456", DifficultyEnum.EASY, 10.5, fixedDate),
+                new HighScoreModel("3", "player1", "123456", DifficultyEnum.EASY, 10.7, fixedDate),
+                new HighScoreModel("4", "player1", "123456", DifficultyEnum.EASY, 11.0, fixedDate),
+                new HighScoreModel("5", "player1", "123456", DifficultyEnum.EASY, 11.2, fixedDate),
+                new HighScoreModel("6", "player1", "123456", DifficultyEnum.EASY, 11.5, fixedDate),
+                new HighScoreModel("7", "player1", "123456", DifficultyEnum.EASY, 11.7, fixedDate),
+                new HighScoreModel("8", "player1", "123456", DifficultyEnum.EASY, 12.0, fixedDate),
+                new HighScoreModel("9", "player1", "123456", DifficultyEnum.EASY, 12.2, fixedDate),
+                new HighScoreModel("10", "player1", "123456", DifficultyEnum.EASY, 12.5, fixedDate)
+        );
+
+        when(highScoreRepository.findByDifficultyEnumOrderByScoreTimeAsc(DifficultyEnum.EASY))
+                .thenReturn(existingScores);
+
+        HighScoreModel newHighScore = new HighScoreModel(
+                null,
+                "player1",
+                "123456",
+                DifficultyEnum.EASY,
+                11.2,
+                fixedDate
+        );
+
+        when(highScoreRepository.save(any(HighScoreModel.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0)); // simulate save returns input
+
+        // Act
+        HighScoreModel result = highScoreService.addHighScore(newHighScore);
+
+        // Assert
+        assertNotNull(result);
+
+        verify(highScoreRepository).deleteById("10"); // schlechtester Score (12.5)
+        verify(highScoreRepository).save(argThat(saved ->
+                saved.id() == null &&
+                        saved.playerName().equals("player1") &&
+                        saved.githubId().equals("123456") &&
+                        saved.difficultyEnum() == DifficultyEnum.EASY &&
+                        saved.scoreTime() == 11.2 &&
+                        saved.date().equals(fixedDate)
+        ));
+    }
 
 }
