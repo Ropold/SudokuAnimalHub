@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {DEFAULT_GRID} from "./model/SudokuGridModel.ts";
+import {DEFAULT_GRID, EMPTY_GRID} from "./model/SudokuGridModel.ts";
 import SudokuGridCard from "./SudokuGridCard.tsx";
 import {ALL_DIFFICULTY, DifficultyEnum} from "./model/DifficultyEnum.ts";
 import {getDifficultyEnumDisplayName} from "./utils/getDifficultyEnumDisplayName.ts";
@@ -10,7 +10,7 @@ type AddSudokuGridProps = {
 
 export default function AddSudokuGrid(props: Readonly<AddSudokuGridProps>) {
     const [difficultyEnum, setDifficultyEnum] = useState<DifficultyEnum | null>(null);
-    const [initialGrid, setInitialGrid] = useState<number[][]>(DEFAULT_GRID);
+    const [initialGrid, setInitialGrid] = useState<number[][]>(EMPTY_GRID);
     const [solutionGrid, setSolutionGrid] = useState<number[][]>(DEFAULT_GRID);
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -27,8 +27,7 @@ export default function AddSudokuGrid(props: Readonly<AddSudokuGridProps>) {
 
     return (
         <>
-            <div className="edit-form">
-                <h3>Add Sudoku Grid</h3>
+            <div className="edit-form margin-top-50">
                 <form onSubmit={handleSubmit}>
                     <label>
                         Difficulty:
@@ -37,7 +36,7 @@ export default function AddSudokuGrid(props: Readonly<AddSudokuGridProps>) {
                             value={difficultyEnum || ""}
                             onChange={(e) => setDifficultyEnum(e.target.value as DifficultyEnum)}
                         >
-                            <option value="">Please select a Category</option>
+                            <option value="">Please select a Difficulty</option>
                             {ALL_DIFFICULTY.map((difficulty) => (
                                 <option key={difficulty} value={difficulty}>
                                     {getDifficultyEnumDisplayName(difficulty)}
@@ -55,7 +54,7 @@ export default function AddSudokuGrid(props: Readonly<AddSudokuGridProps>) {
 
                         <button
                             type="button"
-                            className="button-group-button"
+                            className="button-group-button margin-top-20"
                             onClick={() => setSolutionGrid(initialGrid)}
                         >
                             Transfer InitialGrid Data to SolutionGrid
@@ -70,7 +69,7 @@ export default function AddSudokuGrid(props: Readonly<AddSudokuGridProps>) {
 
                     <button
                         type="submit"
-                        className="button-group-button"
+                        className="button-group-button margin-top-20"
                     >
                         Add Sudoku Grid
                     </button>

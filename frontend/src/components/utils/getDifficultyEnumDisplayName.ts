@@ -5,7 +5,6 @@ export function getDifficultyEnumDisplayName(difficultyEnum: DifficultyEnum): st
         EASY: "Easy",
         MEDIUM: "Medium",
         HARD: "Hard",
-        EVIL: "Evil",
     }
     return difficultyEnumDisplayNames[difficultyEnum]
 }

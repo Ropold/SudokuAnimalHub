@@ -2,9 +2,8 @@
 export type DifficultyEnum =
     "EASY"  |
     "MEDIUM"  |
-    "HARD"  |
-    "EVIL"
+    "HARD"
 
 export const ALL_DIFFICULTY: DifficultyEnum[] = [
-    "EASY", "MEDIUM", "HARD", "EVIL"
+    "EASY", "MEDIUM", "HARD"
 ];
