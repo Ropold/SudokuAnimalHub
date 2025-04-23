@@ -7,7 +7,11 @@ import { DifficultyEnum, ALL_DIFFICULTY } from "./model/DifficultyEnum.ts";
 import { validateSudokuSubmission } from "./utils/SudokuValidation.ts";
 import { getDifficultyEnumDisplayName } from "./utils/getDifficultyEnumDisplayName.ts";
 
-export default function SudokuGridDetails() {
+type SudokuGridDetailsProps = {
+    handleDeleteSudokuGrid: (id: string) => void;
+}
+
+export default function SudokuGridDetails(props: Readonly<SudokuGridDetailsProps>) {
     const [sudokuGrid, setSudokuGrid] = useState<SudokuGridModel | null>(null);
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [initialGrid, setInitialGrid] = useState<number[][]>([]);
@@ -18,6 +22,7 @@ export default function SudokuGridDetails() {
     const [sudokuGridToDelete, setSudokuGridToDelete] = useState<SudokuGridModel | null>(null); // Zustand für das Gitter zum Löschen
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const [savedPopup, setSavedPopup] = useState<boolean>(false);
 
     useEffect(() => {
         if (!id) return;
@@ -85,6 +90,7 @@ export default function SudokuGridDetails() {
             .then((response) => {
                 console.log("Sudoku grid updated successfully", response.data);
                 setSudokuGrid(response.data);
+                setSavedPopup(true);
                 setIsEditing(false);
             })
             .catch((error) => {
@@ -93,6 +99,15 @@ export default function SudokuGridDetails() {
                 setShowPopup(true);
             });
     }
+
+    useEffect(() => {
+        if(savedPopup) {
+            setTimeout(() => {
+                setSavedPopup(false);
+            }, 2000);
+        }
+    }, [savedPopup]);
+
 
     return (
         <div>
@@ -131,10 +146,17 @@ export default function SudokuGridDetails() {
                         </button>
                         <button
                             id="button-delete"
-                            onClick={() => sudokuGrid && handleDeleteClick(sudokuGrid)}
+                            onClick={() => {
+                                if (sudokuGrid) {
+                                    handleDeleteClick(sudokuGrid);
+                                    props.handleDeleteSudokuGrid(sudokuGrid.id);
+                                }
+                            }}
                         >
                             Delete
                         </button>
+
+
 
                     </>
                 )}
@@ -218,6 +240,13 @@ export default function SudokuGridDetails() {
                     </div>
                 </div>
             )}
+
+            {savedPopup && (
+                <div className="saved-animation">
+                    <p>Sudoku Grid saved</p>
+                </div>
+            )}
+
         </div>
     );
 }

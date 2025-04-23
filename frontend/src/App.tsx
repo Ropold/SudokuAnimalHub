@@ -75,6 +75,10 @@ export default function App() {
         setActiveAnimals((prevAnimals) => [...prevAnimals, newAnimal]);
     }
 
+    function handleDeleteSudokuGrid(id: string) {
+        setAllSudokuGrids((prevGrids) => prevGrids.filter((grid) => grid.id !== id));
+    }
+
     function getActiveAnimals() {
         axios
             .get("/api/sudoku-animal-hub/active")
@@ -169,7 +173,7 @@ export default function App() {
 
                 <Route element={<ProtectedRoute user={user} />}>
                     <Route path="/profile/*" element={<Profile user={user} userDetails={userDetails} handleNewAnimalSubmit={handleNewAnimalSubmit} allAnimals={allAnimals} getAllAnimals={getAllAnimals} setAllAnimals={setAllAnimals} favorites={favorites} toggleFavorite={toggleFavorite} allSudokuGrids={allSudokuGrids} getAllSudokuGrids={getAllSudokuGrids}/>} />
-                    <Route path="/sudoku-grid/:id" element={<SudokuGridDetails/>}/>
+                    <Route path="/sudoku-grid/:id" element={<SudokuGridDetails handleDeleteSudokuGrid={handleDeleteSudokuGrid}/>}/>
                 </Route>
 
             </Routes>
