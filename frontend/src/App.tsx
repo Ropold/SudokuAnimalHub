@@ -16,6 +16,8 @@ import HighScore from "./components/HighScore.tsx";
 import Deck from "./components/Deck.tsx";
 import {AnimalModel} from "./components/model/AnimalModel.ts";
 import {DefaultNumberToAnimalMap, NumberToAnimalMap} from "./components/model/NumberToAnimalMap.ts";
+import SudokuGridDetails from "./components/SudokuGridDetails.tsx";
+import {SudokuGridModel} from "./components/model/SudokuGridModel.ts";
 
 
 export default function App() {
@@ -28,6 +30,7 @@ export default function App() {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [tempDeck, setTempDeck] = useState<NumberToAnimalMap>(DefaultNumberToAnimalMap);
     const [savedDeck, setSavedDeck] = useState<NumberToAnimalMap>(DefaultNumberToAnimalMap);
+    const [allSudokuGrids, setAllSudokuGrids] = useState<SudokuGridModel[]>([]);
 
 
     // User functions
@@ -57,6 +60,7 @@ export default function App() {
         getUser();
         getActiveAnimals();
         getAllAnimals();
+        getAllSudokuGrids();
     }, []);
 
     useEffect(() => {
@@ -135,6 +139,17 @@ export default function App() {
             });
     }
 
+    function getAllSudokuGrids() {
+        axios
+            .get("/api/sudoku-grid")
+            .then((response) => {
+                setAllSudokuGrids(response.data)
+            })
+            .catch((error) => {
+                console.error("Error fetching all animals: ", error);
+            });
+    }
+
     useEffect(() => {
         window.scroll(0, 0);
     }, [location]);
@@ -150,9 +165,10 @@ export default function App() {
                 <Route path="/animal/:id" element={<Details user={user} favorites={favorites} toggleFavorite={toggleFavorite}/>}/>
                 <Route path="/high-score" element={<HighScore/>}/>
                 <Route path="/deck" element={<Deck user={user} activeAnimals={activeAnimals} tempDeck={tempDeck} setTempDeck={setTempDeck} savedDeck={savedDeck} setSavedDeck={setSavedDeck} />}/>
+                <Route path="sudoku-grid/:id" element={<SudokuGridDetails/>}/>
 
                 <Route element={<ProtectedRoute user={user} />}>
-                    <Route path="/profile/*" element={<Profile user={user} userDetails={userDetails} handleNewAnimalSubmit={handleNewAnimalSubmit} allAnimals={allAnimals} getAllAnimals={getAllAnimals} setAllAnimals={setAllAnimals} favorites={favorites} toggleFavorite={toggleFavorite}/>} />
+                    <Route path="/profile/*" element={<Profile user={user} userDetails={userDetails} handleNewAnimalSubmit={handleNewAnimalSubmit} allAnimals={allAnimals} getAllAnimals={getAllAnimals} setAllAnimals={setAllAnimals} favorites={favorites} toggleFavorite={toggleFavorite} allSudokuGrids={allSudokuGrids}/>} />
                 </Route>
 
             </Routes>

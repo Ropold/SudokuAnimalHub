@@ -6,7 +6,8 @@ import MyAnimals from "./MyAnimals.tsx";
 import "./styles/Profile.css";
 import { AnimalModel } from "./model/AnimalModel.ts";
 import AddSudokuGrid from "./AddSudokuGrid.tsx";
-import MySudokuGrids from "./MySudokuGrids.tsx";
+import AllSudokuGrids from "./AllSudokuGrids.tsx";
+import {SudokuGridModel} from "./model/SudokuGridModel.ts";
 
 type ProfileProps = {
     user: string;
@@ -17,14 +18,15 @@ type ProfileProps = {
     getAllAnimals: () => void;
     favorites: string[];
     toggleFavorite: (animalId: string) => void;
+    allSudokuGrids: SudokuGridModel[];
 };
 
 export default function Profile(props: Readonly<ProfileProps>) {
     const [isEditing, setIsEditing] = useState<boolean>(false);
 
-    const [activeTab, setActiveTab] = useState<"profile" | "add-animal" | "my-animals" | "favorites" | "add-sudoku-grid" | "my-sudoku-grids">(() => {
+    const [activeTab, setActiveTab] = useState<"profile" | "add-animal" | "my-animals" | "favorites" | "add-sudoku-grid" | "all-sudoku-grids">(() => {
         const savedTab = localStorage.getItem("activeTab");
-        return (savedTab as "profile" | "add-animal" | "my-animals" | "favorites" | "add-sudoku-grid" | "my-sudoku-grids") || "profile";
+        return (savedTab as "profile" | "add-animal" | "my-animals" | "favorites" | "add-sudoku-grid" | "all-sudoku-grids") || "profile";
     });
 
     useEffect(() => {
@@ -40,7 +42,7 @@ export default function Profile(props: Readonly<ProfileProps>) {
                 <button className={activeTab === "my-animals" ? "active-profile-button" : "button-group-button"} onClick={() => { setActiveTab("my-animals"); setIsEditing(false); }}>My Animals</button>
                 <button className={activeTab === "favorites" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("favorites")}>Favorites of Animals</button>
                 <button className={activeTab === "add-sudoku-grid" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("add-sudoku-grid")}>Add new Sudoku Grid</button>
-                <button className={activeTab === "my-sudoku-grids" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("my-sudoku-grids")}>My Sudoku Grids</button>
+                <button className={activeTab === "all-sudoku-grids" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("all-sudoku-grids")}>All Sudoku Grids</button>
             </div>
 
             {/* Anzeige je nach aktivem Tab */}
@@ -76,7 +78,7 @@ export default function Profile(props: Readonly<ProfileProps>) {
                 {activeTab === "my-animals" && <MyAnimals allAnimals={props.allAnimals} getAllAnimals={props.getAllAnimals} setAllAnimals={props.setAllAnimals} user={props.user} favorites={props.favorites} toggleFavorite={props.toggleFavorite} isEditing={isEditing} setIsEditing={setIsEditing}/>}
                 {activeTab === "favorites" && <Favorites user={props.user} favorites={props.favorites} toggleFavorite={props.toggleFavorite} />}
                 {activeTab === "add-sudoku-grid" && <AddSudokuGrid user={props.user}/>}
-                {activeTab === "my-sudoku-grids" && <MySudokuGrids/>}
+                {activeTab === "all-sudoku-grids" && <AllSudokuGrids allSudokuGrids={props.allSudokuGrids}/>}
 
             </div>
         </div>
