@@ -5,6 +5,7 @@ type SudokuGridCardProps = {
     grid: number[][];
     setGrid: React.Dispatch<React.SetStateAction<number[][]>>;
     title?: string;
+    isEditing?: boolean;
 };
 
 export default function SudokuGridCard(props: Readonly<SudokuGridCardProps>) {
@@ -38,14 +39,17 @@ export default function SudokuGridCard(props: Readonly<SudokuGridCardProps>) {
                                         return (
                                             <input
                                                 key={`${row}-${col}`}
-                                                className="sudoku-cell"
+                                                className={`sudoku-cell ${!props.isEditing ? "read-only" : ""}`}
                                                 type="text"
                                                 maxLength={1}
                                                 value={value === 0 ? "" : value}
                                                 onChange={(e) =>
-                                                    handleChange(row, col, e.target.value)
+                                                    props.isEditing ? handleChange(row, col, e.target.value) : undefined
                                                 }
+                                                readOnly={!props.isEditing}
                                             />
+
+
                                         );
                                     })
                                 )}

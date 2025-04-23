@@ -18,6 +18,7 @@ export default function AddSudokuGrid(props: Readonly<AddSudokuGridProps>) {
     const [errorMessages, setErrorMessages] = useState<string[]>([]);
     const [showPopup, setShowPopup] = useState(false);
     const navigate = useNavigate();
+    const isEditing = true;
 
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -76,6 +77,7 @@ export default function AddSudokuGrid(props: Readonly<AddSudokuGridProps>) {
                             grid={initialGrid}
                             setGrid={setInitialGrid}
                             title="Initial Grid"
+                            isEditing={isEditing}
                         />
 
                         <button
@@ -90,6 +92,7 @@ export default function AddSudokuGrid(props: Readonly<AddSudokuGridProps>) {
                             grid={solutionGrid}
                             setGrid={setSolutionGrid}
                             title="Solution Grid"
+                            isEditing={isEditing    }
                         />
                     </div>
 

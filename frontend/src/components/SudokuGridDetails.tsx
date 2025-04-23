@@ -39,8 +39,8 @@ export default function SudokuGridDetails(props: Readonly<SudokuGridDetailsProps
     }, [id]);
 
     function handleDeleteClick(grid: SudokuGridModel) {
-        setSudokuGridToDelete(grid); // Setze das Gitter, das gelöscht werden soll
-        setShowPopup(true); // Zeige das Bestätigungs-Pop-up
+        setSudokuGridToDelete(grid);
+        setShowPopup(true);
     }
 
     function handleConfirmDelete() {
@@ -48,21 +48,20 @@ export default function SudokuGridDetails(props: Readonly<SudokuGridDetailsProps
             axios
                 .delete(`/api/sudoku-grid/${sudokuGridToDelete.id}`)
                 .then(() => {
-                    console.log("Sudoku grid deleted successfully");
                     setSudokuGrid(null);
                     navigate(`/profile`);
                 })
                 .catch((error) => console.error("Error deleting sudoku grid", error));
         }
-        setShowPopup(false); // Schließe das Pop-up
+        setShowPopup(false);
     }
 
     function handleCancel() {
-        setShowPopup(false); // Schließe das Pop-up ohne zu löschen
-        setSudokuGridToDelete(null); // Setze das zu löschende Gitter auf null
+        setShowPopup(false);
+        setSudokuGridToDelete(null);
     }
 
-    // Handle Save Changes ohne FormEvent
+
     function handleSaveChanges() {
         if (!sudokuGrid) return;
 
@@ -88,7 +87,6 @@ export default function SudokuGridDetails(props: Readonly<SudokuGridDetailsProps
         axios
             .put(`/api/sudoku-grid/${sudokuGrid.id}`, updatedGrid)
             .then((response) => {
-                console.log("Sudoku grid updated successfully", response.data);
                 setSudokuGrid(response.data);
                 setSavedPopup(true);
                 setIsEditing(false);
@@ -113,6 +111,11 @@ export default function SudokuGridDetails(props: Readonly<SudokuGridDetailsProps
         <div>
             <h3>Sudoku Grid Details</h3>
             <p>ID: {sudokuGrid?.id}</p>
+            <p>Created By Github-User: {sudokuGrid?.githubId}</p>
+            { sudokuGrid?.difficultyEnum && (
+                <p>Difficulty: {getDifficultyEnumDisplayName(sudokuGrid.difficultyEnum)}</p>
+            )}
+
 
             {/* Difficulty Dropdown */}
             {isEditing && (
@@ -155,9 +158,6 @@ export default function SudokuGridDetails(props: Readonly<SudokuGridDetailsProps
                         >
                             Delete
                         </button>
-
-
-
                     </>
                 )}
 
@@ -190,11 +190,13 @@ export default function SudokuGridDetails(props: Readonly<SudokuGridDetailsProps
                         grid={initialGrid}
                         setGrid={setInitialGrid}
                         title="Initial Grid"
+                        isEditing={isEditing}
                     />
                     <SudokuGridCard
                         grid={solutionGrid}
                         setGrid={setSolutionGrid}
                         title="Solution Grid"
+                        isEditing={isEditing}
                     />
                 </>
             ) : (
@@ -246,7 +248,6 @@ export default function SudokuGridDetails(props: Readonly<SudokuGridDetailsProps
                     <p>Sudoku Grid saved</p>
                 </div>
             )}
-
         </div>
     );
 }
