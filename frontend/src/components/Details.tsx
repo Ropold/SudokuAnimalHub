@@ -48,7 +48,9 @@ export default function Details(props: Readonly<DetailsProps>) {
                 <p><strong>Name:</strong> {animal.name}</p>
                 <p><strong>Category:</strong> {animal.animalEnum}</p>
                 <p><strong>Description:</strong> {animal.description || "No description available"}</p>
-                <img src={animal.imageUrl} alt={animal.name} style={{ maxWidth: "300px" }} />
+                {animal.imageUrl && (
+                    <img src={animal.imageUrl} alt={animal.name} style={{ maxWidth: "300px" }} />
+                )}
                 {props.user !== "anonymousUser" && (
                     <div>
                         <button
