@@ -3,8 +3,9 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { SudokuGridModel } from "./model/SudokuGridModel.ts";
 import SudokuGridCard from "./SudokuGridCard.tsx";
-import * as React from "react";
 import {DifficultyEnum} from "./model/DifficultyEnum.ts";
+import { validateSudokuSubmission } from "./utils/sudokuValidation.ts";
+
 
 export default function SudokuGridDetails() {
     const [sudokuGrid, setSudokuGrid] = useState<SudokuGridModel | null>(null);
@@ -18,7 +19,6 @@ export default function SudokuGridDetails() {
 
     useEffect(() => {
         if (!id) return;
-
         axios
             .get(`/api/sudoku-grid/${id}`)
             .then((response) => {
@@ -43,18 +43,28 @@ export default function SudokuGridDetails() {
         }
     }
 
-    function handleSaveChanges(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-        if (!sudokuGrid) {
+    // Handle Save Changes ohne FormEvent
+    function handleSaveChanges() {
+        if (!sudokuGrid) return;
+
+        const validationErrors = validateSudokuSubmission(
+            difficultyEnum,
+            initialGrid,
+            solutionGrid
+        );
+
+        if (validationErrors.length > 0) {
+            setErrorMessages(validationErrors);
+            setShowPopup(true);
             return;
         }
 
         const updatedGrid = {
             ...sudokuGrid,
-            initialGrid: initialGrid,
-            solutionGrid: solutionGrid,
-            difficultyEnum: difficultyEnum,
-        }
+            initialGrid,
+            solutionGrid,
+            difficultyEnum,
+        };
 
         axios
             .put(`/api/sudoku-grid/${sudokuGrid.id}`, updatedGrid)
@@ -63,14 +73,62 @@ export default function SudokuGridDetails() {
                 setSudokuGrid(response.data);
                 setIsEditing(false);
             })
-            .catch((error) => console.error("Error updating sudoku grid", error));
-
+            .catch((error) => {
+                console.error("Error updating sudoku grid", error);
+                setErrorMessages(["An unexpected error occurred."]);
+                setShowPopup(true);
+            });
     }
+
+
 
     return (
         <div>
-            <h3>Sudoku Grid Details of</h3>
-            <p>{sudokuGrid?.id}</p>
+            <h3>Sudoku Grid Details</h3>
+            <p>ID: {sudokuGrid?.id}</p>
+
+            {/* Edit / Save / Cancel / Delete Buttons */}
+            <div className="space-between">
+                {!isEditing && (
+                    <>
+                        <button
+                            className="button-group-button"
+                            onClick={() => setIsEditing(true)}
+                        >
+                            Edit
+                        </button>
+                        <button
+                            id="button-delete"
+                            onClick={handleConfirmDelete}
+                        >
+                            Delete
+                        </button>
+                    </>
+                )}
+
+                {isEditing && (
+                    <>
+                        <button
+                            type="button"
+                            id="button-is-inactive"
+                            onClick={() => {
+                                if (sudokuGrid) {
+                                    setInitialGrid(sudokuGrid.initialGrid);
+                                    setSolutionGrid(sudokuGrid.solutionGrid);
+                                    setDifficultyEnum(sudokuGrid.difficultyEnum);
+                                }
+                                setIsEditing(false);
+                            }}
+                        >
+                            Cancel
+                        </button>
+                        <button className="button-group-button" onClick={handleSaveChanges}>
+                            Save Changes
+                        </button>
+                    </>
+                )}
+
+            </div>
 
             {sudokuGrid ? (
                 <>
@@ -89,6 +147,7 @@ export default function SudokuGridDetails() {
                 <p>Loading...</p>
             )}
 
+            {/* Validation Error Popup */}
             {showPopup && (
                 <div className="popup-overlay">
                     <div className="popup-content">
@@ -99,11 +158,17 @@ export default function SudokuGridDetails() {
                             ))}
                         </ul>
                         <div className="popup-actions">
-                            <button className="popup-cancel" onClick={() => setShowPopup(false)}>Close</button>
+                            <button
+                                className="popup-cancel"
+                                onClick={() => setShowPopup(false)}
+                            >
+                                Close
+                            </button>
                         </div>
                     </div>
                 </div>
             )}
         </div>
     );
+
 }
