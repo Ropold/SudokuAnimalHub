@@ -3,11 +3,15 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { SudokuGridModel } from "./model/SudokuGridModel.ts";
 import SudokuGridCard from "./SudokuGridCard.tsx";
+import * as React from "react";
+import {DifficultyEnum} from "./model/DifficultyEnum.ts";
 
 export default function SudokuGridDetails() {
     const [sudokuGrid, setSudokuGrid] = useState<SudokuGridModel | null>(null);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
     const [initialGrid, setInitialGrid] = useState<number[][]>([]);
     const [solutionGrid, setSolutionGrid] = useState<number[][]>([]);
+    const [difficultyEnum, setDifficultyEnum] = useState<DifficultyEnum | null>(null);
     const [errorMessages, setErrorMessages] = useState<string[]>([]);
     const [showPopup, setShowPopup] = useState(false);
     const { id } = useParams<{ id: string }>();
@@ -22,9 +26,46 @@ export default function SudokuGridDetails() {
                 setSudokuGrid(gridData);
                 setInitialGrid(gridData.initialGrid);
                 setSolutionGrid(gridData.solutionGrid);
+                setDifficultyEnum(gridData.difficultyEnum);
             })
             .catch((error) => console.error("Error fetching sudoku grid details", error));
     }, [id]);
+
+    function handleConfirmDelete() {
+        if (sudokuGrid) {
+            axios
+                .delete(`/api/sudoku-grid/${sudokuGrid.id}`)
+                .then(() => {
+                    console.log("Sudoku grid deleted successfully");
+                    setSudokuGrid(null);
+                })
+                .catch((error) => console.error("Error deleting sudoku grid", error));
+        }
+    }
+
+    function handleSaveChanges(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        if (!sudokuGrid) {
+            return;
+        }
+
+        const updatedGrid = {
+            ...sudokuGrid,
+            initialGrid: initialGrid,
+            solutionGrid: solutionGrid,
+            difficultyEnum: difficultyEnum,
+        }
+
+        axios
+            .put(`/api/sudoku-grid/${sudokuGrid.id}`, updatedGrid)
+            .then((response) => {
+                console.log("Sudoku grid updated successfully", response.data);
+                setSudokuGrid(response.data);
+                setIsEditing(false);
+            })
+            .catch((error) => console.error("Error updating sudoku grid", error));
+
+    }
 
     return (
         <div>
