@@ -15,8 +15,7 @@ export default function AllSudokuGrids(props: Readonly<AllSudokuGridsProps>) {
     };
 
     return (
-            <div>
-                <h3>All Sudoku Grids</h3>
+            <div className="all-sudoku-grid-container">
                 {props.allSudokuGrids.map((grid) => (
                     <div key={grid.id} className="all-sudoku-grid-cards" onClick={() => handleCardClick(grid.id)}>
                         <p>Difficulty: {getDifficultyEnumDisplayName(grid.difficultyEnum)}</p>

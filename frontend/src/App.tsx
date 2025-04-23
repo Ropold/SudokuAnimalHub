@@ -165,10 +165,11 @@ export default function App() {
                 <Route path="/animal/:id" element={<Details user={user} favorites={favorites} toggleFavorite={toggleFavorite}/>}/>
                 <Route path="/high-score" element={<HighScore/>}/>
                 <Route path="/deck" element={<Deck user={user} activeAnimals={activeAnimals} tempDeck={tempDeck} setTempDeck={setTempDeck} savedDeck={savedDeck} setSavedDeck={setSavedDeck} />}/>
-                <Route path="sudoku-grid/:id" element={<SudokuGridDetails/>}/>
+
 
                 <Route element={<ProtectedRoute user={user} />}>
-                    <Route path="/profile/*" element={<Profile user={user} userDetails={userDetails} handleNewAnimalSubmit={handleNewAnimalSubmit} allAnimals={allAnimals} getAllAnimals={getAllAnimals} setAllAnimals={setAllAnimals} favorites={favorites} toggleFavorite={toggleFavorite} allSudokuGrids={allSudokuGrids}/>} />
+                    <Route path="/profile/*" element={<Profile user={user} userDetails={userDetails} handleNewAnimalSubmit={handleNewAnimalSubmit} allAnimals={allAnimals} getAllAnimals={getAllAnimals} setAllAnimals={setAllAnimals} favorites={favorites} toggleFavorite={toggleFavorite} allSudokuGrids={allSudokuGrids} getAllSudokuGrids={getAllSudokuGrids}/>} />
+                    <Route path="sudoku-grid/:id" element={<SudokuGridDetails/>}/>
                 </Route>
 
             </Routes>

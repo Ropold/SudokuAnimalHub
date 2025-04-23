@@ -19,6 +19,7 @@ type ProfileProps = {
     favorites: string[];
     toggleFavorite: (animalId: string) => void;
     allSudokuGrids: SudokuGridModel[];
+    getAllSudokuGrids: () => void;
 };
 
 export default function Profile(props: Readonly<ProfileProps>) {
@@ -42,7 +43,7 @@ export default function Profile(props: Readonly<ProfileProps>) {
                 <button className={activeTab === "my-animals" ? "active-profile-button" : "button-group-button"} onClick={() => { setActiveTab("my-animals"); setIsEditing(false); }}>My Animals</button>
                 <button className={activeTab === "favorites" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("favorites")}>Favorites of Animals</button>
                 <button className={activeTab === "add-sudoku-grid" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("add-sudoku-grid")}>Add new Sudoku Grid</button>
-                <button className={activeTab === "all-sudoku-grids" ? "active-profile-button" : "button-group-button"} onClick={() => setActiveTab("all-sudoku-grids")}>All Sudoku Grids</button>
+                <button className={activeTab === "all-sudoku-grids" ? "active-profile-button" : "button-group-button"}  onClick={() => {setActiveTab("all-sudoku-grids");props.getAllSudokuGrids();}}>All Sudoku Grids</button>
             </div>
 
             {/* Anzeige je nach aktivem Tab */}
