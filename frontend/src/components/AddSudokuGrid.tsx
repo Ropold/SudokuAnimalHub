@@ -113,7 +113,7 @@ export default function AddSudokuGrid(props: Readonly<AddSudokuGridProps>) {
         };
 
         axios
-            .post("api/sudoku-grid", postSudokuGrid)
+            .post(`api/sudoku-grid`, postSudokuGrid)
             .then((response) => {
                 console.log("Sudoku Grid saved:", response.data);
                 navigate(`/sudoku-grid/${response.data.id}`);
