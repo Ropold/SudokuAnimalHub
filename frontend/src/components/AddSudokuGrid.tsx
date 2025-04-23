@@ -5,7 +5,7 @@ import {ALL_DIFFICULTY, DifficultyEnum} from "./model/DifficultyEnum.ts";
 import {getDifficultyEnumDisplayName} from "./utils/getDifficultyEnumDisplayName.ts";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import {validateSudokuSubmission} from "./utils/sudokuValidation.ts";
+import {validateSudokuSubmission} from "./utils/SudokuValidation.ts";
 
 type AddSudokuGridProps = {
     user: string;
