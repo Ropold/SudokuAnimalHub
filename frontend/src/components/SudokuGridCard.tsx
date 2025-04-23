@@ -23,7 +23,7 @@ export default function SudokuGridCard(props: Readonly<SudokuGridCardProps>) {
 
     return (
         <>
-            <h3>{title || "Sudoku Grid"}</h3>
+        <h3>{title || "Sudoku Grid"}</h3>
         <div className="sudoku-grid-card">
             <div className="sudoku-board">
                 {Array.from({ length: 3 }, (_, blockRow) => (
