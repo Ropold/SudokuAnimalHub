@@ -26,7 +26,8 @@ public class SudokuGridService {
     public SudokuGridModel addSudokuGrid(SudokuGridModel sudokuGridModel) {
     SudokuGridModel newSudokuGridModel = new SudokuGridModel(
             idService.generateRandomId(),
-            sudokuGridModel.grid(),
+            sudokuGridModel.initialGrid(),
+            sudokuGridModel.solutionGrid(),
             sudokuGridModel.difficultyEnum(),
             sudokuGridModel.githubId()
     );
@@ -37,7 +38,8 @@ public class SudokuGridService {
         if(sudokuGridRepository.existsById(id)){
             SudokuGridModel updatedSudokuGridModel = new SudokuGridModel(
                     id,
-                    sudokuGridModel.grid(),
+                    sudokuGridModel.initialGrid(),
+                    sudokuGridModel.solutionGrid(),
                     sudokuGridModel.difficultyEnum(),
                     sudokuGridModel.githubId()
             );

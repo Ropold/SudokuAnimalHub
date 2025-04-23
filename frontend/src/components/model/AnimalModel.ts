@@ -17,5 +17,5 @@ export const DefaultAnimal: AnimalModel = {
     description: "",
     isActive: true,
     githubId: "",
-    imageUrl: "",
+    imageUrl: "https://dummyimage.com/300x200/cccccc/000000&text=No+Image+Available",
 };
