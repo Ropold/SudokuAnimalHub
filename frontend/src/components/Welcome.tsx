@@ -1,10 +1,12 @@
 import welcomePic from "../assets/Sudoku-Logo.jpg"
 import "./styles/Welcome.css"
 import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 export default function Welcome(){
 
     const [showCredits, setShowCredits] = useState(false);
+    const navigate = useNavigate();
 
     const toggleCredits = () => {
         setShowCredits(prev => !prev);
@@ -20,6 +22,7 @@ export default function Welcome(){
                     src={welcomePic}
                     alt="Welcome to Sudoku Animal Hub"
                     className="logo-welcome"
+                    onClick={()=> navigate("/play")}
                 />
                 <div className="info-icon" onClick={toggleCredits} title="Bildnachweis">i</div>
 
