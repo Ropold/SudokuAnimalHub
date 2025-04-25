@@ -18,6 +18,7 @@ import {AnimalModel} from "./components/model/AnimalModel.ts";
 import {DefaultNumberToAnimalMap, NumberToAnimalMap} from "./components/model/NumberToAnimalMap.ts";
 import SudokuGridDetails from "./components/SudokuGridDetails.tsx";
 import {SudokuGridModel} from "./components/model/SudokuGridModel.ts";
+import {HighScoreModel} from "./components/model/HighScoreModel.ts";
 
 
 export default function App() {
@@ -31,6 +32,9 @@ export default function App() {
     const [tempDeck, setTempDeck] = useState<NumberToAnimalMap>(DefaultNumberToAnimalMap);
     const [savedDeck, setSavedDeck] = useState<NumberToAnimalMap>(DefaultNumberToAnimalMap);
     const [allSudokuGrids, setAllSudokuGrids] = useState<SudokuGridModel[]>([]);
+    const [highScoreEasy, setHighScoreEasy] = useState<HighScoreModel[]>([]);
+    const [highScoreMedium, setHighScoreMedium] = useState<HighScoreModel[]>([]);
+    const [highScoreHard, setHighScoreHard] = useState<HighScoreModel[]>([]);
 
 
     // User functions
@@ -158,6 +162,39 @@ export default function App() {
         window.scroll(0, 0);
     }, [location]);
 
+    function getHighScoreEasy() {
+        axios
+            .get("/api/high-score/EASY")
+            .then((response) => {
+                setHighScoreEasy(response.data);
+            })
+            .catch((error) => {
+                console.error("Error fetching high score: ", error);
+            });
+    }
+
+    function getHighScoreMedium() {
+        axios
+            .get("/api/high-score/MEDIUM")
+            .then((response) => {
+                setHighScoreMedium(response.data);
+            })
+            .catch((error) => {
+                console.error("Error fetching high score: ", error);
+            });
+    }
+
+    function getHighScoreHard() {
+        axios
+            .get("/api/high-score/HARD")
+            .then((response) => {
+                setHighScoreHard(response.data);
+            })
+            .catch((error) => {
+                console.error("Error fetching high score: ", error);
+            });
+    }
+
     return (
     <>
         <Navbar getUser={getUser} getUserDetails={getUserDetails} user={user}/>
@@ -167,7 +204,7 @@ export default function App() {
                 <Route path="/play" element={<Play user={user} tempDeck={tempDeck} savedDeck={savedDeck} />}/>
                 <Route path="/list-of-all-animals" element={<ListOfAllAnimals activeAnimals={activeAnimals} getActiveAnimals={getActiveAnimals} favorites={favorites} toggleFavorite={toggleFavorite} currentPage={currentPage} setCurrentPage={setCurrentPage} user={user}/>}/>
                 <Route path="/animal/:id" element={<Details user={user} favorites={favorites} toggleFavorite={toggleFavorite}/>}/>
-                <Route path="/high-score" element={<HighScore/>}/>
+                <Route path="/high-score" element={<HighScore highScoreEasy={highScoreEasy} getHighScoreEasy={getHighScoreEasy} highScoreMedium={highScoreMedium} getHighScoreMedium={getHighScoreMedium} highScoreHard={highScoreHard} getHighScoreHard={getHighScoreHard}/>}/>
                 <Route path="/deck" element={<Deck user={user} activeAnimals={activeAnimals} tempDeck={tempDeck} setTempDeck={setTempDeck} savedDeck={savedDeck} setSavedDeck={setSavedDeck} />}/>
 
 
