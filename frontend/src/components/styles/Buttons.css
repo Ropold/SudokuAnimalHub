@@ -24,6 +24,13 @@
     margin-top: 10px;
 }
 
+.space-difficulty{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
 #buttons-profile-container {
     padding:0;
     margin-top: 20px;
@@ -87,5 +94,13 @@
     background-color: #999;
 }
 #active-paginate:hover{
+    cursor: default;
+}
+
+.active-button-deck-difficulty{
+    background-color: #66bb6a;
+}
+.active-button-deck-difficulty:hover{
+    background-color: #388e3c;
     cursor: default;
 }
