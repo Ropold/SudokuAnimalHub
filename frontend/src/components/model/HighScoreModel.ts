@@ -8,6 +8,5 @@ export type HighScoreModel = {
     difficultyEnum: DifficultyEnum;
     deckEnum: DeckEnum;
     scoreTime: number;
-    numberOfClicks: number;
     date: string;
 }
