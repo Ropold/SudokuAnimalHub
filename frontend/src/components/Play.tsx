@@ -1,9 +1,10 @@
-import {NumberToAnimalMap} from "./model/NumberToAnimalMap.ts";
-import {HighScoreModel} from "./model/HighScoreModel.ts";
-import {useEffect, useState} from "react";
-import {SudokuGridModel} from "./model/SudokuGridModel.ts";
-import {DeckEnum} from "./model/DeckEnum.ts";
-import "./styles/Play.css"
+import { NumberToAnimalMap } from "./model/NumberToAnimalMap.ts";
+import { HighScoreModel } from "./model/HighScoreModel.ts";
+import { useEffect, useState } from "react";
+import {DEFAULT_GRID, SudokuGridModel} from "./model/SudokuGridModel.ts";
+import { DeckEnum } from "./model/DeckEnum.ts";
+import SudokuDeckCard from "./SudokuDeckCard"; // <--- importiert!
+import "./styles/Play.css";
 
 type PlayProps = {
     user: string;
@@ -16,7 +17,7 @@ type PlayProps = {
     highScoreHard: HighScoreModel[];
     getHighScoreHard: () => void;
     allSudokuGrids: SudokuGridModel[];
-}
+};
 
 export default function Play(props: Readonly<PlayProps>) {
     const [showPreviewMode, setShowPreviewMode] = useState<boolean>(true);
@@ -26,7 +27,6 @@ export default function Play(props: Readonly<PlayProps>) {
     const [time, setTime] = useState<number>(0);
     const [intervalId, setIntervalId] = useState<number | null>(null);
     const [showNameInput, setShowNameInput] = useState<boolean>(false);
-
 
     // Timer starten, wenn das Spiel beginnt
     useEffect(() => {
@@ -48,7 +48,7 @@ export default function Play(props: Readonly<PlayProps>) {
         setTime(0);
     }
 
-    return(
+    return (
         <>
             <div className="space-between">
                 <button className="button-group-button">start</button>
@@ -56,22 +56,45 @@ export default function Play(props: Readonly<PlayProps>) {
             </div>
 
             {showPreviewMode && (
-                <div className="border">
-                    <div className="space-between">
-                    <h4>Choose a deck:</h4>
-                        <button onClick={() => setDeckEnum("TEMP_DECK")} className={`button-group-button ${deckEnum === "TEMP_DECK" ? "active-button-deck-difficulty" : ""}`}>Temp Deck</button>
-                        <button onClick={() => setDeckEnum("SAVED_DECK")} className={`button-group-button ${deckEnum === "SAVED_DECK" ? "active-button-deck-difficulty" : ""}`}>Saved Deck</button>
-                        <button onClick={() => setDeckEnum("NUMBER_DECK")} className={`button-group-button ${deckEnum === "NUMBER_DECK" ? "active-button-deck-difficulty" : ""}`}>Number Deck</button>
+                <>
+                    <div className="border">
+                        <div className="space-between">
+                            <h4>Choose a deck:</h4>
+                            <button onClick={() => setDeckEnum("TEMP_DECK")}
+                                    className={`button-group-button ${deckEnum === "TEMP_DECK" ? "active-button-deck-difficulty" : ""}`}>Temp
+                                Deck
+                            </button>
+                            <button onClick={() => setDeckEnum("SAVED_DECK")}
+                                    className={`button-group-button ${deckEnum === "SAVED_DECK" ? "active-button-deck-difficulty" : ""}`}>Saved
+                                Deck
+                            </button>
+                            <button onClick={() => setDeckEnum("NUMBER_DECK")}
+                                    className={`button-group-button ${deckEnum === "NUMBER_DECK" ? "active-button-deck-difficulty" : ""}`}>Number
+                                Deck
+                            </button>
+                        </div>
+
+                        <div className="space-difficulty">
+                            <h4>Choose a difficulty:</h4>
+                            <button onClick={() => setDifficultyEnum("EASY")}
+                                    className={`button-group-button ${difficultyEnum === "EASY" ? "active-button-deck-difficulty" : ""}`}>Easy
+                            </button>
+                            <button onClick={() => setDifficultyEnum("MEDIUM")}
+                                    className={`button-group-button ${difficultyEnum === "MEDIUM" ? "active-button-deck-difficulty" : ""}`}>Medium
+                            </button>
+                            <button onClick={() => setDifficultyEnum("HARD")}
+                                    className={`button-group-button ${difficultyEnum === "HARD" ? "active-button-deck-difficulty" : ""}`}>Hard
+                            </button>
+                        </div>
                     </div>
-                    <div className="space-difficulty">
-                    <h4>Choose a difficulty:</h4>
-                        <button onClick={() => setDifficultyEnum("EASY")} className={`button-group-button ${difficultyEnum === "EASY" ? "active-button-deck-difficulty" : ""}`}>Easy</button>
-                        <button onClick={() => setDifficultyEnum("MEDIUM")} className={`button-group-button ${difficultyEnum === "MEDIUM" ? "active-button-deck-difficulty" : ""}`}>Medium</button>
-                        <button onClick={() => setDifficultyEnum("HARD")} className={`button-group-button ${difficultyEnum === "HARD" ? "active-button-deck-difficulty" : ""}`}>Hard</button>
-                    </div>
-                </div>
+
+                    <SudokuDeckCard
+                        grid={DEFAULT_GRID}
+                        deckMapping={deckEnum === "TEMP_DECK" ? props.tempDeck : deckEnum === "SAVED_DECK" ? props.savedDeck : {}}
+                        title="Preview"
+                    />
+                </>
             )}
         </>
-
-    )
+    );
 }
