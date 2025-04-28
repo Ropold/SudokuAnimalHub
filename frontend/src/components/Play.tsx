@@ -3,6 +3,7 @@ import {HighScoreModel} from "./model/HighScoreModel.ts";
 import {useEffect, useState} from "react";
 import {SudokuGridModel} from "./model/SudokuGridModel.ts";
 import {DeckEnum} from "./model/DeckEnum.ts";
+import "./styles/Play.css"
 
 type PlayProps = {
     user: string;
@@ -41,10 +42,21 @@ export default function Play(props: Readonly<PlayProps>) {
         }
     }, [showPreviewMode, gameFinished]);
 
+    function handleResetGame() {
+        setShowPreviewMode(true);
+        setGameFinished(true);
+        setTime(0);
+    }
+
     return(
         <>
+            <div className="space-between">
+                <button className="button-group-button">start</button>
+                <button className="button-group-button" onClick={handleResetGame}>reset</button>
+            </div>
+
             {showPreviewMode && (
-                <div>
+                <div className="border">
                     <div className="space-between">
                     <h4>Choose a deck:</h4>
                         <button onClick={() => setDeckEnum("TEMP_DECK")} className={`button-group-button ${deckEnum === "TEMP_DECK" ? "active-button-deck-difficulty" : ""}`}>Temp Deck</button>
