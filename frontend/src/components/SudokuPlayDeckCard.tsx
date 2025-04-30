@@ -32,7 +32,7 @@ export default function SudokuPlayDeckCard(props: Readonly<SudokuPlayDeckCardPro
     }
 
     return (
-            <div className="sudoku-deck-center">
+            <div className="sudoku-deck-center margin-top-20">
                 <div className="sudoku-play-board">
                     {Array.from({length: 3}, (_, blockRow) => (
                         <div key={blockRow} className="sudoku-play-block-row">

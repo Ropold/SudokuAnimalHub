@@ -45,7 +45,7 @@ export default function Play(props: Readonly<PlayProps>) {
         }
     }, [showPreviewMode, gameFinished]);
 
-    function handleResetGame() {
+    function handleHardResetGame() {
         setShowPreviewMode(true);
         setGameFinished(true);
         setTime(0);
@@ -65,7 +65,8 @@ export default function Play(props: Readonly<PlayProps>) {
         <>
             <div className="space-between">
                 <button className="button-group-button" onClick={handleStartGame}>start</button>
-                <button className="button-group-button" onClick={handleResetGame}>reset</button>
+                <button className="button-group-button">reset current Sudoku</button>
+                <button className="button-group-button" onClick={handleHardResetGame}>reset hard</button>
                 <div>⏱️ Time: {time.toFixed(1)} sec</div>
             </div>
 

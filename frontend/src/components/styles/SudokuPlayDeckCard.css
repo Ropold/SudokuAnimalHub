@@ -1,36 +1,44 @@
 .sudoku-play-board {
     display: flex;
     flex-direction: column;
+    gap: 6px; /* Abstand zwischen Block-Reihen */
 }
 
 .sudoku-play-block-row {
     display: flex;
+    gap: 6px; /* Abstand zwischen Blöcken */
 }
 
 .sudoku-play-block {
-    display: flex;
-    flex-wrap: wrap;
-    width: 120px;
-    height: 120px;
-    border: 1px solid #999;
+    display: grid;
+    grid-template-columns: repeat(3, 64px);
+    grid-template-rows: repeat(3, 64px);
+    gap: 2px; /* Weißer Abstand zwischen Zellen */
+    border: 2px solid #333;
+    background-color: white;
 }
 
 .sudoku-play-cell {
-    width: 40px;
-    height: 40px;
+    width: 64px;
+    height: 64px;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: white;
+    box-sizing: border-box;
 }
 
+
 .cell-fixed {
-    background-color: #ddd;
     font-weight: bold;
+    border: 2px solid #0074D9; /* Blau */
+    background-color: #f0f8ff;
 }
 
 .cell-editable {
     cursor: pointer;
-    background-color: #fefefe;
+    border: 2px solid #388e3c; /* Lila */
+    background-color: #fff5ff;
 }
 
 .sudoku-play-image {
