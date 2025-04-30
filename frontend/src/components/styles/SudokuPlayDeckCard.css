@@ -1,0 +1,41 @@
+.sudoku-play-board {
+    display: flex;
+    flex-direction: column;
+}
+
+.sudoku-play-block-row {
+    display: flex;
+}
+
+.sudoku-play-block {
+    display: flex;
+    flex-wrap: wrap;
+    width: 120px;
+    height: 120px;
+    border: 1px solid #999;
+}
+
+.sudoku-play-cell {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cell-fixed {
+    background-color: #ddd;
+    font-weight: bold;
+}
+
+.cell-editable {
+    cursor: pointer;
+    background-color: #fefefe;
+}
+
+.sudoku-play-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}

@@ -115,6 +115,7 @@ export default function Play(props: Readonly<PlayProps>) {
                  initialGrid={currentSudoku.initialGrid}
                  solutionGrid={currentSudoku.solutionGrid}
                  deckMapping={deckEnum === "TEMP_DECK" ? props.tempDeck : deckEnum === "SAVED_DECK" ? props.savedDeck : {}}
+                 setGameFinished={setGameFinished}
              />
             )
             }

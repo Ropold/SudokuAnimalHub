@@ -1,6 +1,5 @@
 import "./styles/SudokuDeckCard.css";
-import { AnimalEnum } from "./model/AnimalEnum";
-import { animalsEnumImages } from "./utils/AnimalEnumImages";
+import { ResolveImageUrl } from "./utils/ResolveImageUrl.ts"
 
 type SudokuDeckCardProps = {
     grid: number[][];
@@ -8,17 +7,6 @@ type SudokuDeckCardProps = {
 };
 
 export default function SudokuPreviewDeckCard(props: Readonly<SudokuDeckCardProps>) {
-    const { grid, deckMapping} = props;
-
-    const resolveImageUrl = (value: number) => {
-        const entry = deckMapping[value];
-        if (!entry) return null;
-        if (entry.startsWith("http")) {
-            return entry; // echte URL
-        }
-        // Sonst AnimalEnum-Name → lokale Map lookup
-        return animalsEnumImages[entry as AnimalEnum];
-    };
 
     return (
         <>
@@ -33,8 +21,9 @@ export default function SudokuPreviewDeckCard(props: Readonly<SudokuDeckCardProp
                                         Array.from({ length: 3 }, (_, innerCol) => {
                                             const row = blockRow * 3 + innerRow;
                                             const col = blockCol * 3 + innerCol;
-                                            const value = grid[row][col];
-                                            const imageUrl = resolveImageUrl(value);
+                                            const value = props.grid[row][col];
+                                            const imageUrl = ResolveImageUrl(value, props.deckMapping);  // <-- hier verwenden
+
                                             return (
                                                 <div key={`${row}-${col}`} className="preview-sudoku-deck-cell">
                                                     {imageUrl ? (
