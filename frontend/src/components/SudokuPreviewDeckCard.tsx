@@ -23,26 +23,24 @@ export default function SudokuPreviewDeckCard(props: Readonly<SudokuDeckCardProp
     return (
         <>
             <h3>{"Preview Sudoku Deck"}</h3>
-            <div className="sudoku-deck-card">
-                <div className="sudoku-deck-board">
+            <div className="preview-sudoku-deck-card">
+                <div className="preview-sudoku-deck-board">
                     {Array.from({ length: 3 }, (_, blockRow) => (
-                        <div key={blockRow} className="sudoku-deck-block-row">
+                        <div key={blockRow} className="preview-sudoku-deck-block-row">
                             {Array.from({ length: 3 }, (_, blockCol) => (
-                                <div key={blockCol} className="sudoku-deck-block">
+                                <div key={blockCol} className="preview-sudoku-deck-block">
                                     {Array.from({ length: 3 }, (_, innerRow) =>
                                         Array.from({ length: 3 }, (_, innerCol) => {
                                             const row = blockRow * 3 + innerRow;
                                             const col = blockCol * 3 + innerCol;
                                             const value = grid[row][col];
-
                                             const imageUrl = resolveImageUrl(value);
-
                                             return (
-                                                <div key={`${row}-${col}`} className="sudoku-deck-cell">
+                                                <div key={`${row}-${col}`} className="preview-sudoku-deck-cell">
                                                     {imageUrl ? (
-                                                        <img src={imageUrl} alt="Deck Item" className="sudoku-deck-image" />
+                                                        <img src={imageUrl} alt="Deck Item" className="preview-sudoku-deck-image" />
                                                     ) : value !== 0 ? (
-                                                        <span className="sudoku-deck-number">{value}</span>
+                                                        <span className="preview-sudoku-deck-number">{value}</span>
                                                     ) : null}
                                                 </div>
                                             );

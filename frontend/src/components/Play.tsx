@@ -1,7 +1,7 @@
 import { NumberToAnimalMap } from "./model/NumberToAnimalMap.ts";
 import { HighScoreModel } from "./model/HighScoreModel.ts";
 import { useEffect, useState } from "react";
-import {DEFAULT_GRID, SudokuGridModel} from "./model/SudokuGridModel.ts";
+import {DEFAULT_GRID, DefaultSudokuGrid, SudokuGridModel} from "./model/SudokuGridModel.ts";
 import { DeckEnum } from "./model/DeckEnum.ts";
 import SudokuPreviewDeckCard from "./SudokuPreviewDeckCard.tsx"; // <--- importiert!
 import "./styles/Play.css";
@@ -28,6 +28,8 @@ export default function Play(props: Readonly<PlayProps>) {
     const [time, setTime] = useState<number>(0);
     const [intervalId, setIntervalId] = useState<number | null>(null);
     const [showNameInput, setShowNameInput] = useState<boolean>(false);
+    const [currentSudoku, setCurrentSudoku] = useState<SudokuGridModel | null>(DefaultSudokuGrid);
+
 
     // Timer starten, wenn das Spiel beginnt
     useEffect(() => {
@@ -50,6 +52,11 @@ export default function Play(props: Readonly<PlayProps>) {
     }
 
     function handleStartGame() {
+        const filtered = props.allSudokuGrids.filter(grid => grid.difficultyEnum === difficultyEnum);
+        const randomGrid = filtered.length > 0
+            ? filtered[Math.floor(Math.random() * filtered.length)]
+            : DefaultSudokuGrid;
+        setCurrentSudoku(randomGrid);
         setShowPreviewMode(false);
         setGameFinished(false);
     }
@@ -103,8 +110,12 @@ export default function Play(props: Readonly<PlayProps>) {
                 </>
             )}
 
-            {!gameFinished && (
-             <SudokuPlayDeckCard/>
+            {!gameFinished && currentSudoku && (
+             <SudokuPlayDeckCard
+                 initialGrid={currentSudoku.initialGrid}
+                 solutionGrid={currentSudoku.solutionGrid}
+                 deckMapping={deckEnum === "TEMP_DECK" ? props.tempDeck : deckEnum === "SAVED_DECK" ? props.savedDeck : {}}
+             />
             )
             }
         </>

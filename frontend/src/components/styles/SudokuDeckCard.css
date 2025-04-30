@@ -1,26 +1,26 @@
-.sudoku-deck-card {
+.preview-sudoku-deck-card {
     display: flex;
     justify-content: center;
 }
 
-.sudoku-deck-board {
+.preview-sudoku-deck-board {
     display: flex;
     flex-direction: column;
 }
 
-.sudoku-deck-block-row {
+.preview-sudoku-deck-block-row {
     display: flex;
 }
 
-.sudoku-deck-block {
+.preview-sudoku-deck-block {
     display: flex;
     flex-wrap: wrap;
-    width: 120px; /* anpassen je nach Größe */
+    width: 120px;
     height: 120px;
     border: 1px solid #ccc;
 }
 
-.sudoku-deck-cell {
+.preview-sudoku-deck-cell {
     width: 40px;
     height: 40px;
     display: flex;
@@ -28,9 +28,14 @@
     align-items: center;
 }
 
-.sudoku-deck-image {
+.preview-sudoku-deck-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 4px;
+}
+
+.preview-sudoku-deck-number {
+    font-size: 16px;
+    font-weight: bold;
 }
