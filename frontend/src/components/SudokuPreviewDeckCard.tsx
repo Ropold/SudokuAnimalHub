@@ -3,7 +3,7 @@ import { ResolveImageUrl } from "./utils/ResolveImageUrl.ts"
 
 type SudokuDeckCardProps = {
     grid: number[][];
-    deckMapping: { [key: number]: string }; // Nummer → URL oder Enum-String
+    deckMapping: { [key: number]: string };
 };
 
 export default function SudokuPreviewDeckCard(props: Readonly<SudokuDeckCardProps>) {
@@ -11,7 +11,7 @@ export default function SudokuPreviewDeckCard(props: Readonly<SudokuDeckCardProp
     return (
         <>
             <h3>{"Preview Sudoku Deck"}</h3>
-            <div className="preview-sudoku-deck-card">
+            <div className="sudoku-deck-center">
                 <div className="preview-sudoku-deck-board">
                     {Array.from({ length: 3 }, (_, blockRow) => (
                         <div key={blockRow} className="preview-sudoku-deck-block-row">
