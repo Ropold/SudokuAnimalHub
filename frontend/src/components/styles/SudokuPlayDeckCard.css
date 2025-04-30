@@ -11,16 +11,16 @@
 
 .sudoku-play-block {
     display: grid;
-    grid-template-columns: repeat(3, 64px);
-    grid-template-rows: repeat(3, 64px);
+    grid-template-columns: repeat(3, 72px);
+    grid-template-rows: repeat(3, 72px);
     gap: 2px; /* Weißer Abstand zwischen Zellen */
-    border: 2px solid #333;
     background-color: white;
+    border: 2px solid #333;
 }
 
 .sudoku-play-cell {
-    width: 64px;
-    height: 64px;
+    width: 72px;
+    height: 72px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -28,22 +28,28 @@
     box-sizing: border-box;
 }
 
-
 .cell-fixed {
     font-weight: bold;
-    border: 2px solid #0074D9; /* Blau */
-    background-color: #f0f8ff;
+    border: 3px solid #007bff;
+    background-color: #f1f1f1; /* Helles Grau */
+    position: relative;
 }
 
 .cell-editable {
     cursor: pointer;
-    border: 2px solid #388e3c; /* Lila */
-    background-color: #fff5ff;
+    border: 3px solid #388e3c;
+    background-color: white;
 }
 
 .sudoku-play-image {
-    width: 100%;
-    height: 100%;
+    width: 95%;
+    height: 95%;
     object-fit: cover;
     border-radius: 4px;
+    margin: auto;
+}
+
+/* Graustufen nur für initiale Zellen (cell-fixed) */
+.cell-fixed .sudoku-play-image {
+    filter: grayscale(100%); /* Nur für initiale Zellen Graustufen anwenden */
 }

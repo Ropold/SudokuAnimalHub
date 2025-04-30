@@ -65,6 +65,7 @@ export default function Play(props: Readonly<PlayProps>) {
         <>
             <div className="space-between">
                 <button className="button-group-button" onClick={handleStartGame}>start</button>
+                <button className="button-group-button">show Errors</button>
                 <button className="button-group-button">reset current Sudoku</button>
                 <button className="button-group-button" onClick={handleHardResetGame}>reset hard</button>
                 <div>⏱️ Time: {time.toFixed(1)} sec</div>
