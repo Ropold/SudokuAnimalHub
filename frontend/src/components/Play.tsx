@@ -67,13 +67,17 @@ export default function Play(props: Readonly<PlayProps>) {
         setTimeout(() => setShowErrorBorders(false), 2000); // Fehler-Animation 2 Sekunden
     };
 
+    function handleResetCurrentSudoku() {
+
+    }
+
     return (
         <>
             <div className="space-between">
-                <button className="button-group-button" onClick={handleStartGame}>start</button>
-                <button className="button-group-button" onClick={handleShowErrors}>show Errors</button>
-                <button className="button-group-button">reset current Sudoku</button>
-                <button className="button-group-button" onClick={handleHardResetGame}>reset hard</button>
+                <button className="button-group-button" id={gameFinished ? "start-button" : undefined} onClick={handleStartGame} disabled={!gameFinished}>Start</button>
+                <button className="button-group-button" onClick={handleShowErrors} disabled={gameFinished}>Show Errors</button>
+                <button className="button-group-button" disabled={gameFinished} onClick={handleResetCurrentSudoku}>Reset Current Sudoku</button>
+                <button className="button-group-button" onClick={handleHardResetGame}>Reset Hard</button>
                 <div>⏱️ Time: {time.toFixed(1)} sec</div>
             </div>
 
