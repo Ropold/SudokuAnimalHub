@@ -3,8 +3,9 @@ import { HighScoreModel } from "./model/HighScoreModel.ts";
 import { useEffect, useState } from "react";
 import {DEFAULT_GRID, SudokuGridModel} from "./model/SudokuGridModel.ts";
 import { DeckEnum } from "./model/DeckEnum.ts";
-import SudokuDeckCard from "./SudokuDeckCard"; // <--- importiert!
+import SudokuPreviewDeckCard from "./SudokuPreviewDeckCard.tsx"; // <--- importiert!
 import "./styles/Play.css";
+import SudokuPlayDeckCard from "./SudokuPlayDeckCard.tsx";
 
 type PlayProps = {
     user: string;
@@ -48,11 +49,17 @@ export default function Play(props: Readonly<PlayProps>) {
         setTime(0);
     }
 
+    function handleStartGame() {
+        setShowPreviewMode(false);
+        setGameFinished(false);
+    }
+
     return (
         <>
             <div className="space-between">
-                <button className="button-group-button">start</button>
+                <button className="button-group-button" onClick={handleStartGame}>start</button>
                 <button className="button-group-button" onClick={handleResetGame}>reset</button>
+                <div>⏱️ Time: {time.toFixed(1)} sec</div>
             </div>
 
             {showPreviewMode && (
@@ -65,6 +72,7 @@ export default function Play(props: Readonly<PlayProps>) {
                                 Deck
                             </button>
                             <button onClick={() => setDeckEnum("SAVED_DECK")}
+                                    disabled={props.user === "anonymousUser"}
                                     className={`button-group-button ${deckEnum === "SAVED_DECK" ? "active-button-deck-difficulty" : ""}`}>Saved
                                 Deck
                             </button>
@@ -88,13 +96,17 @@ export default function Play(props: Readonly<PlayProps>) {
                         </div>
                     </div>
 
-                    <SudokuDeckCard
+                    <SudokuPreviewDeckCard
                         grid={DEFAULT_GRID}
                         deckMapping={deckEnum === "TEMP_DECK" ? props.tempDeck : deckEnum === "SAVED_DECK" ? props.savedDeck : {}}
-                        title="Preview"
                     />
                 </>
             )}
+
+            {!gameFinished && (
+             <SudokuPlayDeckCard/>
+            )
+            }
         </>
     );
 }

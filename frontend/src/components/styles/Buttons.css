@@ -6,6 +6,11 @@
     background-color: #007bff;
 }
 
+.button-group-button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
 #button-high-score {
     background-color: #ff9e00;
 }
@@ -102,5 +107,4 @@
 }
 .active-button-deck-difficulty:hover{
     background-color: #388e3c;
-    cursor: default;
 }

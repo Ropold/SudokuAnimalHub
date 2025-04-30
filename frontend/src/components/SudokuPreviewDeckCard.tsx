@@ -5,11 +5,10 @@ import { animalsEnumImages } from "./utils/AnimalEnumImages";
 type SudokuDeckCardProps = {
     grid: number[][];
     deckMapping: { [key: number]: string }; // Nummer → URL oder Enum-String
-    title?: string;
 };
 
-export default function SudokuDeckCard(props: Readonly<SudokuDeckCardProps>) {
-    const { grid, deckMapping, title } = props;
+export default function SudokuPreviewDeckCard(props: Readonly<SudokuDeckCardProps>) {
+    const { grid, deckMapping} = props;
 
     const resolveImageUrl = (value: number) => {
         const entry = deckMapping[value];
@@ -23,7 +22,7 @@ export default function SudokuDeckCard(props: Readonly<SudokuDeckCardProps>) {
 
     return (
         <>
-            <h3>{title || "Sudoku Deck"}</h3>
+            <h3>{"Preview Sudoku Deck"}</h3>
             <div className="sudoku-deck-card">
                 <div className="sudoku-deck-board">
                     {Array.from({ length: 3 }, (_, blockRow) => (
