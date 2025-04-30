@@ -1,6 +1,6 @@
 import "./styles/SudokuPlayDeckCard.css";
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ResolveImageUrl } from "./utils/ResolveImageUrl.ts";
 
 type SudokuPlayDeckCardProps = {
@@ -8,22 +8,25 @@ type SudokuPlayDeckCardProps = {
     solutionGrid: number[][];
     deckMapping: { [key: number]: string };
     setGameFinished: React.Dispatch<React.SetStateAction<boolean>>;
+    showErrorBorders: boolean;
 };
 
 export default function SudokuPlayDeckCard(props: Readonly<SudokuPlayDeckCardProps>) {
     const [playGrid, setPlayGrid] = useState<number[][]>(structuredClone(props.initialGrid));
+    const [errors, setErrors] = useState<boolean[][]>(
+        Array.from({ length: 9 }, () => Array(9).fill(false))
+    );
 
     // Funktion für Linksklick
     function handleCellClick(row: number, col: number) {
         setPlayGrid(prev => {
             const newGrid = structuredClone(prev);
-            // Wenn der Wert 0 ist, setzen wir ihn auf 1, ansonsten erhöhen wir ihn um 1
             if (newGrid[row][col] === 0) {
-                newGrid[row][col] = 1; // Start mit 1, wenn es leer ist
+                newGrid[row][col] = 1;
             } else if (newGrid[row][col] < 9) {
-                newGrid[row][col] += 1; // Zyklisch von 1–9
+                newGrid[row][col] += 1;
             } else {
-                newGrid[row][col] = 0; // Nach 9 auf 0 zurücksetzen
+                newGrid[row][col] = 0;
             }
             checkForCompletion(newGrid);
             return newGrid;
@@ -32,23 +35,32 @@ export default function SudokuPlayDeckCard(props: Readonly<SudokuPlayDeckCardPro
 
     // Funktion für Rechtsklick
     function handleRightClick(row: number, col: number, e: React.MouseEvent) {
-        e.preventDefault(); // Verhindert das Standard-Kontextmenü
+        e.preventDefault();
         setPlayGrid(prev => {
             const newGrid = structuredClone(prev);
-            // Wenn der Wert 0 ist, setzen wir ihn auf 9, sonst verringern wir den Wert um 1
             if (newGrid[row][col] === 0) {
-                newGrid[row][col] = 9; // Wenn leer, setze auf 9
+                newGrid[row][col] = 9;
             } else if (newGrid[row][col] > 0) {
-                newGrid[row][col] -= 1; // Wenn > 0, verringern
+                newGrid[row][col] -= 1;
             } else {
-                newGrid[row][col] = 9; // Wenn 0, auf 9 setzen
+                newGrid[row][col] = 9;
             }
             checkForCompletion(newGrid);
             return newGrid;
         });
     }
 
-    // Überprüfen, ob das Sudoku gelöst ist
+    function checkForErrors(grid: number[][]) {
+        const errors: boolean[][] = [];
+        grid.forEach((row, rIdx) => {
+            errors[rIdx] = [];
+            row.forEach((val, cIdx) => {
+                errors[rIdx][cIdx] = val !== props.solutionGrid[rIdx][cIdx];
+            });
+        });
+        return errors;
+    }
+
     function checkForCompletion(grid: number[][]) {
         const isSolved = grid.every((row, rIdx) =>
             row.every((val, cIdx) => val === props.solutionGrid[rIdx][cIdx])
@@ -57,6 +69,16 @@ export default function SudokuPlayDeckCard(props: Readonly<SudokuPlayDeckCardPro
             props.setGameFinished(true);
         }
     }
+
+    useEffect(() => {
+        if (props.showErrorBorders) {
+            const newErrors = checkForErrors(playGrid);
+            setErrors(newErrors);
+        } else {
+            // Fehler-Grid zurücksetzen, wenn Fehleranzeige ausgeschaltet ist
+            setErrors(Array.from({ length: 9 }, () => Array(9).fill(false)));
+        }
+    }, [props.showErrorBorders, playGrid]);
 
     return (
         <div className="sudoku-deck-center margin-top-20">
@@ -71,15 +93,16 @@ export default function SudokuPlayDeckCard(props: Readonly<SudokuPlayDeckCardPro
                                         const col = blockCol * 3 + innerCol;
                                         const value = playGrid[row][col];
                                         const isInitial = props.initialGrid[row][col] !== 0;
+                                        const hasError = errors[row]?.[col] ?? false;
 
-                                        const imageUrl = ResolveImageUrl(value, props.deckMapping);  // <-- hier verwenden
+                                        const imageUrl = ResolveImageUrl(value, props.deckMapping);
 
                                         return (
                                             <div
                                                 key={`${row}-${col}`}
-                                                className={`sudoku-play-cell ${isInitial ? "cell-fixed" : "cell-editable"}`}
-                                                onClick={() => !isInitial && handleCellClick(row, col)} // Linksklick
-                                                onContextMenu={(e) => !isInitial && handleRightClick(row, col, e)} // Rechtsklick
+                                                className={`sudoku-play-cell ${isInitial ? "cell-fixed" : "cell-editable"} ${props.showErrorBorders && hasError ? "error-cell" : ""}`}
+                                                onClick={() => !isInitial && handleCellClick(row, col)}
+                                                onContextMenu={(e) => !isInitial && handleRightClick(row, col, e)}
                                             >
                                                 {imageUrl ? (
                                                     <img src={imageUrl} alt="Deck" className="sudoku-play-image" />

@@ -27,8 +27,9 @@ export default function Play(props: Readonly<PlayProps>) {
     const [difficultyEnum, setDifficultyEnum] = useState<string>("EASY");
     const [time, setTime] = useState<number>(0);
     const [intervalId, setIntervalId] = useState<number | null>(null);
-    const [showNameInput, setShowNameInput] = useState<boolean>(false);
+    //const [showNameInput, setShowNameInput] = useState<boolean>(false);
     const [currentSudoku, setCurrentSudoku] = useState<SudokuGridModel | null>(DefaultSudokuGrid);
+    const [showErrorBorders, setShowErrorBorders] = useState<boolean>(false);
 
 
     // Timer starten, wenn das Spiel beginnt
@@ -61,11 +62,16 @@ export default function Play(props: Readonly<PlayProps>) {
         setGameFinished(false);
     }
 
+    const handleShowErrors = () => {
+        setShowErrorBorders(true);
+        setTimeout(() => setShowErrorBorders(false), 2000); // Fehler-Animation 2 Sekunden
+    };
+
     return (
         <>
             <div className="space-between">
                 <button className="button-group-button" onClick={handleStartGame}>start</button>
-                <button className="button-group-button">show Errors</button>
+                <button className="button-group-button" onClick={handleShowErrors}>show Errors</button>
                 <button className="button-group-button">reset current Sudoku</button>
                 <button className="button-group-button" onClick={handleHardResetGame}>reset hard</button>
                 <div>⏱️ Time: {time.toFixed(1)} sec</div>
@@ -118,6 +124,7 @@ export default function Play(props: Readonly<PlayProps>) {
                  solutionGrid={currentSudoku.solutionGrid}
                  deckMapping={deckEnum === "TEMP_DECK" ? props.tempDeck : deckEnum === "SAVED_DECK" ? props.savedDeck : {}}
                  setGameFinished={setGameFinished}
+                 showErrorBorders={showErrorBorders}
              />
             )
             }

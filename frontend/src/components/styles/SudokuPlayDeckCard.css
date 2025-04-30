@@ -26,6 +26,7 @@
     align-items: center;
     background-color: white;
     box-sizing: border-box;
+    user-select: none;
 }
 
 .cell-fixed {
@@ -37,7 +38,7 @@
 
 .cell-editable {
     cursor: pointer;
-    border: 3px solid #388e3c;
+    /*border: 3px solid #388e3c;*/
     background-color: white;
 }
 
@@ -50,6 +51,22 @@
 }
 
 /* Graustufen nur für initiale Zellen (cell-fixed) */
-.cell-fixed .sudoku-play-image {
-    filter: grayscale(100%); /* Nur für initiale Zellen Graustufen anwenden */
+/*.cell-fixed .sudoku-play-image {*/
+/*    filter: grayscale(100%); !* Nur für initiale Zellen Graustufen anwenden *!*/
+/*}*/
+
+/* Fehler-Animation */
+.error-cell {
+    border: 2px solid #e67e00;  /* Roter Rahmen für Fehler */
+    animation: shake 0.3s ease-in-out; /* Optionale Animation */
 }
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+
