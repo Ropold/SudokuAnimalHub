@@ -30,6 +30,7 @@ export default function Play(props: Readonly<PlayProps>) {
     //const [showNameInput, setShowNameInput] = useState<boolean>(false);
     const [currentSudoku, setCurrentSudoku] = useState<SudokuGridModel | null>(DefaultSudokuGrid);
     const [showErrorBorders, setShowErrorBorders] = useState<boolean>(false);
+    const [resetTrigger, setResetTrigger] = useState(0);
 
 
     // Timer starten, wenn das Spiel beginnt
@@ -68,8 +69,10 @@ export default function Play(props: Readonly<PlayProps>) {
     };
 
     function handleResetCurrentSudoku() {
-
+        setResetTrigger(prev => prev + 1);
+        setTime(0);
     }
+
 
     return (
         <>
@@ -129,6 +132,7 @@ export default function Play(props: Readonly<PlayProps>) {
                  deckMapping={deckEnum === "TEMP_DECK" ? props.tempDeck : deckEnum === "SAVED_DECK" ? props.savedDeck : {}}
                  setGameFinished={setGameFinished}
                  showErrorBorders={showErrorBorders}
+                 key={resetTrigger}
              />
             )
             }
