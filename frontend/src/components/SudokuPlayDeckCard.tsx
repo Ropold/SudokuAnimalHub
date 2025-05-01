@@ -70,6 +70,23 @@ export default function SudokuPlayDeckCard(props: Readonly<SudokuPlayDeckCardPro
         }
     }, [props.showErrorBorders, playGrid]);
 
+    useEffect(() => {
+        function handleKeyDown(e: KeyboardEvent) {
+            if (!selectedCell) return;
+
+            const num = parseInt(e.key, 10);
+            if (!isNaN(num) && num >= 0 && num <= 9) {
+                handleNumberInput(num);
+            }
+        }
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [selectedCell]);
+
+
     return (
         <div className="sudoku-deck-center margin-top-20">
             <div>
@@ -119,6 +136,7 @@ export default function SudokuPlayDeckCard(props: Readonly<SudokuPlayDeckCardPro
                     </div>
                 ))}
             </div>
+                {/* Kann stehen bleiben oder entfernt werden */}
                 {selectedCell && (
                     <div className="number-picker margin-top-20">
                         {Array.from({ length: 10 }, (_, i) => (
@@ -126,6 +144,7 @@ export default function SudokuPlayDeckCard(props: Readonly<SudokuPlayDeckCardPro
                         ))}
                     </div>
                 )}
+
             </div>
         </div>
 

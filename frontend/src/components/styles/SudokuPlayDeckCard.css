@@ -15,7 +15,7 @@
     grid-template-rows: repeat(3, 72px);
     gap: 2px; /* Weißer Abstand zwischen Zellen */
     background-color: white;
-    border: 2px solid #333;
+    border: 4px solid #333;
 }
 
 .sudoku-play-cell {
@@ -37,7 +37,6 @@
 
 .cell-editable {
     cursor: pointer;
-    background-color: white;
 }
 
 .sudoku-play-image {
@@ -76,8 +75,4 @@
 .highlight-same-value {
     outline: 3px solid #007bff;
     border-radius: 4px;
-    width: 95%;
-    height: 95%;
-    object-fit: cover;
-    margin: auto;
 }
