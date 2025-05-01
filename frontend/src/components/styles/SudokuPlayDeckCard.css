@@ -31,14 +31,12 @@
 
 .cell-fixed {
     font-weight: bold;
-    border: 3px solid #007bff;
     background-color: #f1f1f1; /* Helles Grau */
     position: relative;
 }
 
 .cell-editable {
     cursor: pointer;
-    /*border: 3px solid #388e3c;*/
     background-color: white;
 }
 
@@ -46,14 +44,9 @@
     width: 95%;
     height: 95%;
     object-fit: cover;
-    border-radius: 4px;
     margin: auto;
 }
 
-/* Graustufen nur für initiale Zellen (cell-fixed) */
-/*.cell-fixed .sudoku-play-image {*/
-/*    filter: grayscale(100%); !* Nur für initiale Zellen Graustufen anwenden *!*/
-/*}*/
 
 /* Fehler-Animation */
 .error-cell {
@@ -70,3 +63,21 @@
 }
 
 
+
+.selected-cell {
+    outline: 3px solid green;
+    border-radius: 4px;
+    width: 95%;
+    height: 95%;
+    object-fit: cover;
+    margin: auto;
+}
+
+.highlight-same-value {
+    outline: 3px solid #007bff;
+    border-radius: 4px;
+    width: 95%;
+    height: 95%;
+    object-fit: cover;
+    margin: auto;
+}

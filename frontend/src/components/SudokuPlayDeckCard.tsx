@@ -16,39 +16,29 @@ export default function SudokuPlayDeckCard(props: Readonly<SudokuPlayDeckCardPro
     const [errors, setErrors] = useState<boolean[][]>(
         Array.from({ length: 9 }, () => Array(9).fill(false))
     );
+    const [selectedCell, setSelectedCell] = useState<{ row: number, col: number } | null>(null);
+
 
     // Funktion für Linksklick
     function handleCellClick(row: number, col: number) {
+        setSelectedCell({ row, col });
+    }
+
+
+    function handleNumberInput(num: number) {
+        if (!selectedCell) return;
+
+        const isEditable = props.initialGrid[selectedCell.row][selectedCell.col] === 0;
+        if (!isEditable) return;
+
         setPlayGrid(prev => {
             const newGrid = structuredClone(prev);
-            if (newGrid[row][col] === 0) {
-                newGrid[row][col] = 1;
-            } else if (newGrid[row][col] < 9) {
-                newGrid[row][col] += 1;
-            } else {
-                newGrid[row][col] = 0;
-            }
+            newGrid[selectedCell.row][selectedCell.col] = num;
             checkForCompletion(newGrid);
             return newGrid;
         });
     }
 
-    // Funktion für Rechtsklick
-    function handleRightClick(row: number, col: number, e: React.MouseEvent) {
-        e.preventDefault();
-        setPlayGrid(prev => {
-            const newGrid = structuredClone(prev);
-            if (newGrid[row][col] === 0) {
-                newGrid[row][col] = 9;
-            } else if (newGrid[row][col] > 0) {
-                newGrid[row][col] -= 1;
-            } else {
-                newGrid[row][col] = 9;
-            }
-            checkForCompletion(newGrid);
-            return newGrid;
-        });
-    }
 
     function checkForErrors(grid: number[][]) {
         const errors: boolean[][] = [];
@@ -82,6 +72,7 @@ export default function SudokuPlayDeckCard(props: Readonly<SudokuPlayDeckCardPro
 
     return (
         <div className="sudoku-deck-center margin-top-20">
+            <div>
             <div className="sudoku-play-board">
                 {Array.from({ length: 3 }, (_, blockRow) => (
                     <div key={blockRow} className="sudoku-play-block-row">
@@ -97,14 +88,24 @@ export default function SudokuPlayDeckCard(props: Readonly<SudokuPlayDeckCardPro
 
                                         const imageUrl = ResolveImageUrl(value, props.deckMapping);
 
+                                        const isSelected = selectedCell?.row === row && selectedCell?.col === col;
+                                        const selectedValue = selectedCell ? playGrid[selectedCell.row][selectedCell.col] : null;
+                                        const highlight = value !== 0 && value === selectedValue && selectedValue !== 0;
+
                                         return (
                                             <div
                                                 key={`${row}-${col}`}
-                                                className={`sudoku-play-cell ${isInitial ? "cell-fixed" : "cell-editable"} ${props.showErrorBorders && hasError ? "error-cell" : ""}`}
-                                                onClick={() => !isInitial && handleCellClick(row, col)}
-                                                onContextMenu={(e) => !isInitial && handleRightClick(row, col, e)}
+                                                className={`sudoku-play-cell
+                                                    ${isInitial ? "cell-fixed" : "cell-editable"}
+                                                    ${props.showErrorBorders && hasError ? "error-cell" : ""}
+                                                    ${isSelected ? "selected-cell" : ""}
+                                                    ${highlight ? "highlight-same-value" : ""}
+                                                `}
+                                                onClick={() => handleCellClick(row, col)}
+                                                onContextMenu={(e) => e.preventDefault()}
                                             >
-                                                {imageUrl ? (
+
+                                            {imageUrl ? (
                                                     <img src={imageUrl} alt="Deck" className="sudoku-play-image" />
                                                 ) : value !== 0 ? (
                                                     <span>{value}</span>
@@ -118,6 +119,15 @@ export default function SudokuPlayDeckCard(props: Readonly<SudokuPlayDeckCardPro
                     </div>
                 ))}
             </div>
+                {selectedCell && (
+                    <div className="number-picker margin-top-20">
+                        {Array.from({ length: 10 }, (_, i) => (
+                            <button key={i} onClick={() => handleNumberInput(i)}>{i}</button>
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
+
     );
 }
