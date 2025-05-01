@@ -136,14 +136,25 @@ export default function SudokuPlayDeckCard(props: Readonly<SudokuPlayDeckCardPro
                     </div>
                 ))}
             </div>
-                {/* Kann stehen bleiben oder entfernt werden */}
-                {selectedCell && (
-                    <div className="number-picker margin-top-20">
-                        {Array.from({ length: 10 }, (_, i) => (
-                            <button key={i} onClick={() => handleNumberInput(i)}>{i}</button>
-                        ))}
-                    </div>
-                )}
+                <div className="number-picker margin-top-20">
+                    {Array.from({ length: 10 }, (_, i) => {
+                        const imageUrl = ResolveImageUrl(i, props.deckMapping);
+
+                        return (
+                            <button key={i} onClick={() => handleNumberInput(i)} className="number-button">
+                                <div className="number-button-content">
+                                    {imageUrl ? (
+                                        <img src={imageUrl} alt={`Symbol ${i}`} className="number-button-image" />
+                                    ) : (
+                                        <div className="number-button-placeholder" />
+                                    )}
+                                    <span className="number-overlay">{i}</span>
+                                </div>
+                            </button>
+
+                        );
+                    })}
+                </div>
 
             </div>
         </div>
