@@ -32,6 +32,28 @@ export default function Play(props: Readonly<PlayProps>) {
     const [resetTrigger, setResetTrigger] = useState(0);
     const [showNameInput, setShowNameInput] = useState<boolean>(false);
     const [showWinAnimation, setShowWinAnimation] = useState<boolean>(false);
+    const [isNewHighScore, setIsNewHighScore] = useState<boolean>(false);
+
+    function checkForHighScore() {
+        const highScores = difficultyEnum === "EASY" ? props.highScoreEasy :
+            difficultyEnum === "MEDIUM" ? props.highScoreMedium : props.highScoreHard;
+
+        if(highScores.length<10){
+            setIsNewHighScore(true);
+            setShowNameInput(true);
+            return;
+        }
+
+        const lowestScore = highScores[highScores.length - 1];
+
+        const isBetterScore = time < lowestScore.scoreTime;
+        if(isBetterScore) {
+            setIsNewHighScore(true);
+            setShowNameInput(true);
+        }else {
+            return;
+        }
+    }
 
     // Timer starten, wenn das Spiel beginnt
     useEffect(() => {
