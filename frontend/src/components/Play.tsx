@@ -27,11 +27,10 @@ export default function Play(props: Readonly<PlayProps>) {
     const [difficultyEnum, setDifficultyEnum] = useState<string>("EASY");
     const [time, setTime] = useState<number>(0);
     const [intervalId, setIntervalId] = useState<number | null>(null);
-    //const [showNameInput, setShowNameInput] = useState<boolean>(false);
     const [currentSudoku, setCurrentSudoku] = useState<SudokuGridModel | null>(DefaultSudokuGrid);
     const [showErrorBorders, setShowErrorBorders] = useState<boolean>(false);
     const [resetTrigger, setResetTrigger] = useState(0);
-
+    const [showNameInput, setShowNameInput] = useState<boolean>(false);
 
     // Timer starten, wenn das Spiel beginnt
     useEffect(() => {
