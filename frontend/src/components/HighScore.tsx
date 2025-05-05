@@ -108,6 +108,7 @@ export default function HighScore(props: Readonly<HighScoreProps>) {
                         <th>Date</th>
                         <th>Deck</th>
                         <th>Difficulty</th>
+                        <th>Show-Errors Used</th>
                         <th>Authentication</th>
                         <th>Time</th>
                     </tr>
@@ -120,6 +121,7 @@ export default function HighScore(props: Readonly<HighScoreProps>) {
                             <td>{formatDate(highScore.date)}</td>
                             <td>{getDeckEnumDisplayName(highScore.deckEnum)}</td>
                             <td>{getDifficultyEnumDisplayName(highScore.difficultyEnum)}</td>
+                            <td>{highScore.helpCount ? `Yes (${highScore.helpCount})` : "No"}</td>
                             <td>
                                 {highScore.githubId === "anonymousUser"
                                     ? "Anonymous"
