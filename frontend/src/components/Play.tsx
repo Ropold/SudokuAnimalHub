@@ -6,6 +6,7 @@ import { DeckEnum } from "./model/DeckEnum.ts";
 import SudokuPreviewDeckCard from "./SudokuPreviewDeckCard.tsx"; // <--- importiert!
 import "./styles/Play.css";
 import SudokuPlayDeckCard from "./SudokuPlayDeckCard.tsx";
+import axios from "axios";
 
 type PlayProps = {
     user: string;
@@ -33,6 +34,43 @@ export default function Play(props: Readonly<PlayProps>) {
     const [showNameInput, setShowNameInput] = useState<boolean>(false);
     const [showWinAnimation, setShowWinAnimation] = useState<boolean>(false);
     const [isNewHighScore, setIsNewHighScore] = useState<boolean>(false);
+    const [showErrorUsed, setShowErrorUsed] = useState<number>(0);
+    const [playerName, setPlayerName] = useState<string>("");
+    const [showPopup, setShowPopup] = useState<boolean>(false);
+    const [popupMessage, setPopupMessage] = useState("");
+
+    function postHighScore() {
+        const highScoreData = {
+            id: null,
+            playerName,
+            githubId: props.user,
+            difficultyEnum: currentSudoku?.difficultyEnum,
+            deckEnum: deckEnum,
+            showErrorUsed,
+            scoreTime: parseFloat(time.toFixed(1)),
+            date: new Date().toISOString()
+        }
+        console.log("High Score Data:", highScoreData);
+
+        axios
+            .post("/api/high-score", highScoreData)
+            .then(() => {
+                setShowNameInput(false);
+                props.getHighScoreEasy();
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
+    function handleSaveHighScore() {
+        if (playerName.trim().length < 3) {
+            setPopupMessage("Your name must be at least 3 characters long!");
+            setShowPopup(true);
+            return;
+        }
+        postHighScore();
+    }
 
     function checkForHighScore() {
         const highScores = difficultyEnum === "EASY" ? props.highScoreEasy :
@@ -73,6 +111,7 @@ export default function Play(props: Readonly<PlayProps>) {
         setShowPreviewMode(true);
         setGameFinished(true);
         setTime(0);
+        setShowErrorUsed(0);
     }
 
     function handleStartGame() {
@@ -90,11 +129,13 @@ export default function Play(props: Readonly<PlayProps>) {
         setResetTrigger(prev => prev + 1); // zwinge Re-Render durch Key-Wechsel
         setShowPreviewMode(false);
         setGameFinished(false);
+        setShowErrorUsed(0);
     }
 
     const handleShowErrors = () => {
         setShowErrorBorders(true);
         setTimeout(() => setShowErrorBorders(false), 2000); // Fehler-Animation 2 Sekunden
+        setShowErrorUsed(prev => prev + 1);
     };
 
     function handleResetCurrentSudoku() {
