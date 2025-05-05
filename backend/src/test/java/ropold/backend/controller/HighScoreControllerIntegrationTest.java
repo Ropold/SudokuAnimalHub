@@ -36,10 +36,10 @@ class HighScoreControllerIntegrationTest {
         LocalDateTime fixedDate = LocalDateTime.of(2025, 3, 5, 12, 0, 0);
 
         HighScoreModel highScoreModel1 = new HighScoreModel(
-                "1", "player1", "123456", DifficultyEnum.EASY, DeckEnum.TEMP_DECK,10.2, fixedDate);
+                "1", "player1", "123456", DifficultyEnum.EASY, DeckEnum.TEMP_DECK,0,10.2, fixedDate);
 
         HighScoreModel highScoreModel2 = new HighScoreModel(
-                "2", "player1", "123456", DifficultyEnum.MEDIUM, DeckEnum.TEMP_DECK,14.5, fixedDate.minusMinutes(5));
+                "2", "player1", "123456", DifficultyEnum.MEDIUM, DeckEnum.TEMP_DECK,0,14.5, fixedDate.minusMinutes(5));
 
         highScoreRepository.saveAll(List.of(highScoreModel1, highScoreModel2));
     }
@@ -56,6 +56,7 @@ class HighScoreControllerIntegrationTest {
                             "githubId": "123456",
                             "difficultyEnum": "EASY",
                             "deckEnum": "TEMP_DECK",
+                            "helpCount": 0,
                             "scoreTime": 10.2,
                             "date": "2025-03-05T12:00:00"
                         }
@@ -73,6 +74,7 @@ class HighScoreControllerIntegrationTest {
                     "githubId": "654321",
                     "difficultyEnum": "HARD",
                     "deckEnum": "TEMP_DECK",
+                    "helpCount": 0,
                     "scoreTime": 20.5,
                     "date": "2025-03-05T12:00:00"
                 }
@@ -97,6 +99,7 @@ class HighScoreControllerIntegrationTest {
                         "654321",
                         DifficultyEnum.HARD,
                         DeckEnum.TEMP_DECK,
+                        0,
                         20.5,
                         null
                 ));
@@ -117,6 +120,7 @@ class HighScoreControllerIntegrationTest {
                     "githubId" + i,
                     DifficultyEnum.EASY,
                     DeckEnum.TEMP_DECK,
+                    0,
                     10.0 + i,
                     fixedDate
             ));
@@ -129,6 +133,7 @@ class HighScoreControllerIntegrationTest {
             "githubId": "githubNew",
             "difficultyEnum": "EASY",
             "deckEnum": "TEMP_DECK",
+            "helpCount": 0,
             "scoreTime": 20.0,
             "date": "2025-03-05T12:00:00"
         }

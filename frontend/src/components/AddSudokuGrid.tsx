@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {DEFAULT_GRID, EMPTY_GRID} from "./model/SudokuGridModel.ts";
 import SudokuGridCard from "./SudokuGridCard.tsx";
 import {ALL_DIFFICULTY, DifficultyEnum} from "./model/DifficultyEnum.ts";
@@ -6,6 +6,7 @@ import {getDifficultyEnumDisplayName} from "./utils/getDifficultyEnumDisplayName
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import {validateSudokuSubmission} from "./utils/SudokuValidation.ts";
+import * as React from "react";
 
 type AddSudokuGridProps = {
     user: string;
@@ -17,6 +18,7 @@ export default function AddSudokuGrid(props: Readonly<AddSudokuGridProps>) {
     const [solutionGrid, setSolutionGrid] = useState<number[][]>(DEFAULT_GRID);
     const [errorMessages, setErrorMessages] = useState<string[]>([]);
     const [showPopup, setShowPopup] = useState(false);
+    const [savedPopup, setSavedPopup] = useState<boolean>(false);
     const navigate = useNavigate();
     const isEditing = true;
 
@@ -42,7 +44,11 @@ export default function AddSudokuGrid(props: Readonly<AddSudokuGridProps>) {
             .post(`api/sudoku-grid`, postSudokuGrid)
             .then((response) => {
                 console.log("Sudoku Grid saved:", response.data);
-                navigate(`/sudoku-grid/${response.data.id}`);
+                setSavedPopup(true);
+                // 2 Sekunden warten, dann navigieren
+                setTimeout(() => {
+                    navigate(`/sudoku-grid/${response.data.id}`);
+                }, 2000);
             })
             .catch((error) => {
                 console.error("Error saving Sudoku Grid:", error);
@@ -51,8 +57,15 @@ export default function AddSudokuGrid(props: Readonly<AddSudokuGridProps>) {
             });
     };
 
+    useEffect(() => {
+        if(savedPopup) {
+            setTimeout(() => {
+                setSavedPopup(false);
+            }, 2000);
+        }
+    }, [savedPopup]);
+
     return (
-        <>
             <div className="edit-form margin-top-50">
                 <form onSubmit={handleSubmit}>
                     <label>
@@ -119,7 +132,12 @@ export default function AddSudokuGrid(props: Readonly<AddSudokuGridProps>) {
                         </div>
                     </div>
                 )}
+
+                {savedPopup && (
+                    <div className="saved-animation">
+                        <p>Sudoku Grid saved</p>
+                    </div>
+                )}
             </div>
-        </>
     );
 }

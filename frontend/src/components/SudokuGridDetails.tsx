@@ -9,6 +9,7 @@ import { getDifficultyEnumDisplayName } from "./utils/getDifficultyEnumDisplayNa
 
 type SudokuGridDetailsProps = {
     handleDeleteSudokuGrid: (id: string) => void;
+    getAllSudokuGrids: () => void;
 }
 
 export default function SudokuGridDetails(props: Readonly<SudokuGridDetailsProps>) {
@@ -49,6 +50,7 @@ export default function SudokuGridDetails(props: Readonly<SudokuGridDetailsProps
                 .delete(`/api/sudoku-grid/${sudokuGridToDelete.id}`)
                 .then(() => {
                     setSudokuGrid(null);
+                    props.getAllSudokuGrids();
                     navigate(`/profile`);
                 })
                 .catch((error) => console.error("Error deleting sudoku grid", error));
@@ -90,6 +92,7 @@ export default function SudokuGridDetails(props: Readonly<SudokuGridDetailsProps
                 setSudokuGrid(response.data);
                 setSavedPopup(true);
                 setIsEditing(false);
+                props.getAllSudokuGrids();
             })
             .catch((error) => {
                 console.error("Error updating sudoku grid", error);
@@ -124,7 +127,7 @@ export default function SudokuGridDetails(props: Readonly<SudokuGridDetailsProps
                     <select
                         className="input-small"
                         id="difficulty"
-                        value={difficultyEnum || ""}
+                        value={difficultyEnum ?? ""}
                         onChange={(e) => setDifficultyEnum(e.target.value as DifficultyEnum)}
                     >
                         <option value="">Please select a Difficulty</option>

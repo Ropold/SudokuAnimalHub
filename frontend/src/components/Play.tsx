@@ -3,9 +3,10 @@ import { HighScoreModel } from "./model/HighScoreModel.ts";
 import { useEffect, useState } from "react";
 import {DEFAULT_GRID, DefaultSudokuGrid, SudokuGridModel} from "./model/SudokuGridModel.ts";
 import { DeckEnum } from "./model/DeckEnum.ts";
-import SudokuPreviewDeckCard from "./SudokuPreviewDeckCard.tsx"; // <--- importiert!
+import SudokuPreviewDeckCard from "./SudokuPreviewDeckCard.tsx";
 import "./styles/Play.css";
 import SudokuPlayDeckCard from "./SudokuPlayDeckCard.tsx";
+import axios from "axios";
 
 type PlayProps = {
     user: string;
@@ -27,11 +28,71 @@ export default function Play(props: Readonly<PlayProps>) {
     const [difficultyEnum, setDifficultyEnum] = useState<string>("EASY");
     const [time, setTime] = useState<number>(0);
     const [intervalId, setIntervalId] = useState<number | null>(null);
-    //const [showNameInput, setShowNameInput] = useState<boolean>(false);
     const [currentSudoku, setCurrentSudoku] = useState<SudokuGridModel | null>(DefaultSudokuGrid);
     const [showErrorBorders, setShowErrorBorders] = useState<boolean>(false);
     const [resetTrigger, setResetTrigger] = useState(0);
+    const [showNameInput, setShowNameInput] = useState<boolean>(false);
+    const [showWinAnimation, setShowWinAnimation] = useState<boolean>(false);
+    const [isNewHighScore, setIsNewHighScore] = useState<boolean>(false);
+    const [helpCount, setHelpCount] = useState<number>(0);
+    const [playerName, setPlayerName] = useState<string>("");
+    const [showPopup, setShowPopup] = useState<boolean>(false);
+    const [popupMessage, setPopupMessage] = useState("");
+    const [hasStartedOnce, setHasStartedOnce] = useState(false);
 
+    function postHighScore() {
+        const highScoreData = {
+            id: null,
+            playerName,
+            githubId: props.user,
+            difficultyEnum: currentSudoku?.difficultyEnum,
+            deckEnum: deckEnum,
+            helpCount: helpCount,
+            scoreTime: parseFloat(time.toFixed(1)),
+            date: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString()
+        }
+        console.log("High Score Data:", highScoreData);
+
+        axios
+            .post("/api/high-score", highScoreData)
+            .then(() => {
+                setShowNameInput(false);
+                props.getHighScoreEasy();
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
+    function handleSaveHighScore() {
+        if (playerName.trim().length < 3) {
+            setPopupMessage("Your name must be at least 3 characters long!");
+            setShowPopup(true);
+            return;
+        }
+        postHighScore();
+    }
+
+    function checkForHighScore() {
+        const highScores = difficultyEnum === "EASY" ? props.highScoreEasy :
+            difficultyEnum === "MEDIUM" ? props.highScoreMedium : props.highScoreHard;
+
+        if(highScores.length<10){
+            setIsNewHighScore(true);
+            setShowNameInput(true);
+            return;
+        }
+
+        const lowestScore = highScores[highScores.length - 1];
+
+        const isBetterScore = time < lowestScore.scoreTime;
+        if(isBetterScore) {
+            setIsNewHighScore(true);
+            setShowNameInput(true);
+        }else {
+            return;
+        }
+    }
 
     // Timer starten, wenn das Spiel beginnt
     useEffect(() => {
@@ -50,28 +111,53 @@ export default function Play(props: Readonly<PlayProps>) {
     function handleHardResetGame() {
         setShowPreviewMode(true);
         setGameFinished(true);
+        setHasStartedOnce(false);
         setTime(0);
+        setHelpCount(0);
+        setIsNewHighScore(false);
     }
+
 
     function handleStartGame() {
         const filtered = props.allSudokuGrids.filter(grid => grid.difficultyEnum === difficultyEnum);
-        const randomGrid = filtered.length > 0
-            ? filtered[Math.floor(Math.random() * filtered.length)]
-            : DefaultSudokuGrid;
-        setCurrentSudoku(randomGrid);
+        let newGrid = DefaultSudokuGrid;
+
+        if (filtered.length > 0) {
+            const otherGrids = filtered.filter(grid => grid.id !== currentSudoku?.id);
+            newGrid = otherGrids.length > 0
+                ? otherGrids[Math.floor(Math.random() * otherGrids.length)]
+                : filtered[0]; // Nimm das gleiche nochmal
+        }
+        setHasStartedOnce(true);
+        setShowNameInput(false);
+        setCurrentSudoku(newGrid);
+        setResetTrigger(prev => prev + 1); // zwinge Re-Render durch Key-Wechsel
         setShowPreviewMode(false);
         setGameFinished(false);
+        setHelpCount(0);
     }
 
     const handleShowErrors = () => {
         setShowErrorBorders(true);
         setTimeout(() => setShowErrorBorders(false), 2000); // Fehler-Animation 2 Sekunden
+        setHelpCount(prev => prev + 1);
     };
 
     function handleResetCurrentSudoku() {
         setResetTrigger(prev => prev + 1);
         setTime(0);
+        setHelpCount(0);
     }
+
+    useEffect(() => {
+        if(hasStartedOnce && gameFinished){
+            setShowWinAnimation(true);
+            checkForHighScore();
+            setTimeout(() => {
+                setShowWinAnimation(false);
+            }, 3000); // Animation für 2 Sekunden anzeigen
+        }
+    }, [gameFinished]);
 
 
     return (
@@ -83,6 +169,56 @@ export default function Play(props: Readonly<PlayProps>) {
                 <button className="button-group-button" onClick={handleHardResetGame}>Reset Hard</button>
                 <div>⏱️ Time: {time.toFixed(1)} sec</div>
             </div>
+
+            {/* Spielername Eingabefeld, wenn ein neuer Highscore erreicht wurde */}
+            {isNewHighScore && showNameInput && (
+                <form
+                    className="high-score-input"
+                    onSubmit={(e) => {
+                        e.preventDefault(); // Verhindert das Neuladen der Seite
+                        handleSaveHighScore();
+                    }}
+                >
+                    <label htmlFor="playerName">
+                        Congratulations! You secured a spot on the high score list. Enter your name:
+                    </label>
+                    <input
+                        className="playerName"
+                        type="text"
+                        id="playerName"
+                        value={playerName}
+                        onChange={(e) => setPlayerName(e.target.value)}
+                        placeholder="Enter your name"
+                    />
+                    <button
+                        className="button-group-button"
+                        id="button-border-animation"
+                        type="submit"
+                    >
+                        Save Highscore
+                    </button>
+                </form>
+            )}
+
+            {showWinAnimation && (
+                <div className="win-animation">
+                    <p>You completed the Sudoku Game game in {time.toFixed(1)} seconds!</p>
+                </div>
+            )}
+
+            {showPopup && (
+                <div className="popup-overlay">
+                    <div className="popup-content">
+                        <h3>Hinweis</h3>
+                        <p>{popupMessage}</p>
+                        <div className="popup-actions">
+                            <button onClick={() => setShowPopup(false)} className="popup-confirm">
+                                OK
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {showPreviewMode && (
                 <>
@@ -125,14 +261,14 @@ export default function Play(props: Readonly<PlayProps>) {
                 </>
             )}
 
-            {!gameFinished && currentSudoku && (
+            {!showPreviewMode && currentSudoku && (
              <SudokuPlayDeckCard
                  initialGrid={currentSudoku.initialGrid}
                  solutionGrid={currentSudoku.solutionGrid}
                  deckMapping={deckEnum === "TEMP_DECK" ? props.tempDeck : deckEnum === "SAVED_DECK" ? props.savedDeck : {}}
                  setGameFinished={setGameFinished}
                  showErrorBorders={showErrorBorders}
-                 key={resetTrigger}
+                 key={`${currentSudoku.id}-${resetTrigger}`}
              />
             )
             }

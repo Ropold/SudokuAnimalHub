@@ -7,6 +7,7 @@ export type HighScoreModel = {
     githubId: string;
     difficultyEnum: DifficultyEnum;
     deckEnum: DeckEnum;
+    helpCount: number;
     scoreTime: number;
     date: string;
 }

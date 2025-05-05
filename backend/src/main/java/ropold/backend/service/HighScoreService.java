@@ -28,6 +28,7 @@ public class HighScoreService {
                 highScoreModel.githubId(),
                 highScoreModel.difficultyEnum(),
                 highScoreModel.deckEnum(),
+                highScoreModel.helpCount(),
                 highScoreModel.scoreTime(),
                 highScoreModel.date()
         );
