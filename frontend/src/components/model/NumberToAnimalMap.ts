@@ -11,12 +11,12 @@ export type AnimalOfUser = {
 
 export const DefaultNumberToAnimalMap: NumberToAnimalMap = {
     1: "CAT",
-    2: "DOG",
-    3: "BEAR",
-    4: "FOX",
-    5: "ELEPHANT",
-    6: "MONKEY",
-    7: "LION",
+    2: "WHALE",
+    3: "CHICKEN",
+    4: "FISH",
+    5: "FROG",
+    6: "LLAMA",
+    7: "ZEBRA",
     8: "PENGUIN",
-    9: "RABBIT"
+    9: "TURTLE"
 };
