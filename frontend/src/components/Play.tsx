@@ -31,6 +31,7 @@ export default function Play(props: Readonly<PlayProps>) {
     const [showErrorBorders, setShowErrorBorders] = useState<boolean>(false);
     const [resetTrigger, setResetTrigger] = useState(0);
     const [showNameInput, setShowNameInput] = useState<boolean>(false);
+    const [showWinAnimation, setShowWinAnimation] = useState<boolean>(false);
 
     // Timer starten, wenn das Spiel beginnt
     useEffect(() => {
@@ -54,10 +55,17 @@ export default function Play(props: Readonly<PlayProps>) {
 
     function handleStartGame() {
         const filtered = props.allSudokuGrids.filter(grid => grid.difficultyEnum === difficultyEnum);
-        const randomGrid = filtered.length > 0
-            ? filtered[Math.floor(Math.random() * filtered.length)]
-            : DefaultSudokuGrid;
-        setCurrentSudoku(randomGrid);
+        let newGrid = DefaultSudokuGrid;
+
+        if (filtered.length > 0) {
+            const otherGrids = filtered.filter(grid => grid.id !== currentSudoku?.id);
+            newGrid = otherGrids.length > 0
+                ? otherGrids[Math.floor(Math.random() * otherGrids.length)]
+                : filtered[0]; // Nimm das gleiche nochmal
+        }
+
+        setCurrentSudoku(newGrid);
+        setResetTrigger(prev => prev + 1); // zwinge Re-Render durch Key-Wechsel
         setShowPreviewMode(false);
         setGameFinished(false);
     }
@@ -124,14 +132,14 @@ export default function Play(props: Readonly<PlayProps>) {
                 </>
             )}
 
-            {!gameFinished && currentSudoku && (
+            {!showPreviewMode && currentSudoku && (
              <SudokuPlayDeckCard
                  initialGrid={currentSudoku.initialGrid}
                  solutionGrid={currentSudoku.solutionGrid}
                  deckMapping={deckEnum === "TEMP_DECK" ? props.tempDeck : deckEnum === "SAVED_DECK" ? props.savedDeck : {}}
                  setGameFinished={setGameFinished}
                  showErrorBorders={showErrorBorders}
-                 key={resetTrigger}
+                 key={`${currentSudoku.id}-${resetTrigger}`}
              />
             )
             }
