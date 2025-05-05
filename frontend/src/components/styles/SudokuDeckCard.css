@@ -1,0 +1,41 @@
+.sudoku-deck-center {
+    display: flex;
+    justify-content: center;
+}
+
+.preview-sudoku-deck-board {
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-sudoku-deck-block-row {
+    display: flex;
+}
+
+.preview-sudoku-deck-block {
+    display: flex;
+    flex-wrap: wrap;
+    width: 120px;
+    height: 120px;
+    border: 1px solid #ccc;
+}
+
+.preview-sudoku-deck-cell {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.preview-sudoku-deck-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.preview-sudoku-deck-number {
+    font-size: 16px;
+    font-weight: bold;
+}

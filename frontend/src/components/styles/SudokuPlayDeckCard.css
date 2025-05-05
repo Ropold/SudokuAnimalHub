@@ -1,0 +1,112 @@
+.sudoku-play-board {
+    display: flex;
+    flex-direction: column;
+    gap: 6px; /* Abstand zwischen Block-Reihen */
+}
+
+.sudoku-play-block-row {
+    display: flex;
+    gap: 6px; /* Abstand zwischen Blöcken */
+}
+
+.sudoku-play-block {
+    display: grid;
+    grid-template-columns: repeat(3, 66px);
+    grid-template-rows: repeat(3, 66px);
+    gap: 2px; /* Weißer Abstand zwischen Zellen */
+    background-color: white;
+    border: 4px solid #333;
+}
+
+.sudoku-play-cell {
+    width: 66px;
+    height: 66px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+.cell-fixed {
+    font-weight: bold;
+    background-color: #f1f1f1; /* Helles Grau */
+    position: relative;
+}
+
+.cell-editable {
+    cursor: pointer;
+}
+
+.sudoku-play-image {
+    width: 95%;
+    height: 95%;
+    object-fit: cover;
+    margin: auto;
+}
+
+/* Fehler-Animation */
+.error-cell {
+    border: 2px solid #e67e00;  /* Roter Rahmen für Fehler */
+    animation: shake 0.3s ease-in-out; /* Optionale Animation */
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+.selected-cell {
+    outline: 3px solid green;
+    border-radius: 4px;
+    width: 95%;
+    height: 95%;
+    object-fit: cover;
+    margin: auto;
+}
+
+.highlight-same-value {
+    outline: 3px solid #007bff;
+    border-radius: 4px;
+}
+
+.number-button {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    margin: 4px;
+    padding: 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: white;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.number-button-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.number-button-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.number-overlay {
+    position: absolute;
+    bottom: 2px;
+    right: 4px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 2px 5px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+}
