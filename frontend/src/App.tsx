@@ -209,7 +209,7 @@ export default function App() {
 
                 <Route element={<ProtectedRoute user={user} />}>
                     <Route path="/profile/*" element={<Profile user={user} userDetails={userDetails} handleNewAnimalSubmit={handleNewAnimalSubmit} allAnimals={allAnimals} getAllAnimals={getAllAnimals} setAllAnimals={setAllAnimals} favorites={favorites} toggleFavorite={toggleFavorite} allSudokuGrids={allSudokuGrids} getAllSudokuGrids={getAllSudokuGrids}/>} />
-                    <Route path="/sudoku-grid/:id" element={<SudokuGridDetails handleDeleteSudokuGrid={handleDeleteSudokuGrid}/>}/>
+                    <Route path="/sudoku-grid/:id" element={<SudokuGridDetails handleDeleteSudokuGrid={handleDeleteSudokuGrid} getAllSudokuGrids={getAllSudokuGrids}/>}/>
                 </Route>
 
             </Routes>
