@@ -128,3 +128,13 @@
         border-color: #388e3c; /* Zurück zur Startfarbe */
     }
 }
+
+#button-border-animation{
+    border-radius: 10px;
+    border: 4px solid transparent;
+    animation: borderAnimation 2s infinite ease-in-out
+}
+
+#button-border-animation:focus {
+    outline: none; /* Optional: Entfernt den Standard-Fokusrahmen!*/
+}
