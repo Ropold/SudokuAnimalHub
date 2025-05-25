@@ -20,12 +20,16 @@ type MyAnimalsProps = {
 }
 
 export default function MyAnimals(props: Readonly<MyAnimalsProps>) {
-
+    const [userAnimals, setUserAnimals] = useState<AnimalModel[]>([]);
     const [editData, setEditData] = useState<AnimalModel | null>(null);
     const [image, setImage] = useState<File | null>(null);
     const [animalToDelete, setAnimalToDelete] = useState<string | null>(null);
     const [showPopup, setShowPopup] = useState(false);
     const [imageChanged, setImageChanged] = useState(false);
+
+    useEffect(() => {
+        setUserAnimals(props.allAnimals.filter(animal => animal.githubId === props.user));
+    }, [props.allAnimals, props.user]);
 
     function handleEditToggle (animalId: string) {
         const animalToEdit = props.allAnimals.find((animal) => animal.id === animalId);
@@ -222,8 +226,8 @@ export default function MyAnimals(props: Readonly<MyAnimalsProps>) {
                 </div>
             ) : (
                 <div className="animal-card-container">
-                    {props.allAnimals.length > 0 ? (
-                        props.allAnimals.map((a) => (
+                    {userAnimals.length > 0 ? (
+                        userAnimals.map((a) => (
                             <div key={a.id}>
                                 <AnimalCard
                                     animal={a}
